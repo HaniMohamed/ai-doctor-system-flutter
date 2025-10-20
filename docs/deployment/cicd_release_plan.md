@@ -816,3 +816,21 @@ class DeploymentMonitor {
 ```
 
 This comprehensive CI/CD and release plan ensures reliable, secure, and efficient delivery of the AI Doctor System while maintaining the highest quality standards required for healthcare applications.
+
+## Client Release/Rollback Playbook (Flutter)
+
+### Release Steps
+1. Update version in `pubspec.yaml`
+2. Generate changelog entry in `CHANGELOG.md`
+3. Create release branch `release/x.y.z`
+4. Run tests and quality workflows
+5. Build Android/iOS/Web artifacts with appropriate `--dart-define=ENV`
+6. Upload artifacts to distribution (Play Console/TestFlight/Web host)
+7. Tag `vX.Y.Z` and merge back to `main`
+
+### Rollback Steps
+1. Identify target tag `vX.Y.(Z-1)`
+2. Create `rollback-vX.Y.(Z-1)` branch and checkout tag
+3. Run smoke tests
+4. Re-deploy previous artifacts
+5. Notify stakeholders
