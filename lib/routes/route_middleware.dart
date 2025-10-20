@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../features/auth/domain/services/auth_service.dart';
+
 import '../core/di/injection_container.dart';
+import '../features/auth/domain/services/auth_service.dart';
 
 class AuthMiddleware extends GetMiddleware {
   @override
