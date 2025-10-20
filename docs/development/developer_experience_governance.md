@@ -37,7 +37,10 @@ summary: "Comprehensive developer experience framework and governance standards 
   - Profile module scaffolding: entities, models, remote/local datasources, repository, use cases, controller, binding, basic page
   - Dashboard page scaffold with basic stat cards
   - Appointments module: entity, model, remote datasource, repository, usecase, controller, binding, route and page wiring
-  - Next: Doctors, Patients, and Notifications module scaffolds
+  - Doctors module: entity, model, remote datasource, repository, usecase, controller, binding, route
+  - Patients module: entity, model, remote datasource, repository, usecase, controller, binding, route
+  - Notifications module: entity, model, remote datasource, repository, usecase, controller, binding, route
+  - Next: AI services (Symptom Checker first) and realtime/offline scaffolding
 
 # Developer Experience & Governance - AI Doctor System Flutter Client
 
