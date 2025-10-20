@@ -3,6 +3,7 @@ import 'app_routes.dart';
 import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/register_page.dart';
 import '../features/auth/presentation/pages/forgot_password_page.dart';
+import '../features/auth/presentation/bindings/auth_binding.dart';
 import '../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../features/profile/presentation/pages/profile_page.dart';
 import '../features/appointments/presentation/pages/appointments_list_page.dart';
@@ -23,6 +24,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.login,
       page: () => const LoginPage(),
+      binding: AuthBinding(),
     ),
     GetPage(
       name: AppRoutes.register,

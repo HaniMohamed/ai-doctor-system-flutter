@@ -5,6 +5,8 @@ import '../storage/secure_storage.dart';
 import '../storage/cache_manager.dart';
 import '../../features/auth/domain/services/auth_service.dart';
 import '../../features/auth/data/services/auth_service_impl.dart';
+import '../network/network_info.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 class ServiceLocator {
   static Future<void> setup() async {
@@ -15,6 +17,9 @@ class ServiceLocator {
     sl.registerLazySingleton<LocalStorage>(() => LocalStorage());
     sl.registerLazySingleton<SecureStorage>(() => SecureStorage());
     sl.registerLazySingleton<CacheManager>(() => CacheManager());
+    
+    // Network info
+    sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(Connectivity()));
     
     // Auth service
     sl.registerLazySingleton<AuthService>(() => AuthServiceImpl());
