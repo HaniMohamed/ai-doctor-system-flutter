@@ -8,7 +8,7 @@ import '../datasources/auth_remote_datasource.dart';
 class AuthServiceImpl implements AuthService {
   final AuthRemoteDataSource _remoteDataSource;
   final SecureStorage _secureStorage;
-  
+
   User? _currentUser;
   bool _isAuthenticated = false;
   AuthTokens? _tokens;
@@ -16,8 +16,8 @@ class AuthServiceImpl implements AuthService {
   AuthServiceImpl({
     required AuthRemoteDataSource remoteDataSource,
     required SecureStorage secureStorage,
-  }) : _remoteDataSource = remoteDataSource,
-       _secureStorage = secureStorage;
+  })  : _remoteDataSource = remoteDataSource,
+        _secureStorage = secureStorage;
 
   @override
   bool get isAuthenticated => _isAuthenticated;
@@ -29,22 +29,23 @@ class AuthServiceImpl implements AuthService {
   Future<User> login(String email, String password) async {
     try {
       // Call the remote data source for actual authentication
-      final userModel = await _remoteDataSource.login(email, password);
-      
+      final loginResponse = await _remoteDataSource.login(email, password);
+
       // Store user data and set authentication state
-      _currentUser = userModel; // UserModel extends User, so no conversion needed
+      _currentUser = loginResponse.user; // UserModel extends User
       _isAuthenticated = true;
-      
+
       // Store authentication state in secure storage
       await _secureStorage.write('is_authenticated', 'true');
       await _secureStorage.write('user_email', email);
-      
+      await _secureStorage.write('access_token', loginResponse.accessToken);
+
       return _currentUser!;
     } catch (e) {
       // If remote authentication fails, fall back to mock for development
       Logger.warning('Authentication failed, using mock user', 'AUTH', e);
       await Future.delayed(const Duration(seconds: 1));
-      
+
       _currentUser = User(
         id: 'user-123',
         email: email,
@@ -53,11 +54,11 @@ class AuthServiceImpl implements AuthService {
         organizationId: 'org-123',
       );
       _isAuthenticated = true;
-      
+
       // Store mock authentication state
       await _secureStorage.write('is_authenticated', 'true');
       await _secureStorage.write('user_email', email);
-      
+
       return _currentUser!;
     }
   }
@@ -76,7 +77,7 @@ class AuthServiceImpl implements AuthService {
       _currentUser = null;
       _isAuthenticated = false;
       _tokens = null;
-      
+
       // Clear stored authentication data
       await _secureStorage.delete('is_authenticated');
       await _secureStorage.delete('user_email');
@@ -90,13 +91,13 @@ class AuthServiceImpl implements AuthService {
     if (_tokens != null) {
       return _tokens!.accessToken;
     }
-    
+
     // Try to get token from secure storage
     final storedToken = await _secureStorage.read('access_token');
     if (storedToken != null) {
       return storedToken;
     }
-    
+
     return null;
   }
 
@@ -107,10 +108,10 @@ class AuthServiceImpl implements AuthService {
       if (refreshToken == null) {
         throw Exception('No refresh token available');
       }
-      
+
       final tokensModel = await _remoteDataSource.refreshToken(refreshToken);
       _tokens = tokensModel;
-      
+
       // Store new tokens
       await _secureStorage.write('access_token', tokensModel.accessToken);
       await _secureStorage.write('refresh_token', tokensModel.refreshToken);
@@ -132,7 +133,8 @@ class AuthServiceImpl implements AuthService {
           // Try to get current user from API
           try {
             final userModel = await _remoteDataSource.getCurrentUser();
-            _currentUser = userModel; // UserModel extends User, so no conversion needed
+            _currentUser =
+                userModel; // UserModel extends User, so no conversion needed
             _isAuthenticated = true;
           } catch (e) {
             Logger.error('Failed to get current user', 'AUTH', e);

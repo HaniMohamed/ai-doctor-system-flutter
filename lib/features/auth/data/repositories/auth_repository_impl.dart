@@ -5,6 +5,8 @@ import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../datasources/auth_local_datasource.dart';
 import '../datasources/auth_remote_datasource.dart';
+import '../models/auth_tokens_model.dart';
+import '../models/login_response_model.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
@@ -15,17 +17,25 @@ class AuthRepositoryImpl implements AuthRepository {
     required AuthRemoteDataSource remoteDataSource,
     required AuthLocalDataSource localDataSource,
     required NetworkInfo networkInfo,
-  }) : _remoteDataSource = remoteDataSource,
-       _localDataSource = localDataSource,
-       _networkInfo = networkInfo;
+  })  : _remoteDataSource = remoteDataSource,
+        _localDataSource = localDataSource,
+        _networkInfo = networkInfo;
 
   @override
   Future<User> login(String email, String password) async {
     if (await _networkInfo.isConnected) {
       try {
-        final user = await _remoteDataSource.login(email, password);
-        await _localDataSource.cacheUser(user);
-        return user;
+        final LoginResponseModel loginResponse =
+            await _remoteDataSource.login(email, password);
+        // Cache user and tokens so interceptor can attach Authorization header
+        await _localDataSource.cacheUser(loginResponse.user as dynamic);
+        await _localDataSource.cacheTokens(AuthTokensModel(
+          accessToken: loginResponse.accessToken,
+          refreshToken: '',
+          tokenType: loginResponse.tokenType,
+          expiresIn: loginResponse.expiresIn,
+        ));
+        return loginResponse.user;
       } catch (e) {
         throw ServerException(e.toString());
       }
