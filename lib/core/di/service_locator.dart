@@ -22,8 +22,18 @@ class ServiceLocator {
     // Network info
     sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(Connectivity()));
     
+    // Auth data sources
+    sl.registerLazySingleton<AuthRemoteDataSource>(
+      () => AuthRemoteDataSourceImpl(apiClient: sl<ApiClient>()),
+    );
+    
     // Auth service
-    sl.registerLazySingleton<AuthService>(() => AuthServiceImpl());
+    sl.registerLazySingleton<AuthService>(
+      () => AuthServiceImpl(
+        remoteDataSource: sl<AuthRemoteDataSource>(),
+        secureStorage: sl<SecureStorage>(),
+      ),
+    );
     
     // Initialize storage services
     await sl<LocalStorage>().initialize();

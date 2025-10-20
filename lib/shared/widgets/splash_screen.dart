@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../core/di/injection_container.dart';
+import '../../features/auth/domain/services/auth_service.dart';
 import '../../routes/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,8 +22,18 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _navigateToNextScreen() async {
     await Future.delayed(const Duration(seconds: 2));
     
-    // TODO: Check authentication status and navigate accordingly
-    Get.offNamed(AppRoutes.login);
+    // Check authentication status and navigate accordingly
+    try {
+      final authService = sl<AuthService>();
+      if (authService.isAuthenticated && authService.currentUser != null) {
+        Get.offNamed(AppRoutes.dashboard);
+      } else {
+        Get.offNamed(AppRoutes.login);
+      }
+    } catch (e) {
+      // If there's any error with auth service, navigate to login
+      Get.offNamed(AppRoutes.login);
+    }
   }
 
   @override

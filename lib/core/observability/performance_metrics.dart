@@ -73,6 +73,15 @@ class PerformanceMetrics {
       'platform': Platform.operatingSystem,
     });
   }
+
+  void recordError(Object error, String endpoint, String method) {
+    _collectors['error_rate']?.increment({
+      'error_type': error.runtimeType.toString(),
+      'endpoint': endpoint,
+      'method': method,
+      'platform': Platform.operatingSystem,
+    });
+  }
 }
 
 
