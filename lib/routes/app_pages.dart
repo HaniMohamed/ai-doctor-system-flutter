@@ -7,6 +7,7 @@ import '../features/auth/presentation/bindings/auth_binding.dart';
 import '../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../features/profile/presentation/pages/profile_page.dart';
 import '../features/appointments/presentation/pages/appointments_list_page.dart';
+import '../features/appointments/presentation/bindings/appointments_binding.dart';
 import '../features/doctors/presentation/pages/doctors_list_page.dart';
 import '../features/patients/presentation/pages/patient_profile_page.dart';
 import '../features/chat/presentation/pages/chat_page.dart';
@@ -45,6 +46,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.appointments,
       page: () => const AppointmentsListPage(),
+      binding: AppointmentsBinding(),
     ),
     GetPage(
       name: AppRoutes.doctors,

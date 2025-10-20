@@ -36,7 +36,8 @@ summary: "Comprehensive developer experience framework and governance standards 
   - Added dependencies: `dartz`, `connectivity_plus`
   - Profile module scaffolding: entities, models, remote/local datasources, repository, use cases, controller, binding, basic page
   - Dashboard page scaffold with basic stat cards
-  - Next: Healthcare core modules skeletons (appointments, doctors, patients, notifications)
+  - Appointments module: entity, model, remote datasource, repository, usecase, controller, binding, route and page wiring
+  - Next: Doctors, Patients, and Notifications module scaffolds
 
 # Developer Experience & Governance - AI Doctor System Flutter Client
 

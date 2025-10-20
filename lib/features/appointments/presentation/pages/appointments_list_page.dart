@@ -1,15 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import '../controllers/appointments_controller.dart';
 
 class AppointmentsListPage extends StatelessWidget {
   const AppointmentsListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(AppointmentsController(Get.find()));
+
     return Scaffold(
       appBar: AppBar(title: const Text('Appointments')),
-      body: const Center(
-        child: Text('Appointments List Page - TODO: Implement'),
-      ),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (controller.errorMessage.value.isNotEmpty) {
+          return Center(child: Text(controller.errorMessage.value));
+        }
+        if (controller.appointments.isEmpty) {
+          return const Center(child: Text('No appointments'));
+        }
+        return ListView.separated(
+          itemCount: controller.appointments.length,
+          separatorBuilder: (_, __) => const Divider(height: 1),
+          itemBuilder: (context, index) {
+            final a = controller.appointments[index];
+            return ListTile(
+              title: Text('Doctor: ${a.doctorId} • Patient: ${a.patientId}')
+                  .copyWith(),
+              subtitle: Text('${a.scheduledAt} • ${a.status.name}'),
+            );
+          },
+        );
+      }),
     );
   }
 }
