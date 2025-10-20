@@ -1,0 +1,33 @@
+name: ai_doctor_system
+description: AI-powered healthcare management system Flutter client
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^4.6.6
+  dio: ^5.4.0
+  websocket: ^1.0.4
+  sqflite: ^2.3.0
+  flutter_secure_storage: ^9.0.0
+  shared_preferences: ^2.2.2
+  get_it: ^7.6.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^3.0.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/fonts/
+    - assets/animations/
+
