@@ -9,6 +9,7 @@ import '../features/profile/presentation/pages/profile_page.dart';
 import '../features/appointments/presentation/pages/appointments_list_page.dart';
 import '../features/appointments/presentation/bindings/appointments_binding.dart';
 import '../features/doctors/presentation/pages/doctors_list_page.dart';
+import '../features/doctors/presentation/bindings/doctors_binding.dart';
 import '../features/patients/presentation/pages/patient_profile_page.dart';
 import '../features/chat/presentation/pages/chat_page.dart';
 import '../features/notifications/presentation/pages/notifications_page.dart';
@@ -51,6 +52,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.doctors,
       page: () => const DoctorsListPage(),
+      binding: DoctorsBinding(),
     ),
     GetPage(
       name: AppRoutes.patients,
