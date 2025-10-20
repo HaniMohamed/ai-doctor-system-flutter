@@ -25,7 +25,8 @@ summary: "Comprehensive developer experience framework and governance standards 
   - Created `lib/shared/widgets/splash_screen.dart`
   - Created placeholder pages for all routes
   - Created auth service interface and implementation
-  - Next: Set up DI and service locator under lib/core/di
+  - Implemented network layer interceptors (auth, error, logging) and wired into `ApiClient`
+  - Next: Storage layer (local, secure, cache manager finalization) and environment config
 
 # Developer Experience & Governance - AI Doctor System Flutter Client
 

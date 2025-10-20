@@ -1,4 +1,7 @@
 import 'package:dio/dio.dart';
+import 'interceptors/auth_interceptor.dart';
+import 'interceptors/error_interceptor.dart';
+import 'interceptors/logging_interceptor.dart';
 
 class ApiClient {
   late Dio _dio;
@@ -9,7 +12,11 @@ class ApiClient {
   }
 
   void _setupInterceptors() {
-    // TODO: Add auth, error, and logging interceptors
+    _dio.interceptors.addAll([
+      AuthInterceptor(),
+      ErrorInterceptor(),
+      LoggingInterceptor(),
+    ]);
   }
 
   Future<Response<T>> get<T>(
