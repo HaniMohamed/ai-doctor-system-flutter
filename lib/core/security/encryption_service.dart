@@ -5,7 +5,7 @@ import '../storage/secure_storage.dart';
 
 class EncryptionService {
   static const String _keyStorageKey = 'encryption_key_v1';
-  final SecretBoxAlgorithm _algorithm = AesGcm.with256bits();
+  final AesGcm _algorithm = AesGcm.with256bits();
   final SecureStorage _secureStorage;
 
   EncryptionService(this._secureStorage);
@@ -29,7 +29,7 @@ class EncryptionService {
     final secretBox = await _algorithm.encrypt(
       utf8.encode(plaintext),
       secretKey: key,
-      nonce: await nonce,
+      nonce: nonce,
     );
     final payload = jsonEncode({
       'n': base64Encode(secretBox.nonce),

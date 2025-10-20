@@ -1,5 +1,5 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../core/di/service_locator.dart';
 import '../features/auth/domain/services/auth_service.dart';
 
 class AuthMiddleware extends GetMiddleware {

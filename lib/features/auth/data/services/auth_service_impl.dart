@@ -16,7 +16,7 @@ class AuthServiceImpl implements AuthService {
     // TODO: Implement actual login logic
     await Future.delayed(const Duration(seconds: 1));
     
-    _currentUser = const User(
+    _currentUser = User(
       id: 'user-123',
       email: email,
       fullName: 'Test User',

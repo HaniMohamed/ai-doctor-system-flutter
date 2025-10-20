@@ -1,3 +1,4 @@
+import 'dart:convert';
 import '../../../../core/storage/local_storage.dart';
 import '../../../../core/storage/secure_storage.dart';
 import '../../../../core/constants/storage_keys.dart';
@@ -24,14 +25,14 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
 
   @override
   Future<void> cacheUser(UserModel user) async {
-    await _localStorage.setString(StorageKeys.userData, user.toJson());
+    await _localStorage.setString(StorageKeys.userData, jsonEncode(user.toJson()));
   }
 
   @override
   Future<UserModel?> getCachedUser() async {
     final userData = _localStorage.getString(StorageKeys.userData);
     if (userData != null) {
-      return UserModel.fromJson(userData);
+      return UserModel.fromJson(jsonDecode(userData) as Map<String, dynamic>);
     }
     return null;
   }

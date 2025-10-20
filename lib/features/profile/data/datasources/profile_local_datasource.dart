@@ -1,5 +1,6 @@
+import 'dart:convert';
 import '../../../../core/storage/local_storage.dart';
-import '../../data/models/user_profile_model.dart';
+import '../models/user_profile_model.dart';
 
 abstract class ProfileLocalDataSource {
   Future<void> cacheUserProfile(UserProfileModel profile);
@@ -14,14 +15,14 @@ class ProfileLocalDataSourceImpl implements ProfileLocalDataSource {
 
   @override
   Future<void> cacheUserProfile(UserProfileModel profile) async {
-    await _localStorage.setString(_key, profile.toJson());
+    await _localStorage.setString(_key, jsonEncode(profile.toJson()));
   }
 
   @override
   Future<UserProfileModel?> getCachedUserProfile() async {
     final data = _localStorage.getString(_key);
     if (data != null) {
-      return UserProfileModel.fromJson(data);
+      return UserProfileModel.fromJson(jsonDecode(data) as Map<String, dynamic>);
     }
     return null;
   }

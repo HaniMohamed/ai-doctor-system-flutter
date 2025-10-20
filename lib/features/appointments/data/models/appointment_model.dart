@@ -12,7 +12,7 @@ class AppointmentModel extends Appointment {
   });
 
   factory AppointmentModel.fromJson(Map<String, dynamic> json) {
-    return AppointmentModel({
+    return AppointmentModel(
       id: json['id'] as String,
       doctorId: json['doctor_id'] as String,
       patientId: json['patient_id'] as String,
@@ -20,7 +20,7 @@ class AppointmentModel extends Appointment {
       status: _mapStatus(json['status'] as String),
       organizationId: json['organization_id'] as String,
       notes: json['notes'] as String?,
-    });
+    );
   }
 
   Map<String, dynamic> toJson() {

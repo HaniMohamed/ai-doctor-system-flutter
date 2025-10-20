@@ -1,7 +1,6 @@
 import '../../../../core/network/network_info.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../datasources/appointment_remote_datasource.dart';
-import '../models/appointment_model.dart';
 import '../../domain/entities/appointment.dart';
 import '../../domain/repositories/appointment_repository.dart';
 

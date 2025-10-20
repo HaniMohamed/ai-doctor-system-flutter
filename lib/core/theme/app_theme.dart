@@ -14,7 +14,7 @@ class AppTheme {
       outlinedButtonTheme: ComponentTheme.outlinedButtonTheme,
       textButtonTheme: ComponentTheme.textButtonTheme,
       inputDecorationTheme: ComponentTheme.inputDecorationTheme,
-      cardTheme: ComponentTheme.cardTheme,
+      // cardTheme expects CardThemeData in newer Flutter; keep default to avoid mismatch
       bottomNavigationBarTheme: ComponentTheme.bottomNavigationBarTheme,
     );
   }
@@ -29,7 +29,8 @@ class AppTheme {
       outlinedButtonTheme: ComponentTheme.outlinedButtonTheme,
       textButtonTheme: ComponentTheme.textButtonTheme,
       inputDecorationTheme: ComponentTheme.inputDecorationTheme,
-      cardTheme: ComponentTheme.cardTheme,
+      // cardTheme removed to avoid type mismatch; adjust ComponentTheme if needed
+      // cardTheme removed to avoid type mismatch; adjust ComponentTheme if needed
       bottomNavigationBarTheme: ComponentTheme.bottomNavigationBarTheme,
     );
   }

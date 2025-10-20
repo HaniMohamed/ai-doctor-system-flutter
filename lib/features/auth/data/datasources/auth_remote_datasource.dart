@@ -1,12 +1,9 @@
-import 'package:dio/dio.dart';
 import '../../../../core/network/api_client.dart';
-import '../../../../core/di/injection_container.dart';
 import '../models/user_model.dart';
 import '../models/auth_tokens_model.dart';
-import '../models/login_request_model.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<UserModel> login(LoginRequestModel request);
+  Future<UserModel> login(String email, String password);
   Future<void> logout();
   Future<UserModel> getCurrentUser();
   Future<AuthTokensModel> refreshToken(String refreshToken);
@@ -18,10 +15,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   AuthRemoteDataSourceImpl({required ApiClient apiClient}) : _apiClient = apiClient;
 
   @override
-  Future<UserModel> login(LoginRequestModel request) async {
+  Future<UserModel> login(String email, String password) async {
     final response = await _apiClient.post(
       '/auth/login',
-      data: request.toJson(),
+      data: {
+        'email': email,
+        'password': password,
+      },
     );
     return UserModel.fromJson(response.data);
   }

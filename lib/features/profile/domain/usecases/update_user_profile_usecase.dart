@@ -1,5 +1,5 @@
-import '../../entities/user_profile.dart';
-import '../../repositories/profile_repository.dart';
+import '../entities/user_profile.dart';
+import '../repositories/profile_repository.dart';
 
 class UpdateUserProfileUsecase {
   final ProfileRepository _repository;

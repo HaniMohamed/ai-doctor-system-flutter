@@ -27,8 +27,7 @@ class AppointmentsListPage extends StatelessWidget {
           itemBuilder: (context, index) {
             final a = controller.appointments[index];
             return ListTile(
-              title: Text('Doctor: ${a.doctorId} • Patient: ${a.patientId}')
-                  .copyWith(),
+              title: Text('Doctor: ${a.doctorId} • Patient: ${a.patientId}'),
               subtitle: Text('${a.scheduledAt} • ${a.status.name}'),
             );
           },

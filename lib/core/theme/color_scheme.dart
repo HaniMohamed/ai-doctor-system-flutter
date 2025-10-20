@@ -21,12 +21,10 @@ class AppColorScheme {
       secondary: secondary,
       secondaryContainer: secondaryVariant,
       surface: surface,
-      background: background,
       error: error,
       onPrimary: onPrimary,
       onSecondary: onSecondary,
       onSurface: onSurface,
-      onBackground: onBackground,
       onError: onError,
     );
   }
@@ -38,12 +36,12 @@ class AppColorScheme {
       secondary: secondary,
       secondaryContainer: secondaryVariant,
       surface: surface,
-      background: background,
+      surface: surface,
       error: error,
       onPrimary: onPrimary,
       onSecondary: onSecondary,
       onSurface: onSurface,
-      onBackground: onBackground,
+      onSurface: onSurface,
       onError: onError,
     );
   }

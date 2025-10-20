@@ -15,9 +15,9 @@ class AccessibilityConfig extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-    final clampedScale = mediaQuery.textScaleFactor.clamp(minTextScale, maxTextScale);
+    final clampedScale = mediaQuery.textScaler.clamp(minScaleFactor: minTextScale, maxScaleFactor: maxTextScale);
     return MediaQuery(
-      data: mediaQuery.copyWith(textScaleFactor: clampedScale),
+      data: mediaQuery.copyWith(textScaler: clampedScale),
       child: child,
     );
   }

@@ -1,5 +1,4 @@
-import 'package:dartz/dartz.dart';
-import '../../../../core/errors/failures.dart';
+import '../../../../core/errors/exceptions.dart';
 import '../../../../core/network/network_info.dart';
 import '../datasources/auth_remote_datasource.dart';
 import '../datasources/auth_local_datasource.dart';
@@ -24,9 +23,7 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<User> login(String email, String password) async {
     if (await _networkInfo.isConnected) {
       try {
-        final user = await _remoteDataSource.login(
-          LoginRequestModel(email: email, password: password),
-        );
+        final user = await _remoteDataSource.login(email, password);
         await _localDataSource.cacheUser(user);
         return user;
       } catch (e) {

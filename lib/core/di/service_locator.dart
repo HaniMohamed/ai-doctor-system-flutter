@@ -1,4 +1,4 @@
-import 'package:get_it/get_it.dart';
+import 'injection_container.dart';
 import '../network/api_client.dart';
 import '../storage/local_storage.dart';
 import '../storage/secure_storage.dart';
