@@ -1,5 +1,5 @@
-import '../entities/user_profile.dart';
 import '../entities/organization.dart';
+import '../entities/user_profile.dart';
 
 abstract class ProfileRepository {
   Future<UserProfile> getUserProfile();

@@ -1,6 +1,6 @@
 import '../../../../core/network/api_client.dart';
-import '../../data/models/user_profile_model.dart';
 import '../../data/models/organization_model.dart';
+import '../../data/models/user_profile_model.dart';
 
 abstract class ProfileRemoteDataSource {
   Future<UserProfileModel> getUserProfile();

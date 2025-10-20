@@ -1,6 +1,6 @@
 import '../../../../core/network/api_client.dart';
-import '../models/user_model.dart';
 import '../models/auth_tokens_model.dart';
+import '../models/user_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<UserModel> login(String email, String password);

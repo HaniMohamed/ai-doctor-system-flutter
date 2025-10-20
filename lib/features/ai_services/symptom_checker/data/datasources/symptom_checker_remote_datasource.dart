@@ -1,8 +1,7 @@
+import '../../../../../core/network/api_client.dart';
+import '../../data/models/analysis_result_model.dart';
 import '../../domain/entities/analysis_result.dart';
 import '../../domain/entities/symptom.dart';
-import '../../domain/repositories/symptom_checker_repository.dart';
-import '../../data/models/analysis_result_model.dart';
-import '../../../../../core/network/api_client.dart';
 
 abstract class SymptomCheckerRemoteDataSource {
   Future<AnalysisResult> analyzeSymptoms(List<Symptom> symptoms, {int? age, String? gender});

@@ -1,12 +1,13 @@
-import 'injection_container.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+
+import '../../features/auth/data/services/auth_service_impl.dart';
+import '../../features/auth/domain/services/auth_service.dart';
 import '../network/api_client.dart';
+import '../network/network_info.dart';
+import '../storage/cache_manager.dart';
 import '../storage/local_storage.dart';
 import '../storage/secure_storage.dart';
-import '../storage/cache_manager.dart';
-import '../../features/auth/domain/services/auth_service.dart';
-import '../../features/auth/data/services/auth_service_impl.dart';
-import '../network/network_info.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'injection_container.dart';
 
 class ServiceLocator {
   static Future<void> setup() async {

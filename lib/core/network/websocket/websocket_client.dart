@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:web_socket_channel/web_socket_channel.dart';
+
+import '../../../features/auth/domain/services/auth_service.dart';
 import '../../config/environment_config.dart';
 import '../../di/injection_container.dart';
-import '../../../features/auth/domain/services/auth_service.dart';
 
 class WebSocketClient {
   WebSocketChannel? _channel;

@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
-import '../../domain/entities/symptom.dart';
+
 import '../../domain/entities/analysis_result.dart';
+import '../../domain/entities/symptom.dart';
 import '../../domain/usecases/analyze_symptoms_usecase.dart';
 
 class SymptomCheckerController extends GetxController {

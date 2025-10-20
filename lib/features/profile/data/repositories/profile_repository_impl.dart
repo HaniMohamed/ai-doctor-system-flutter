@@ -1,10 +1,10 @@
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/network/network_info.dart';
-import '../datasources/profile_remote_datasource.dart';
-import '../datasources/profile_local_datasource.dart';
-import '../../domain/entities/user_profile.dart';
 import '../../domain/entities/organization.dart';
+import '../../domain/entities/user_profile.dart';
 import '../../domain/repositories/profile_repository.dart';
+import '../datasources/profile_local_datasource.dart';
+import '../datasources/profile_remote_datasource.dart';
 
 class ProfileRepositoryImpl implements ProfileRepository {
   final ProfileRemoteDataSource _remote;

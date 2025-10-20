@@ -1,7 +1,7 @@
 import '../../../../core/network/network_info.dart';
-import '../datasources/patient_remote_datasource.dart';
 import '../../domain/entities/patient.dart';
 import '../../domain/repositories/patient_repository.dart';
+import '../datasources/patient_remote_datasource.dart';
 
 class PatientRepositoryImpl implements PatientRepository {
   final PatientRemoteDataSource _remote;

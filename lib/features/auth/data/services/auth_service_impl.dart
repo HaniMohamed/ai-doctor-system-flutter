@@ -1,5 +1,5 @@
-import '../../domain/services/auth_service.dart';
 import '../../domain/entities/user.dart';
+import '../../domain/services/auth_service.dart';
 
 class AuthServiceImpl implements AuthService {
   User? _currentUser;

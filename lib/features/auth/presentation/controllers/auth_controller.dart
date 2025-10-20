@@ -1,9 +1,10 @@
 import 'package:get/get.dart';
+
+import '../../../../core/errors/failures.dart';
+import '../../domain/entities/user.dart';
+import '../../domain/usecases/get_current_user_usecase.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
-import '../../domain/usecases/get_current_user_usecase.dart';
-import '../../domain/entities/user.dart';
-import '../../../../core/errors/failures.dart';
 
 class AuthController extends GetxController {
   final LoginUsecase _loginUsecase;

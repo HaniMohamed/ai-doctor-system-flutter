@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
-import '../../di/injection_container.dart';
+
 import '../../../../features/auth/domain/services/auth_service.dart';
+import '../../di/injection_container.dart';
 
 class AuthInterceptor extends Interceptor {
   @override

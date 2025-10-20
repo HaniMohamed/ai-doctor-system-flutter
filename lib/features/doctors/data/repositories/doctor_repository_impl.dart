@@ -1,7 +1,7 @@
 import '../../../../core/network/network_info.dart';
-import '../datasources/doctor_remote_datasource.dart';
 import '../../domain/entities/doctor.dart';
 import '../../domain/repositories/doctor_repository.dart';
+import '../datasources/doctor_remote_datasource.dart';
 
 class DoctorRepositoryImpl implements DoctorRepository {
   final DoctorRemoteDataSource _remote;

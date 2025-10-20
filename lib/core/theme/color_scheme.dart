@@ -36,11 +36,9 @@ class AppColorScheme {
       secondary: secondary,
       secondaryContainer: secondaryVariant,
       surface: surface,
-      surface: surface,
       error: error,
       onPrimary: onPrimary,
       onSecondary: onSecondary,
-      onSurface: onSurface,
       onSurface: onSurface,
       onError: onError,
     );
