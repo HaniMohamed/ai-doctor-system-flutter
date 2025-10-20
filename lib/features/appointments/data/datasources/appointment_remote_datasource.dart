@@ -27,13 +27,13 @@ class AppointmentRemoteDataSourceImpl implements AppointmentRemoteDataSource {
 
   @override
   Future<AppointmentModel> updateAppointment(String id, Map<String, dynamic> request) async {
-    final res = await _apiClient.post('/appointments/$id', data: request);
+    final res = await _apiClient.put('/appointments/$id', data: request);
     return AppointmentModel.fromJson(res.data);
   }
 
   @override
   Future<void> deleteAppointment(String id) async {
-    await _apiClient.post('/appointments/$id/delete');
+    await _apiClient.delete('/appointments/$id');
   }
 }
 

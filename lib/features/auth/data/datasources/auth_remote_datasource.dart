@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import '../../../../core/network/api_client.dart';
 import '../models/auth_tokens_model.dart';
 import '../models/user_model.dart';
@@ -19,9 +20,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final response = await _apiClient.post(
       '/auth/login',
       data: {
-        'email': email,
+        'username': email,
         'password': password,
       },
+      options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     return UserModel.fromJson(response.data);
   }
@@ -41,7 +43,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<AuthTokensModel> refreshToken(String refreshToken) async {
     final response = await _apiClient.post(
       '/auth/refresh',
-      data: {'refresh_token': refreshToken},
     );
     return AuthTokensModel.fromJson(response.data);
   }

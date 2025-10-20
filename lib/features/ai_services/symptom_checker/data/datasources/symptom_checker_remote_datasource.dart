@@ -14,11 +14,11 @@ class SymptomCheckerRemoteDataSourceImpl implements SymptomCheckerRemoteDataSour
   @override
   Future<AnalysisResult> analyzeSymptoms(List<Symptom> symptoms, {int? age, String? gender}) async {
     final payload = {
-      'symptoms': symptoms.map((s) => {'name': s.name, 'severity': s.severity}).toList(),
+      'symptoms': symptoms.map((s) => s.name).join(', '),
       if (age != null) 'age': age,
       if (gender != null) 'gender': gender,
     };
-    final res = await _apiClient.post('/ai/symptom-checker/analyze', data: payload);
+    final res = await _apiClient.post('/ai/symptom-checker', data: payload);
     return AnalysisResultModel.fromJson(res.data);
   }
 }

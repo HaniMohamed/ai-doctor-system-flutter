@@ -15,19 +15,19 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<UserProfileModel> getUserProfile() async {
-    final res = await _apiClient.get('/profile/me');
+    final res = await _apiClient.get('/users/me');
     return UserProfileModel.fromJson(res.data);
   }
 
   @override
   Future<UserProfileModel> updateUserProfile(UserProfileModel profile) async {
-    final res = await _apiClient.post('/profile/me', data: profile.toJson());
+    final res = await _apiClient.put('/users/me', data: profile.toJson());
     return UserProfileModel.fromJson(res.data);
   }
 
   @override
   Future<UserProfileModel> uploadProfileImage(String base64Image) async {
-    final res = await _apiClient.post('/profile/me/avatar', data: {
+    final res = await _apiClient.post('/users/me/avatar', data: {
       'image_base64': base64Image,
     });
     return UserProfileModel.fromJson(res.data);
@@ -35,7 +35,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
 
   @override
   Future<OrganizationModel> getOrganization() async {
-    final res = await _apiClient.get('/profile/organization');
+    final res = await _apiClient.get('/users/organization');
     return OrganizationModel.fromJson(res.data);
   }
 }

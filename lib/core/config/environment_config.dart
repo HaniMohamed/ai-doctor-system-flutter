@@ -17,13 +17,13 @@ class EnvironmentConfig {
   static String get websocketUrl {
     switch (_environment) {
       case 'production':
-        return 'wss://api.aidoctorsystem.com';
+        return 'wss://api.aidoctorsystem.com/api/v1';
       case 'staging':
-        return 'wss://staging-api.aidoctorsystem.com';
+        return 'wss://staging-api.aidoctorsystem.com/api/v1';
       case 'testing':
-        return 'wss://testing-api.aidoctorsystem.com';
+        return 'wss://testing-api.aidoctorsystem.com/api/v1';
       default:
-        return 'ws://localhost:8000';
+        return 'ws://localhost:8000/api/v1';
     }
   }
 
