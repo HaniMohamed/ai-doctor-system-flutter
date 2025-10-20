@@ -164,15 +164,17 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
     // TODO: Implement actual symptom analysis
     await Future.delayed(const Duration(seconds: 2));
 
-    setState(() {
-      _isAnalyzing = false;
-    });
+    if (mounted) {
+      setState(() {
+        _isAnalyzing = false;
+      });
 
-    // TODO: Show analysis results
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Symptom analysis feature coming soon!'),
-      ),
-    );
+      // TODO: Show analysis results
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Symptom analysis feature coming soon!'),
+        ),
+      );
+    }
   }
 }

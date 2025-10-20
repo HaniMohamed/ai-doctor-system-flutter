@@ -12,7 +12,6 @@ class _SettingsPageState extends State<SettingsPage> {
   bool _darkModeEnabled = false;
   bool _biometricAuthEnabled = false;
   String _language = 'English';
-  final String _theme = 'System';
 
   @override
   Widget build(BuildContext context) {
@@ -202,48 +201,65 @@ class _SettingsPageState extends State<SettingsPage> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Select Language'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            RadioListTile<String>(
-              title: const Text('English'),
-              value: 'English',
-              groupValue: _language,
-              onChanged: (value) {
-                setState(() {
-                  _language = value!;
-                });
-                Navigator.pop(context);
-                _showComingSoon('Language change');
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('Spanish'),
-              value: 'Spanish',
-              groupValue: _language,
-              onChanged: (value) {
-                setState(() {
-                  _language = value!;
-                });
-                Navigator.pop(context);
-                _showComingSoon('Language change');
-              },
-            ),
-            RadioListTile<String>(
-              title: const Text('French'),
-              value: 'French',
-              groupValue: _language,
-              onChanged: (value) {
-                setState(() {
-                  _language = value!;
-                });
-                Navigator.pop(context);
-                _showComingSoon('Language change');
-              },
-            ),
-          ],
+        content: StatefulBuilder(
+          builder: (context, setDialogState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildLanguageOption('English', context),
+                _buildLanguageOption('Spanish', context),
+                _buildLanguageOption('French', context),
+              ],
+            );
+          },
         ),
       ),
+    );
+  }
+
+  Widget _buildLanguageOption(String language, BuildContext context) {
+    final isSelected = _language == language;
+    
+    return ListTile(
+      leading: Container(
+        width: 24,
+        height: 24,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(
+            color: isSelected 
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.outline,
+            width: 2,
+          ),
+          color: isSelected 
+              ? Theme.of(context).colorScheme.primary
+              : Colors.transparent,
+        ),
+        child: isSelected
+            ? Icon(
+                Icons.check,
+                size: 16,
+                color: Theme.of(context).colorScheme.onPrimary,
+              )
+            : null,
+      ),
+      title: Text(
+        language,
+        style: TextStyle(
+          color: isSelected 
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.onSurface,
+          fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+        ),
+      ),
+      onTap: () {
+        setState(() {
+          _language = language;
+        });
+        Navigator.pop(context);
+        _showComingSoon('Language change');
+      },
     );
   }
 

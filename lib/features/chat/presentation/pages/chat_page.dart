@@ -87,7 +87,7 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                     maxLines: null,
                     textInputAction: TextInputAction.send,
-                    onSubmitted: _sendMessage,
+                    onSubmitted: (_) => _sendMessage(),
                   ),
                 ),
                 const SizedBox(width: 8),
