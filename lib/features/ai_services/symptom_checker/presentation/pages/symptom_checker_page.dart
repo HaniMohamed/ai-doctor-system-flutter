@@ -16,6 +16,7 @@ class SymptomCheckerPage extends StatefulWidget {
 
 class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
   final TextEditingController _symptomController = TextEditingController();
+  final FocusNode _symptomFocusNode = FocusNode();
   bool _canAddSymptom = false;
   late SymptomCheckerController _controller;
   final AIProgressService _progressService = AIProgressService();
@@ -50,6 +51,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
   void dispose() {
     _symptomController.removeListener(_onTextChanged);
     _symptomController.dispose();
+    _symptomFocusNode.dispose();
     _progressService.stopProgress();
     super.dispose();
   }
@@ -90,13 +92,26 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
             const SizedBox(height: 16),
             TextField(
               controller: _symptomController,
+              focusNode: _symptomFocusNode,
               decoration: const InputDecoration(
                 hintText: 'Enter your symptoms (e.g., headache, fever, nausea)',
                 border: OutlineInputBorder(),
                 prefixIcon: Icon(Icons.search),
               ),
               maxLines: 3,
+              textInputAction: TextInputAction.done,
               onSubmitted: _addSymptom,
+              onChanged: (value) {
+                // Handle Enter key in multi-line text field
+                if (value.contains('\n')) {
+                  // Remove the newline and submit
+                  final textWithoutNewline = value.replaceAll('\n', '').trim();
+                  if (textWithoutNewline.isNotEmpty) {
+                    _symptomController.text = textWithoutNewline;
+                    _addSymptom(textWithoutNewline);
+                  }
+                }
+              },
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
@@ -224,6 +239,13 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
       _symptomController.clear();
       // Clear any previous error messages when adding new symptoms
       _controller.errorMessage.value = '';
+      // Return focus to the text field after adding symptom
+      // Use addPostFrameCallback to ensure the UI has updated
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted && _symptomFocusNode.canRequestFocus) {
+          _symptomFocusNode.requestFocus();
+        }
+      });
     }
   }
 
