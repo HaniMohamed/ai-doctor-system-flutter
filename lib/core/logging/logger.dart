@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer' as developer;
 import '../config/environment_config.dart';
 
@@ -11,38 +12,46 @@ enum LogLevel {
 
 class Logger {
   static const String _logName = 'AI_Doctor_App';
-  
-  static void debug(String message, [String? tag, Object? error, StackTrace? stackTrace]) {
+
+  static void debug(String message,
+      [String? tag, Object? error, StackTrace? stackTrace]) {
     _log(LogLevel.debug, message, tag, error, stackTrace);
   }
-  
-  static void info(String message, [String? tag, Object? error, StackTrace? stackTrace]) {
+
+  static void info(String message,
+      [String? tag, Object? error, StackTrace? stackTrace]) {
     _log(LogLevel.info, message, tag, error, stackTrace);
   }
-  
-  static void warning(String message, [String? tag, Object? error, StackTrace? stackTrace]) {
+
+  static void warning(String message,
+      [String? tag, Object? error, StackTrace? stackTrace]) {
     _log(LogLevel.warning, message, tag, error, stackTrace);
   }
-  
-  static void error(String message, [String? tag, Object? error, StackTrace? stackTrace]) {
+
+  static void error(String message,
+      [String? tag, Object? error, StackTrace? stackTrace]) {
     _log(LogLevel.error, message, tag, error, stackTrace);
   }
-  
-  static void fatal(String message, [String? tag, Object? error, StackTrace? stackTrace]) {
+
+  static void fatal(String message,
+      [String? tag, Object? error, StackTrace? stackTrace]) {
     _log(LogLevel.fatal, message, tag, error, stackTrace);
   }
-  
-  static void _log(LogLevel level, String message, String? tag, Object? error, StackTrace? stackTrace) {
+
+  static void _log(LogLevel level, String message, String? tag, Object? error,
+      StackTrace? stackTrace) {
     // Only log in non-production environments or for errors/fatal messages
-    if (!EnvironmentConfig.enableLogging && level != LogLevel.error && level != LogLevel.fatal) {
+    if (!EnvironmentConfig.enableLogging &&
+        level != LogLevel.error &&
+        level != LogLevel.fatal) {
       return;
     }
-    
+
     final timestamp = DateTime.now().toIso8601String();
     final levelName = level.name.toUpperCase();
     final tagPrefix = tag != null ? '[$tag] ' : '';
     final logMessage = '$timestamp [$levelName] $tagPrefix$message';
-    
+
     // Use developer.log for better integration with Flutter tools
     developer.log(
       logMessage,
@@ -51,13 +60,13 @@ class Logger {
       error: error,
       stackTrace: stackTrace,
     );
-    
+
     // Also print to console in development for immediate feedback
     if (EnvironmentConfig.enableLogging) {
       _printToConsole(level, logMessage);
     }
   }
-  
+
   static int _getDeveloperLogLevel(LogLevel level) {
     switch (level) {
       case LogLevel.debug:
@@ -72,7 +81,7 @@ class Logger {
         return 1600;
     }
   }
-  
+
   static void _printToConsole(LogLevel level, String message) {
     switch (level) {
       case LogLevel.debug:
@@ -97,37 +106,170 @@ class Logger {
         break;
     }
   }
-  
-  // Convenience methods for common use cases
-  static void apiRequest(String method, String url, Map<String, dynamic>? data) {
-    debug('API Request: $method $url', 'API');
-    if (data != null && EnvironmentConfig.enableLogging) {
-      debug('Request Data: $data', 'API');
+
+  // Enhanced API logging methods
+  static void apiRequest({
+    required String method,
+    required String url,
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? headers,
+    String? correlationId,
+    String? userId,
+  }) {
+    final requestInfo = StringBuffer();
+    requestInfo.write('🚀 API Request: $method $url');
+
+    if (correlationId != null) {
+      requestInfo.write(' [ID: $correlationId]');
+    }
+    if (userId != null) {
+      requestInfo.write(' [User: $userId]');
+    }
+
+    debug(requestInfo.toString(), 'API');
+
+    if (EnvironmentConfig.enableLogging) {
+      if (data != null) {
+        final dataSize = _calculateDataSize(data);
+        debug('📤 Request Data (${dataSize}): ${_truncateData(data)}', 'API');
+      }
+
+      if (headers != null && headers.isNotEmpty) {
+        final filteredHeaders = _filterSensitiveHeaders(headers);
+        debug('📋 Headers: $filteredHeaders', 'API');
+      }
     }
   }
-  
-  static void apiResponse(int statusCode, String url, Duration responseTime) {
+
+  static void apiResponse({
+    required int statusCode,
+    required String url,
+    required Duration responseTime,
+    Map<String, dynamic>? data,
+    Map<String, dynamic>? headers,
+    String? correlationId,
+    int? contentLength,
+  }) {
     final level = statusCode >= 400 ? LogLevel.error : LogLevel.info;
-    _log(level, 'API Response: $statusCode $url (${responseTime.inMilliseconds}ms)', 'API', null, null);
+    final emoji = statusCode >= 400 ? '❌' : (statusCode >= 300 ? '⚠️' : '✅');
+
+    final responseInfo = StringBuffer();
+    responseInfo.write('$emoji API Response: $statusCode $url');
+    responseInfo.write(' (${responseTime.inMilliseconds}ms)');
+
+    if (correlationId != null) {
+      responseInfo.write(' [ID: $correlationId]');
+    }
+    if (contentLength != null) {
+      responseInfo.write(' [Size: ${_formatBytes(contentLength)}]');
+    }
+
+    _log(level, responseInfo.toString(), 'API', null, null);
+
+    if (EnvironmentConfig.enableLogging && data != null) {
+      debug('📥 Response Data: ${_truncateData(data)}', 'API');
+    }
+
+    if (EnvironmentConfig.enableLogging &&
+        headers != null &&
+        headers.isNotEmpty) {
+      final filteredHeaders = _filterSensitiveHeaders(headers);
+      debug('📋 Response Headers: $filteredHeaders', 'API');
+    }
   }
-  
-  static void apiError(String method, String url, Object error) {
-    _log(LogLevel.error, 'API Error: $method $url', 'API', error, null);
+
+  static void apiError({
+    required String method,
+    required String url,
+    required Object error,
+    String? correlationId,
+    String? userId,
+    int? statusCode,
+    Duration? responseTime,
+  }) {
+    final errorInfo = StringBuffer();
+    errorInfo.write('💥 API Error: $method $url');
+
+    if (statusCode != null) {
+      errorInfo.write(' [$statusCode]');
+    }
+    if (correlationId != null) {
+      errorInfo.write(' [ID: $correlationId]');
+    }
+    if (userId != null) {
+      errorInfo.write(' [User: $userId]');
+    }
+    if (responseTime != null) {
+      errorInfo.write(' (${responseTime.inMilliseconds}ms)');
+    }
+
+    _log(LogLevel.error, errorInfo.toString(), 'API', error, null);
   }
-  
+
   static void authEvent(String event, String? userId) {
     final message = userId != null ? '$event (User: $userId)' : event;
     info(message, 'AUTH');
   }
-  
+
   static void navigationEvent(String from, String to) {
     debug('Navigation: $from -> $to', 'NAVIGATION');
   }
-  
+
   static void userAction(String action, [Map<String, dynamic>? data]) {
     debug('User Action: $action', 'USER');
     if (data != null && EnvironmentConfig.enableLogging) {
       debug('Action Data: $data', 'USER');
+    }
+  }
+
+  // Helper methods for enhanced API logging
+  static String _calculateDataSize(dynamic data) {
+    try {
+      final jsonString = data is String ? data : jsonEncode(data);
+      return _formatBytes(jsonString.length);
+    } catch (e) {
+      return 'Unknown';
+    }
+  }
+
+  static String _formatBytes(int bytes) {
+    if (bytes < 1024) return '$bytes B';
+    if (bytes < 1024 * 1024) return '${(bytes / 1024).toStringAsFixed(1)} KB';
+    return '${(bytes / (1024 * 1024)).toStringAsFixed(1)} MB';
+  }
+
+  static Map<String, dynamic> _filterSensitiveHeaders(
+      Map<String, dynamic> headers) {
+    final sensitiveKeys = [
+      'authorization',
+      'cookie',
+      'x-api-key',
+      'x-auth-token'
+    ];
+    final filtered = <String, dynamic>{};
+
+    headers.forEach((key, value) {
+      if (!sensitiveKeys.contains(key.toLowerCase())) {
+        filtered[key] = value;
+      } else {
+        filtered[key] = '***REDACTED***';
+      }
+    });
+
+    return filtered;
+  }
+
+  static dynamic _truncateData(dynamic data, {int maxLength = 1000}) {
+    try {
+      final jsonString = data is String ? data : jsonEncode(data);
+      if (jsonString.length <= maxLength) {
+        return data;
+      }
+      return '${jsonString.substring(0, maxLength)}... [TRUNCATED]';
+    } catch (e) {
+      return data.toString().length <= maxLength
+          ? data.toString()
+          : '${data.toString().substring(0, maxLength)}... [TRUNCATED]';
     }
   }
 }

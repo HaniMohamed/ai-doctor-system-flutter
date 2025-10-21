@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 
 import '../../domain/entities/symptom.dart';
 import '../controllers/symptom_checker_controller.dart';
+import '../../../../../shared/widgets/ai_loading_animation.dart';
+import '../../../../../shared/services/ai_progress_service.dart';
 
 class SymptomCheckerPage extends StatefulWidget {
   const SymptomCheckerPage({super.key});
@@ -16,18 +18,39 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
   final TextEditingController _symptomController = TextEditingController();
   bool _canAddSymptom = false;
   late SymptomCheckerController _controller;
+  final AIProgressService _progressService = AIProgressService();
+  String _currentLoadingMessage = "🧠 Initializing AI analysis...";
+  double _currentProgress = 0.0;
 
   @override
   void initState() {
     super.initState();
     _controller = Get.find<SymptomCheckerController>();
     _symptomController.addListener(_onTextChanged);
+
+    // Listen to progress updates
+    _progressService.progressStream.listen((progress) {
+      if (mounted) {
+        setState(() {
+          _currentProgress = progress;
+        });
+      }
+    });
+
+    _progressService.messageStream.listen((message) {
+      if (mounted) {
+        setState(() {
+          _currentLoadingMessage = message;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
     _symptomController.removeListener(_onTextChanged);
     _symptomController.dispose();
+    _progressService.stopProgress();
     super.dispose();
   }
 
@@ -154,6 +177,16 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
                         return _buildErrorMessage(context);
                       }
 
+                      // Show AI loading animation when analyzing
+                      if (_controller.isLoading.value) {
+                        return MedicalAiLoadingIndicator(
+                          initialText: _currentLoadingMessage,
+                          primaryColor: Theme.of(context).colorScheme.primary,
+                          secondaryColor:
+                              Theme.of(context).colorScheme.secondary,
+                        );
+                      }
+
                       if (_controller.result.value != null) {
                         return _buildAnalysisResults(context);
                       } else {
@@ -204,9 +237,22 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
 
   Future<void> _analyzeSymptoms() async {
     if (_controller.symptoms.isEmpty) return;
+
+    // Prevent multiple rapid clicks
+    if (_controller.isLoading.value) {
+      return;
+    }
+
     // Clear any previous error messages when starting new analysis
     _controller.errorMessage.value = '';
+
+    // Start AI progress animation
+    _progressService.startProgress();
+
     await _controller.analyze();
+
+    // Stop progress animation when analysis is complete
+    _progressService.stopProgress();
   }
 
   Widget _buildAnalysisResults(BuildContext context) {
