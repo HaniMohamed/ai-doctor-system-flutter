@@ -1,16 +1,18 @@
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as dio;
+import 'package:get/get.dart';
 
 import '../config/environment_config.dart';
+import '../services/language_service.dart';
 import 'interceptors/auth_interceptor.dart';
 import 'interceptors/error_interceptor.dart';
 import 'interceptors/logging_interceptor.dart';
 
 class ApiClient {
-  late Dio _dio;
+  late dio.Dio _dio;
 
   ApiClient() {
-    _dio = Dio(
-      BaseOptions(
+    _dio = dio.Dio(
+      dio.BaseOptions(
         baseUrl: '${EnvironmentConfig.apiBaseUrl}/api/v1',
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(minutes: 4),
@@ -18,10 +20,22 @@ class ApiClient {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
+          'Accept-Language': _getLanguageHeader(),
         },
       ),
     );
     _setupInterceptors();
+  }
+
+  String _getLanguageHeader() {
+    try {
+      if (Get.isRegistered<LanguageService>()) {
+        return LanguageService.instance.currentLanguageHeader;
+      }
+    } catch (e) {
+      // Fallback to default language
+    }
+    return 'en-US';
   }
 
   void _setupInterceptors() {
@@ -32,10 +46,14 @@ class ApiClient {
     ]);
   }
 
-  Future<Response<T>> get<T>(
+  void updateLanguageHeader() {
+    _dio.options.headers['Accept-Language'] = _getLanguageHeader();
+  }
+
+  Future<dio.Response<T>> get<T>(
     String path, {
     Map<String, dynamic>? queryParameters,
-    Options? options,
+    dio.Options? options,
   }) async {
     return _dio.get<T>(
       path,
@@ -44,11 +62,11 @@ class ApiClient {
     );
   }
 
-  Future<Response<T>> post<T>(
+  Future<dio.Response<T>> post<T>(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-    Options? options,
+    dio.Options? options,
   }) async {
     return _dio.post<T>(
       path,
@@ -58,11 +76,11 @@ class ApiClient {
     );
   }
 
-  Future<Response<T>> put<T>(
+  Future<dio.Response<T>> put<T>(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-    Options? options,
+    dio.Options? options,
   }) async {
     return _dio.put<T>(
       path,
@@ -72,11 +90,11 @@ class ApiClient {
     );
   }
 
-  Future<Response<T>> delete<T>(
+  Future<dio.Response<T>> delete<T>(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
-    Options? options,
+    dio.Options? options,
   }) async {
     return _dio.delete<T>(
       path,

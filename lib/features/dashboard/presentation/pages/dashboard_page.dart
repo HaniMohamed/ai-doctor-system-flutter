@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../../routes/app_routes.dart';
+import '../../../../shared/widgets/base_scaffold.dart';
+import '../../../../generated/l10n/app_localizations.dart';
 import '../controllers/dashboard_controller.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -11,8 +13,8 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<DashboardController>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Dashboard')),
+    return BaseScaffold(
+      title: AppLocalizations.of(context)!.dashboard,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -33,7 +35,7 @@ class DashboardPage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: _StatCard(
-                          label: 'Total Appointments',
+                          label: AppLocalizations.of(context)!.appointments,
                           value: controller.appointmentsCount.value.toString(),
                           icon: Icons.calendar_today,
                         ),
@@ -54,7 +56,7 @@ class DashboardPage extends StatelessWidget {
                     children: [
                       Expanded(
                         child: _StatCard(
-                          label: 'Total Notifications',
+                          label: AppLocalizations.of(context)!.notifications,
                           value: controller.notificationsCount.value.toString(),
                           icon: Icons.notifications,
                         ),
@@ -76,7 +78,7 @@ class DashboardPage extends StatelessWidget {
               );
             }),
             const SizedBox(height: 24),
-            Text('Quick Actions',
+            Text(AppLocalizations.of(context)!.settings,
                 style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
             _buildQuickActions(context),
@@ -93,7 +95,7 @@ class DashboardPage extends StatelessWidget {
           children: [
             Expanded(
               child: _ActionCard(
-                title: 'Book Appointment',
+                title: AppLocalizations.of(context)!.appointments,
                 subtitle: 'Schedule with a doctor',
                 icon: Icons.calendar_today,
                 color: Colors.blue,
@@ -103,7 +105,7 @@ class DashboardPage extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: _ActionCard(
-                title: 'Symptom Checker',
+                title: AppLocalizations.of(context)!.symptomChecker,
                 subtitle: 'AI-powered health check',
                 icon: Icons.health_and_safety,
                 color: Colors.green,
@@ -117,7 +119,7 @@ class DashboardPage extends StatelessWidget {
           children: [
             Expanded(
               child: _ActionCard(
-                title: 'Chat with AI',
+                title: AppLocalizations.of(context)!.chat,
                 subtitle: 'Get instant medical advice',
                 icon: Icons.chat,
                 color: Colors.purple,
@@ -127,7 +129,7 @@ class DashboardPage extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: _ActionCard(
-                title: 'Find Doctors',
+                title: AppLocalizations.of(context)!.doctors,
                 subtitle: 'Browse available doctors',
                 icon: Icons.people,
                 color: Colors.orange,
@@ -141,7 +143,7 @@ class DashboardPage extends StatelessWidget {
           children: [
             Expanded(
               child: _ActionCard(
-                title: 'Notifications',
+                title: AppLocalizations.of(context)!.notifications,
                 subtitle: 'View your alerts',
                 icon: Icons.notifications,
                 color: Colors.red,
@@ -151,7 +153,7 @@ class DashboardPage extends StatelessWidget {
             const SizedBox(width: 12),
             Expanded(
               child: _ActionCard(
-                title: 'Profile',
+                title: AppLocalizations.of(context)!.profile,
                 subtitle: 'Manage your account',
                 icon: Icons.person,
                 color: Colors.teal,

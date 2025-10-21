@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../features/auth/data/datasources/auth_local_datasource.dart';
 import '../../features/auth/data/datasources/auth_remote_datasource.dart';
@@ -9,10 +10,15 @@ import '../network/network_info.dart';
 import '../storage/cache_manager.dart';
 import '../storage/local_storage.dart';
 import '../storage/secure_storage.dart';
+import '../services/language_service.dart';
 import 'injection_container.dart';
 
 class ServiceLocator {
   static Future<void> setup() async {
+    // SharedPreferences
+    final prefs = await SharedPreferences.getInstance();
+    sl.registerLazySingleton<SharedPreferences>(() => prefs);
+
     // Network
     sl.registerLazySingleton<ApiClient>(() => ApiClient());
 
@@ -24,6 +30,11 @@ class ServiceLocator {
     // Network info
     sl.registerLazySingleton<NetworkInfo>(
         () => NetworkInfoImpl(Connectivity()));
+
+    // Language service
+    sl.registerLazySingleton<LanguageService>(
+      () => LanguageService(sl<SharedPreferences>()),
+    );
 
     // Auth data sources
     sl.registerLazySingleton<AuthRemoteDataSource>(
@@ -49,5 +60,8 @@ class ServiceLocator {
     await sl<LocalStorage>().initialize();
     await sl<SecureStorage>().initialize();
     await sl<CacheManager>().initialize();
+    
+    // Initialize language service
+    await sl<LanguageService>().onInit();
   }
 }
