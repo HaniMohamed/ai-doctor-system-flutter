@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../generated/l10n/app_localizations.dart';
 
 class PatientProfilePage extends StatefulWidget {
   const PatientProfilePage({super.key});
@@ -13,9 +14,11 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
   final _emailController = TextEditingController(text: 'john.doe@email.com');
   final _phoneController = TextEditingController(text: '+1 (555) 123-4567');
   final _dateOfBirthController = TextEditingController(text: '1990-05-15');
-  final _addressController = TextEditingController(text: '123 Main St, City, State 12345');
-  final _emergencyContactController = TextEditingController(text: 'Jane Doe - (555) 987-6543');
-  
+  final _addressController =
+      TextEditingController(text: '123 Main St, City, State 12345');
+  final _emergencyContactController =
+      TextEditingController(text: 'Jane Doe - (555) 987-6543');
+
   bool _isEditing = false;
   String _bloodType = 'O+';
   String _allergies = 'None known';
@@ -37,7 +40,7 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Patient Profile'),
+        title: Text(AppLocalizations.of(context)!.profile),
         actions: [
           IconButton(
             onPressed: _toggleEdit,
@@ -107,19 +110,20 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
                   Text(
                     _nameController.text,
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     'Patient ID: P-12345',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    ),
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                   ),
                   const SizedBox(height: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.green,
                       borderRadius: BorderRadius.circular(12),
@@ -146,9 +150,9 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
     return Text(
       title,
       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-        fontWeight: FontWeight.bold,
-        color: Theme.of(context).colorScheme.primary,
-      ),
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.primary,
+          ),
     );
   }
 
@@ -204,39 +208,47 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
               label: 'Blood Type',
               value: _bloodType,
               items: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-              onChanged: _isEditing ? (value) {
-                setState(() {
-                  _bloodType = value!;
-                });
-              } : null,
+              onChanged: _isEditing
+                  ? (value) {
+                      setState(() {
+                        _bloodType = value!;
+                      });
+                    }
+                  : null,
             ),
             _buildTextAreaField(
               label: 'Allergies',
               value: _allergies,
-              onChanged: _isEditing ? (value) {
-                setState(() {
-                  _allergies = value;
-                });
-              } : null,
+              onChanged: _isEditing
+                  ? (value) {
+                      setState(() {
+                        _allergies = value;
+                      });
+                    }
+                  : null,
             ),
             _buildTextAreaField(
               label: 'Current Medications',
               value: _medications,
-              onChanged: _isEditing ? (value) {
-                setState(() {
-                  _medications = value;
-                });
-              } : null,
+              onChanged: _isEditing
+                  ? (value) {
+                      setState(() {
+                        _medications = value;
+                      });
+                    }
+                  : null,
             ),
             _buildTextAreaField(
               label: 'Medical History',
               value: _medicalHistory,
               maxLines: 3,
-              onChanged: _isEditing ? (value) {
-                setState(() {
-                  _medicalHistory = value;
-                });
-              } : null,
+              onChanged: _isEditing
+                  ? (value) {
+                      setState(() {
+                        _medicalHistory = value;
+                      });
+                    }
+                  : null,
             ),
           ],
         ),
@@ -309,10 +321,12 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
           labelText: label,
           border: const OutlineInputBorder(),
         ),
-        items: items.map((item) => DropdownMenuItem(
-          value: item,
-          child: Text(item),
-        )).toList(),
+        items: items
+            .map((item) => DropdownMenuItem(
+                  value: item,
+                  child: Text(item),
+                ))
+            .toList(),
         onChanged: onChanged,
       ),
     );
@@ -345,14 +359,14 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
         Expanded(
           child: OutlinedButton(
             onPressed: _cancelEdit,
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
         ),
         const SizedBox(width: 16),
         Expanded(
           child: ElevatedButton(
             onPressed: _saveProfile,
-            child: const Text('Save Changes'),
+            child: Text(AppLocalizations.of(context)!.save),
           ),
         ),
       ],
@@ -385,7 +399,7 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
-    
+
     if (picked != null) {
       _dateOfBirthController.text = picked.toIso8601String().split('T')[0];
     }
@@ -399,8 +413,8 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Profile updated successfully'),
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.success),
         backgroundColor: Colors.green,
       ),
     );

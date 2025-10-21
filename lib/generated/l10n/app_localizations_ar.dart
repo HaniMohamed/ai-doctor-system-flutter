@@ -441,4 +441,44 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get totalNotifications => 'إجمالي الإشعارات';
+
+  @override
+  String get appDescription =>
+      'منصة شاملة لإدارة الرعاية الصحية مدعومة بالذكاء الاصطناعي.';
+
+  @override
+  String get appBuiltWith => 'مبني باستخدام Flutter للتوافق عبر المنصات.';
+
+  @override
+  String get confirmSignOut => 'هل أنت متأكد من أنك تريد تسجيل الخروج؟';
+
+  @override
+  String get aiInitializingNeuralNetwork => '🧠 تهيئة الشبكة العصبية...';
+
+  @override
+  String get aiScanningSymptomPatterns => '🔍 فحص أنماط الأعراض...';
+
+  @override
+  String get aiAnalyzingMedicalHistory => '📊 تحليل التاريخ الطبي...';
+
+  @override
+  String get aiProcessingGeneticData => '🧬 معالجة البيانات الوراثية...';
+
+  @override
+  String get aiRunningDiagnostics => '🤖 تشغيل التشخيص بالذكاء الاصطناعي...';
+
+  @override
+  String get aiCrossReferencingDatabases => '📈 الرجوع إلى قواعد البيانات...';
+
+  @override
+  String get aiGeneratingInsights => '💡 توليد الرؤى...';
+
+  @override
+  String get aiEvaluatingBiomarkers => '🔬 تقييم المؤشرات الحيوية...';
+
+  @override
+  String get aiCalculatingProbabilities => '🎯 حساب الاحتمالات...';
+
+  @override
+  String get aiFinalizingRecommendations => '✨ إنهاء التوصيات...';
 }

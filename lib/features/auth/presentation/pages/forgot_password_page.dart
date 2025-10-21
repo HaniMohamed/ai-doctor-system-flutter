@@ -166,7 +166,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           height: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Text('Resend Email'),
+                      : Text(AppLocalizations.of(context)!.resendEmail),
                 ),
               ],
 
@@ -186,7 +186,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text('Back to Sign In'),
+                    child: Text(AppLocalizations.of(context)!.backToSignIn),
                   ),
                 ],
               ),
@@ -225,8 +225,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Password reset instructions sent to your email'),
+          SnackBar(
+            content: Text(AppLocalizations.of(context)!.passwordResetSent),
             backgroundColor: Colors.green,
           ),
         );
@@ -235,7 +235,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to send reset email: $e'),
+            content:
+                Text('${AppLocalizations.of(context)!.failedToSendReset} $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -260,8 +261,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Reset instructions resent to your email'),
+          SnackBar(
+            content:
+                Text(AppLocalizations.of(context)!.resetInstructionsResent),
             backgroundColor: Colors.green,
           ),
         );
@@ -270,7 +272,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to resend email: $e'),
+            content: Text('${AppLocalizations.of(context)!.failedToResend} $e'),
             backgroundColor: Colors.red,
           ),
         );

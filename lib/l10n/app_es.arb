@@ -193,5 +193,15 @@
   "undo": "Deshacer",
   "redo": "Rehacer",
   "selectAll": "Seleccionar Todo",
-  "deselectAll": "Deseleccionar Todo"
+  "deselectAll": "Deseleccionar Todo",
+  "aiInitializingNeuralNetwork": "🧠 Inicializando red neuronal...",
+  "aiScanningSymptomPatterns": "🔍 Escaneando patrones de síntomas...",
+  "aiAnalyzingMedicalHistory": "📊 Analizando historial médico...",
+  "aiProcessingGeneticData": "🧬 Procesando datos genéticos...",
+  "aiRunningDiagnostics": "🤖 Ejecutando diagnósticos de IA...",
+  "aiCrossReferencingDatabases": "📈 Consultando bases de datos...",
+  "aiGeneratingInsights": "💡 Generando insights...",
+  "aiEvaluatingBiomarkers": "🔬 Evaluando biomarcadores...",
+  "aiCalculatingProbabilities": "🎯 Calculando probabilidades...",
+  "aiFinalizingRecommendations": "✨ Finalizando recomendaciones..."
 }

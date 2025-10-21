@@ -22,8 +22,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
   bool _canAddSymptom = false;
   late SymptomCheckerController _controller;
   final AIProgressService _progressService = AIProgressService();
-  String _currentLoadingMessage = "🧠 Initializing AI analysis...";
-  double _currentProgress = 0.0;
+  String _currentLoadingMessage = "";
 
   @override
   void initState() {
@@ -31,15 +30,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
     _controller = Get.find<SymptomCheckerController>();
     _symptomController.addListener(_onTextChanged);
 
-    // Listen to progress updates
-    _progressService.progressStream.listen((progress) {
-      if (mounted) {
-        setState(() {
-          _currentProgress = progress;
-        });
-      }
-    });
-
+    // Listen to message updates
     _progressService.messageStream.listen((message) {
       if (mounted) {
         setState(() {
@@ -47,6 +38,13 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
         });
       }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Set the context for localized AI progress messages
+    _progressService.setContext(context);
   }
 
   @override
@@ -119,7 +117,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
                   ? () => _addSymptom(_symptomController.text)
                   : null,
               icon: const Icon(Icons.add),
-              label: const Text('Add Symptom'),
+              label: Text(AppLocalizations.of(context)!.addSymptom),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 48),
               ),
@@ -410,7 +408,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
               _analyzeSymptoms();
             },
             icon: const Icon(Icons.refresh),
-            label: const Text('Try Again'),
+            label: Text(AppLocalizations.of(context)!.retry),
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.primary,
               foregroundColor: Theme.of(context).colorScheme.onPrimary,

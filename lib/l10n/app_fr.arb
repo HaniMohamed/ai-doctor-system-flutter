@@ -193,5 +193,15 @@
   "undo": "Annuler",
   "redo": "Refaire",
   "selectAll": "Tout sélectionner",
-  "deselectAll": "Tout désélectionner"
+  "deselectAll": "Tout désélectionner",
+  "aiInitializingNeuralNetwork": "🧠 Initialisation du réseau neuronal...",
+  "aiScanningSymptomPatterns": "🔍 Analyse des modèles de symptômes...",
+  "aiAnalyzingMedicalHistory": "📊 Analyse de l'historique médical...",
+  "aiProcessingGeneticData": "🧬 Traitement des données génétiques...",
+  "aiRunningDiagnostics": "🤖 Exécution des diagnostics IA...",
+  "aiCrossReferencingDatabases": "📈 Consultation des bases de données...",
+  "aiGeneratingInsights": "💡 Génération d'insights...",
+  "aiEvaluatingBiomarkers": "🔬 Évaluation des biomarqueurs...",
+  "aiCalculatingProbabilities": "🎯 Calcul des probabilités...",
+  "aiFinalizingRecommendations": "✨ Finalisation des recommandations..."
 }

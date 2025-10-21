@@ -20,7 +20,8 @@ class DashboardPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Overview', style: Theme.of(context).textTheme.titleLarge),
+            Text(AppLocalizations.of(context)!.overview,
+                style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 12),
             Obx(() {
               if (controller.isLoading.value) {

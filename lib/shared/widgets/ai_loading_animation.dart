@@ -29,14 +29,14 @@ class _MedicalAiLoadingIndicatorState extends State<MedicalAiLoadingIndicator>
   late AnimationController _typingController;
   late Animation<double> _typingAnimation;
 
-  String _currentText = "Analyzing medical data...";
+  String _currentText = "";
   final AIProgressService _progressService = AIProgressService();
   Timer? _messageDelayTimer;
 
   @override
   void initState() {
     super.initState();
-    _currentText = widget.initialText ?? "Analyzing medical data...";
+    _currentText = widget.initialText ?? "";
 
     _controller =
         AnimationController(vsync: this, duration: const Duration(seconds: 3))
@@ -80,6 +80,13 @@ class _MedicalAiLoadingIndicatorState extends State<MedicalAiLoadingIndicator>
 
     // Start the initial typing animation
     _startTypingAnimation();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Set the context for localized AI progress messages
+    _progressService.setContext(context);
   }
 
   void _startTypingAnimation() {

@@ -433,4 +433,45 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get totalNotifications => '総通知数';
+
+  @override
+  String get appDescription =>
+      'A comprehensive healthcare management platform powered by AI.';
+
+  @override
+  String get appBuiltWith =>
+      'Built with Flutter for cross-platform compatibility.';
+
+  @override
+  String get confirmSignOut => 'Are you sure you want to sign out?';
+
+  @override
+  String get aiInitializingNeuralNetwork => '🧠 Initializing neural network...';
+
+  @override
+  String get aiScanningSymptomPatterns => '🔍 Scanning symptom patterns...';
+
+  @override
+  String get aiAnalyzingMedicalHistory => '📊 Analyzing medical history...';
+
+  @override
+  String get aiProcessingGeneticData => '🧬 Processing genetic data...';
+
+  @override
+  String get aiRunningDiagnostics => '🤖 Running AI diagnostics...';
+
+  @override
+  String get aiCrossReferencingDatabases => '📈 Cross-referencing databases...';
+
+  @override
+  String get aiGeneratingInsights => '💡 Generating insights...';
+
+  @override
+  String get aiEvaluatingBiomarkers => '🔬 Evaluating biomarkers...';
+
+  @override
+  String get aiCalculatingProbabilities => '🎯 Calculating probabilities...';
+
+  @override
+  String get aiFinalizingRecommendations => '✨ Finalizing recommendations...';
 }

@@ -384,9 +384,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (!_agreeToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content:
-              Text('Please agree to the Terms of Service and Privacy Policy'),
+        SnackBar(
+          content: Text(AppLocalizations.of(context)!.agreeToTermsError),
         ),
       );
       return;
@@ -402,8 +401,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Account created successfully! Please sign in.'),
+          SnackBar(
+            content:
+                Text(AppLocalizations.of(context)!.accountCreatedSuccessfully),
             backgroundColor: Colors.green,
           ),
         );
@@ -413,7 +413,8 @@ class _RegisterPageState extends State<RegisterPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Registration failed: $e'),
+            content:
+                Text('${AppLocalizations.of(context)!.registrationFailed} $e'),
             backgroundColor: Colors.red,
           ),
         );

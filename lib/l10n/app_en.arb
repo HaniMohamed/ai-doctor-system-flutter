@@ -589,5 +589,18 @@
   "totalNotifications": "Total Notifications",
   "@totalNotifications": {
     "description": "Total notifications label"
-  }
+  },
+  "appDescription": "A comprehensive healthcare management platform powered by AI.",
+  "appBuiltWith": "Built with Flutter for cross-platform compatibility.",
+  "confirmSignOut": "Are you sure you want to sign out?",
+  "aiInitializingNeuralNetwork": "🧠 Initializing neural network...",
+  "aiScanningSymptomPatterns": "🔍 Scanning symptom patterns...",
+  "aiAnalyzingMedicalHistory": "📊 Analyzing medical history...",
+  "aiProcessingGeneticData": "🧬 Processing genetic data...",
+  "aiRunningDiagnostics": "🤖 Running AI diagnostics...",
+  "aiCrossReferencingDatabases": "📈 Cross-referencing databases...",
+  "aiGeneratingInsights": "💡 Generating insights...",
+  "aiEvaluatingBiomarkers": "🔬 Evaluating biomarkers...",
+  "aiCalculatingProbabilities": "🎯 Calculating probabilities...",
+  "aiFinalizingRecommendations": "✨ Finalizing recommendations..."
 }

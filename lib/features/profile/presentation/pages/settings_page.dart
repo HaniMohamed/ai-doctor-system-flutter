@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../generated/l10n/app_localizations.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
@@ -16,7 +17,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(AppLocalizations.of(context)!.settings)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -47,7 +48,6 @@ class _SettingsPageState extends State<SettingsPage> {
               },
             ),
           ),
-          
           const SizedBox(height: 24),
           _buildSectionHeader('Notifications'),
           _buildSettingsTile(
@@ -69,7 +69,6 @@ class _SettingsPageState extends State<SettingsPage> {
             subtitle: 'Manage email notification preferences',
             onTap: () => _showComingSoon('Email notifications'),
           ),
-          
           const SizedBox(height: 24),
           _buildSectionHeader('Appearance'),
           _buildSettingsTile(
@@ -92,7 +91,6 @@ class _SettingsPageState extends State<SettingsPage> {
             subtitle: _language,
             onTap: () => _showLanguageDialog(),
           ),
-          
           const SizedBox(height: 24),
           _buildSectionHeader('Support'),
           _buildSettingsTile(
@@ -119,7 +117,6 @@ class _SettingsPageState extends State<SettingsPage> {
             subtitle: 'Read our terms of service',
             onTap: () => _showComingSoon('Terms of Service'),
           ),
-          
           const SizedBox(height: 24),
           _buildSectionHeader('Account Actions'),
           _buildSettingsTile(
@@ -141,9 +138,9 @@ class _SettingsPageState extends State<SettingsPage> {
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleMedium?.copyWith(
-          color: Theme.of(context).colorScheme.primary,
-          fontWeight: FontWeight.bold,
-        ),
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.bold,
+            ),
       ),
     );
   }
@@ -174,11 +171,12 @@ class _SettingsPageState extends State<SettingsPage> {
         subtitle: Text(
           subtitle,
           style: TextStyle(
-            color: textColor?.withValues(alpha: 0.7) ?? 
-                   Theme.of(context).colorScheme.onSurfaceVariant,
+            color: textColor?.withValues(alpha: 0.7) ??
+                Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
-        trailing: trailing ?? (onTap != null ? const Icon(Icons.chevron_right) : null),
+        trailing: trailing ??
+            (onTap != null ? const Icon(Icons.chevron_right) : null),
         onTap: onTap,
       ),
     );
@@ -200,7 +198,7 @@ class _SettingsPageState extends State<SettingsPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Select Language'),
+        title: Text(AppLocalizations.of(context)!.selectLanguage),
         content: StatefulBuilder(
           builder: (context, setDialogState) {
             return Column(
@@ -219,7 +217,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Widget _buildLanguageOption(String language, BuildContext context) {
     final isSelected = _language == language;
-    
+
     return ListTile(
       leading: Container(
         width: 24,
@@ -227,12 +225,12 @@ class _SettingsPageState extends State<SettingsPage> {
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(
-            color: isSelected 
+            color: isSelected
                 ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.outline,
             width: 2,
           ),
-          color: isSelected 
+          color: isSelected
               ? Theme.of(context).colorScheme.primary
               : Colors.transparent,
         ),
@@ -247,7 +245,7 @@ class _SettingsPageState extends State<SettingsPage> {
       title: Text(
         language,
         style: TextStyle(
-          color: isSelected 
+          color: isSelected
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.onSurface,
           fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
@@ -273,9 +271,9 @@ class _SettingsPageState extends State<SettingsPage> {
         size: 48,
       ),
       children: [
-        const Text('A comprehensive healthcare management platform powered by AI.'),
+        Text(AppLocalizations.of(context)!.appDescription),
         const SizedBox(height: 16),
-        const Text('Built with Flutter for cross-platform compatibility.'),
+        Text(AppLocalizations.of(context)!.appBuiltWith),
       ],
     );
   }
@@ -284,12 +282,12 @@ class _SettingsPageState extends State<SettingsPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Sign Out'),
-        content: const Text('Are you sure you want to sign out?'),
+        title: Text(AppLocalizations.of(context)!.logout),
+        content: Text(AppLocalizations.of(context)!.confirmSignOut),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () {
@@ -299,7 +297,7 @@ class _SettingsPageState extends State<SettingsPage> {
             style: TextButton.styleFrom(
               foregroundColor: Colors.red,
             ),
-            child: const Text('Sign Out'),
+            child: Text(AppLocalizations.of(context)!.logout),
           ),
         ],
       ),

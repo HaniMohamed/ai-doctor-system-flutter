@@ -959,6 +959,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Total Notifications'**
   String get totalNotifications;
+
+  /// No description provided for @appDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'A comprehensive healthcare management platform powered by AI.'**
+  String get appDescription;
+
+  /// No description provided for @appBuiltWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Built with Flutter for cross-platform compatibility.'**
+  String get appBuiltWith;
+
+  /// No description provided for @confirmSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to sign out?'**
+  String get confirmSignOut;
+
+  /// No description provided for @aiInitializingNeuralNetwork.
+  ///
+  /// In en, this message translates to:
+  /// **'🧠 Initializing neural network...'**
+  String get aiInitializingNeuralNetwork;
+
+  /// No description provided for @aiScanningSymptomPatterns.
+  ///
+  /// In en, this message translates to:
+  /// **'🔍 Scanning symptom patterns...'**
+  String get aiScanningSymptomPatterns;
+
+  /// No description provided for @aiAnalyzingMedicalHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'📊 Analyzing medical history...'**
+  String get aiAnalyzingMedicalHistory;
+
+  /// No description provided for @aiProcessingGeneticData.
+  ///
+  /// In en, this message translates to:
+  /// **'🧬 Processing genetic data...'**
+  String get aiProcessingGeneticData;
+
+  /// No description provided for @aiRunningDiagnostics.
+  ///
+  /// In en, this message translates to:
+  /// **'🤖 Running AI diagnostics...'**
+  String get aiRunningDiagnostics;
+
+  /// No description provided for @aiCrossReferencingDatabases.
+  ///
+  /// In en, this message translates to:
+  /// **'📈 Cross-referencing databases...'**
+  String get aiCrossReferencingDatabases;
+
+  /// No description provided for @aiGeneratingInsights.
+  ///
+  /// In en, this message translates to:
+  /// **'💡 Generating insights...'**
+  String get aiGeneratingInsights;
+
+  /// No description provided for @aiEvaluatingBiomarkers.
+  ///
+  /// In en, this message translates to:
+  /// **'🔬 Evaluating biomarkers...'**
+  String get aiEvaluatingBiomarkers;
+
+  /// No description provided for @aiCalculatingProbabilities.
+  ///
+  /// In en, this message translates to:
+  /// **'🎯 Calculating probabilities...'**
+  String get aiCalculatingProbabilities;
+
+  /// No description provided for @aiFinalizingRecommendations.
+  ///
+  /// In en, this message translates to:
+  /// **'✨ Finalizing recommendations...'**
+  String get aiFinalizingRecommendations;
 }
 
 class _AppLocalizationsDelegate
