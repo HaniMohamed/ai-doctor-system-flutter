@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/appointments_controller.dart';
+import '../../../../generated/l10n/app_localizations.dart';
+import '../../../../shared/widgets/base_scaffold.dart';
 
 class AppointmentsListPage extends StatelessWidget {
   const AppointmentsListPage({super.key});
@@ -9,8 +11,8 @@ class AppointmentsListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(AppointmentsController(Get.find()));
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Appointments')),
+    return BaseScaffold(
+      title: AppLocalizations.of(context)!.appointments,
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -19,7 +21,8 @@ class AppointmentsListPage extends StatelessWidget {
           return Center(child: Text(controller.errorMessage.value));
         }
         if (controller.appointments.isEmpty) {
-          return const Center(child: Text('No appointments'));
+          return Center(
+              child: Text(AppLocalizations.of(context)!.noAppointments));
         }
         return ListView.separated(
           itemCount: controller.appointments.length,

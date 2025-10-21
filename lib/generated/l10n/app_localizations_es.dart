@@ -160,4 +160,288 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get changeLanguage => 'Cambiar Idioma';
+
+  @override
+  String get firstName => 'Nombre';
+
+  @override
+  String get lastName => 'Apellido';
+
+  @override
+  String get phoneNumber => 'Número de Teléfono';
+
+  @override
+  String get createAccount => 'Crear Cuenta';
+
+  @override
+  String get joinAIDoctorSystem => 'Únete al Sistema Doctor IA';
+
+  @override
+  String get createYourAccount => 'Crea tu cuenta para comenzar';
+
+  @override
+  String get iAmA => 'Soy un:';
+
+  @override
+  String get patient => 'Paciente';
+
+  @override
+  String get doctor => 'Doctor';
+
+  @override
+  String get iNeedMedicalCare => 'Necesito atención médica';
+
+  @override
+  String get iProvideMedicalCare => 'Proporciono atención médica';
+
+  @override
+  String get firstNameRequired => 'El nombre es requerido';
+
+  @override
+  String get lastNameRequired => 'El apellido es requerido';
+
+  @override
+  String get emailRequired => 'El correo electrónico es requerido';
+
+  @override
+  String get validEmailRequired =>
+      'Por favor ingresa un correo electrónico válido';
+
+  @override
+  String get phoneRequired => 'El número de teléfono es requerido';
+
+  @override
+  String get passwordRequired => 'La contraseña es requerida';
+
+  @override
+  String get passwordMinLength =>
+      'La contraseña debe tener al menos 8 caracteres';
+
+  @override
+  String get confirmPasswordRequired => 'Por favor confirma tu contraseña';
+
+  @override
+  String get passwordsDoNotMatch => 'Las contraseñas no coinciden';
+
+  @override
+  String get agreeToTerms => 'Acepto los';
+
+  @override
+  String get termsOfService => 'Términos de Servicio';
+
+  @override
+  String get and => 'y';
+
+  @override
+  String get privacyPolicy => 'Política de Privacidad';
+
+  @override
+  String get alreadyHaveAccount => '¿Ya tienes una cuenta?';
+
+  @override
+  String get signIn => 'Iniciar Sesión';
+
+  @override
+  String get agreeToTermsError =>
+      'Por favor acepta los Términos de Servicio y Política de Privacidad';
+
+  @override
+  String get accountCreatedSuccessfully =>
+      '¡Cuenta creada exitosamente! Por favor inicia sesión.';
+
+  @override
+  String get registrationFailed => 'Registro fallido:';
+
+  @override
+  String get resetPassword => 'Restablecer Contraseña';
+
+  @override
+  String get enterEmailForReset =>
+      'Ingresa tu dirección de correo electrónico y te enviaremos instrucciones para restablecer tu contraseña';
+
+  @override
+  String get checkYourEmail => 'Revisa tu Correo';
+
+  @override
+  String get resetInstructionsSent =>
+      'Hemos enviado instrucciones de restablecimiento de contraseña a tu dirección de correo electrónico';
+
+  @override
+  String get enterRegisteredEmail => 'Ingresa tu correo registrado';
+
+  @override
+  String get sendResetLink => 'Enviar Enlace de Restablecimiento';
+
+  @override
+  String get resetLinkSent => '¡Enlace de restablecimiento enviado!';
+
+  @override
+  String get checkEmailInstructions =>
+      'Por favor revisa tu correo y sigue las instrucciones para restablecer tu contraseña. El enlace expirará en 24 horas.';
+
+  @override
+  String get resendEmail => 'Reenviar Correo';
+
+  @override
+  String get backToSignIn => 'Volver a Iniciar Sesión';
+
+  @override
+  String get checkSpamFolder =>
+      'Si no recibes un correo en unos minutos, por favor revisa tu carpeta de spam o contacta soporte.';
+
+  @override
+  String get passwordResetSent =>
+      'Instrucciones de restablecimiento de contraseña enviadas a tu correo';
+
+  @override
+  String get failedToSendReset => 'Error al enviar correo de restablecimiento:';
+
+  @override
+  String get resetInstructionsResent =>
+      'Instrucciones de restablecimiento reenviadas a tu correo';
+
+  @override
+  String get failedToResend => 'Error al reenviar correo:';
+
+  @override
+  String get aiAssistant => 'Asistente IA';
+
+  @override
+  String get clearChat => 'Limpiar chat';
+
+  @override
+  String get typeYourMessage => 'Escribe tu mensaje...';
+
+  @override
+  String get welcomeMessage =>
+      '¡Hola! Soy tu asistente de salud IA. ¿Cómo puedo ayudarte hoy?';
+
+  @override
+  String get justNow => 'Ahora mismo';
+
+  @override
+  String minutesAgo(int count) {
+    return 'hace ${count}m';
+  }
+
+  @override
+  String hoursAgo(int count) {
+    return 'hace ${count}h';
+  }
+
+  @override
+  String get demoResponse =>
+      'Gracias por tu mensaje. Esta es una respuesta de demostración. ¡La integración real de IA llegará pronto!';
+
+  @override
+  String get noAppointments => 'Sin citas';
+
+  @override
+  String get noDoctors => 'Sin doctores';
+
+  @override
+  String get noNotifications => 'Sin notificaciones';
+
+  @override
+  String get noProfileData => 'Sin datos de perfil';
+
+  @override
+  String get organization => 'Organización:';
+
+  @override
+  String get describeYourSymptoms => 'Describe tus síntomas';
+
+  @override
+  String get enterSymptomsHint =>
+      'Ingresa tus síntomas (ej. dolor de cabeza, fiebre, náuseas)';
+
+  @override
+  String get clearAllSymptoms => 'Limpiar todos los síntomas';
+
+  @override
+  String get addSymptom => 'Agregar Síntoma';
+
+  @override
+  String get analyzeSymptoms => 'Analizar Síntomas';
+
+  @override
+  String get symptoms => 'Síntomas';
+
+  @override
+  String get analysisResults => 'Resultados del Análisis';
+
+  @override
+  String get possibleConditions => 'Posibles Condiciones';
+
+  @override
+  String get recommendations => 'Recomendaciones';
+
+  @override
+  String get severity => 'Gravedad';
+
+  @override
+  String get confidence => 'Confianza';
+
+  @override
+  String get nextSteps => 'Próximos Pasos';
+
+  @override
+  String get whenToSeekHelp => 'Cuándo Buscar Ayuda';
+
+  @override
+  String get emergency => 'Emergencia';
+
+  @override
+  String get urgent => 'Urgente';
+
+  @override
+  String get moderate => 'Moderado';
+
+  @override
+  String get mild => 'Leve';
+
+  @override
+  String get high => 'Alto';
+
+  @override
+  String get medium => 'Medio';
+
+  @override
+  String get low => 'Bajo';
+
+  @override
+  String get upcoming => 'Próximas';
+
+  @override
+  String get unread => 'No leídas';
+
+  @override
+  String get quickActions => 'Acciones Rápidas';
+
+  @override
+  String get scheduleWithDoctor => 'Programar con un doctor';
+
+  @override
+  String get aiPoweredHealthCheck => 'Verificación de salud con IA';
+
+  @override
+  String get getInstantMedicalAdvice => 'Obtén consejo médico instantáneo';
+
+  @override
+  String get browseAvailableDoctors => 'Explora doctores disponibles';
+
+  @override
+  String get viewYourAlerts => 'Ve tus alertas';
+
+  @override
+  String get manageYourAccount => 'Gestiona tu cuenta';
+
+  @override
+  String get overview => 'Resumen';
+
+  @override
+  String get totalAppointments => 'Total de Citas';
+
+  @override
+  String get totalNotifications => 'Total de Notificaciones';
 }

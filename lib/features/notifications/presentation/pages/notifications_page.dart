@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/notifications_controller.dart';
+import '../../../../generated/l10n/app_localizations.dart';
+import '../../../../shared/widgets/base_scaffold.dart';
 
 class NotificationsPage extends StatelessWidget {
   const NotificationsPage({super.key});
@@ -9,8 +11,8 @@ class NotificationsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(NotificationsController(Get.find()));
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Notifications')),
+    return BaseScaffold(
+      title: AppLocalizations.of(context)!.notifications,
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -19,7 +21,8 @@ class NotificationsPage extends StatelessWidget {
           return Center(child: Text(controller.errorMessage.value));
         }
         if (controller.notifications.isEmpty) {
-          return const Center(child: Text('No notifications'));
+          return Center(
+              child: Text(AppLocalizations.of(context)!.noNotifications));
         }
         return ListView.separated(
           itemCount: controller.notifications.length,

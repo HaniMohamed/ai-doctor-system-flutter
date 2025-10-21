@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/doctors_controller.dart';
+import '../../../../generated/l10n/app_localizations.dart';
+import '../../../../shared/widgets/base_scaffold.dart';
 
 class DoctorsListPage extends StatelessWidget {
   const DoctorsListPage({super.key});
@@ -9,8 +11,8 @@ class DoctorsListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(DoctorsController(Get.find()));
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Doctors')),
+    return BaseScaffold(
+      title: AppLocalizations.of(context)!.doctors,
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -19,7 +21,7 @@ class DoctorsListPage extends StatelessWidget {
           return Center(child: Text(controller.errorMessage.value));
         }
         if (controller.doctors.isEmpty) {
-          return const Center(child: Text('No doctors'));
+          return Center(child: Text(AppLocalizations.of(context)!.noDoctors));
         }
         return ListView.separated(
           itemCount: controller.doctors.length,
@@ -28,7 +30,8 @@ class DoctorsListPage extends StatelessWidget {
             final d = controller.doctors[index];
             return ListTile(
               title: Text(d.name),
-              subtitle: Text('${d.specialty} • ${d.experience} yrs • ${d.rating.toStringAsFixed(1)}★'),
+              subtitle: Text(
+                  '${d.specialty} • ${d.experience} yrs • ${d.rating.toStringAsFixed(1)}★'),
             );
           },
         );

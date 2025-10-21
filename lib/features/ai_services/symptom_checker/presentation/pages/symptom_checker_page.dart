@@ -6,6 +6,8 @@ import '../../domain/entities/symptom.dart';
 import '../controllers/symptom_checker_controller.dart';
 import '../../../../../shared/widgets/ai_loading_animation.dart';
 import '../../../../../shared/services/ai_progress_service.dart';
+import '../../../../../generated/l10n/app_localizations.dart';
+import '../../../../../shared/widgets/base_scaffold.dart';
 
 class SymptomCheckerPage extends StatefulWidget {
   const SymptomCheckerPage({super.key});
@@ -64,39 +66,37 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Symptom Checker'),
-        actions: [
-          Obx(() {
-            if (_controller.symptoms.isNotEmpty) {
-              return IconButton(
-                onPressed: _clearSymptoms,
-                icon: const Icon(Icons.clear_all),
-                tooltip: 'Clear all symptoms',
-              );
-            }
-            return const SizedBox.shrink();
-          }),
-        ],
-      ),
+    return BaseScaffold(
+      title: AppLocalizations.of(context)!.symptomChecker,
+      actions: [
+        Obx(() {
+          if (_controller.symptoms.isNotEmpty) {
+            return IconButton(
+              onPressed: _clearSymptoms,
+              icon: const Icon(Icons.clear_all),
+              tooltip: AppLocalizations.of(context)!.clearAllSymptoms,
+            );
+          }
+          return const SizedBox.shrink();
+        }),
+      ],
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Describe your symptoms',
+              AppLocalizations.of(context)!.describeYourSymptoms,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
             TextField(
               controller: _symptomController,
               focusNode: _symptomFocusNode,
-              decoration: const InputDecoration(
-                hintText: 'Enter your symptoms (e.g., headache, fever, nausea)',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.search),
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.enterSymptomsHint,
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.search),
               ),
               maxLines: 3,
               textInputAction: TextInputAction.done,

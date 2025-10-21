@@ -207,5 +207,387 @@
   "changeLanguage": "Change Language",
   "@changeLanguage": {
     "description": "Change language button text"
+  },
+  "firstName": "First Name",
+  "@firstName": {
+    "description": "First name field label"
+  },
+  "lastName": "Last Name",
+  "@lastName": {
+    "description": "Last name field label"
+  },
+  "phoneNumber": "Phone Number",
+  "@phoneNumber": {
+    "description": "Phone number field label"
+  },
+  "createAccount": "Create Account",
+  "@createAccount": {
+    "description": "Create account button text"
+  },
+  "joinAIDoctorSystem": "Join AI Doctor System",
+  "@joinAIDoctorSystem": {
+    "description": "Registration page title"
+  },
+  "createYourAccount": "Create your account to get started",
+  "@createYourAccount": {
+    "description": "Registration page subtitle"
+  },
+  "iAmA": "I am a:",
+  "@iAmA": {
+    "description": "Role selection label"
+  },
+  "patient": "Patient",
+  "@patient": {
+    "description": "Patient role option"
+  },
+  "doctor": "Doctor",
+  "@doctor": {
+    "description": "Doctor role option"
+  },
+  "iNeedMedicalCare": "I need medical care",
+  "@iNeedMedicalCare": {
+    "description": "Patient role description"
+  },
+  "iProvideMedicalCare": "I provide medical care",
+  "@iProvideMedicalCare": {
+    "description": "Doctor role description"
+  },
+  "firstNameRequired": "First name is required",
+  "@firstNameRequired": {
+    "description": "First name validation error"
+  },
+  "lastNameRequired": "Last name is required",
+  "@lastNameRequired": {
+    "description": "Last name validation error"
+  },
+  "emailRequired": "Email is required",
+  "@emailRequired": {
+    "description": "Email validation error"
+  },
+  "validEmailRequired": "Please enter a valid email",
+  "@validEmailRequired": {
+    "description": "Email format validation error"
+  },
+  "phoneRequired": "Phone number is required",
+  "@phoneRequired": {
+    "description": "Phone validation error"
+  },
+  "passwordRequired": "Password is required",
+  "@passwordRequired": {
+    "description": "Password validation error"
+  },
+  "passwordMinLength": "Password must be at least 8 characters",
+  "@passwordMinLength": {
+    "description": "Password length validation error"
+  },
+  "confirmPasswordRequired": "Please confirm your password",
+  "@confirmPasswordRequired": {
+    "description": "Confirm password validation error"
+  },
+  "passwordsDoNotMatch": "Passwords do not match",
+  "@passwordsDoNotMatch": {
+    "description": "Password mismatch error"
+  },
+  "agreeToTerms": "I agree to the",
+  "@agreeToTerms": {
+    "description": "Terms agreement text"
+  },
+  "termsOfService": "Terms of Service",
+  "@termsOfService": {
+    "description": "Terms of service link text"
+  },
+  "and": "and",
+  "@and": {
+    "description": "Conjunction word"
+  },
+  "privacyPolicy": "Privacy Policy",
+  "@privacyPolicy": {
+    "description": "Privacy policy link text"
+  },
+  "alreadyHaveAccount": "Already have an account?",
+  "@alreadyHaveAccount": {
+    "description": "Login link text"
+  },
+  "signIn": "Sign In",
+  "@signIn": {
+    "description": "Sign in button text"
+  },
+  "agreeToTermsError": "Please agree to the Terms of Service and Privacy Policy",
+  "@agreeToTermsError": {
+    "description": "Terms agreement error message"
+  },
+  "accountCreatedSuccessfully": "Account created successfully! Please sign in.",
+  "@accountCreatedSuccessfully": {
+    "description": "Registration success message"
+  },
+  "registrationFailed": "Registration failed:",
+  "@registrationFailed": {
+    "description": "Registration error message"
+  },
+  "resetPassword": "Reset Password",
+  "@resetPassword": {
+    "description": "Reset password page title"
+  },
+  "forgotPassword": "Forgot Password?",
+  "@forgotPassword": {
+    "description": "Forgot password page title"
+  },
+  "enterEmailForReset": "Enter your email address and we'll send you instructions to reset your password",
+  "@enterEmailForReset": {
+    "description": "Password reset instructions"
+  },
+  "checkYourEmail": "Check Your Email",
+  "@checkYourEmail": {
+    "description": "Email sent confirmation title"
+  },
+  "resetInstructionsSent": "We've sent password reset instructions to your email address",
+  "@resetInstructionsSent": {
+    "description": "Email sent confirmation message"
+  },
+  "enterRegisteredEmail": "Enter your registered email",
+  "@enterRegisteredEmail": {
+    "description": "Email field hint"
+  },
+  "sendResetLink": "Send Reset Link",
+  "@sendResetLink": {
+    "description": "Send reset link button"
+  },
+  "resetLinkSent": "Reset link sent!",
+  "@resetLinkSent": {
+    "description": "Reset link sent confirmation"
+  },
+  "checkEmailInstructions": "Please check your email and follow the instructions to reset your password. The link will expire in 24 hours.",
+  "@checkEmailInstructions": {
+    "description": "Email check instructions"
+  },
+  "resendEmail": "Resend Email",
+  "@resendEmail": {
+    "description": "Resend email button"
+  },
+  "backToSignIn": "Back to Sign In",
+  "@backToSignIn": {
+    "description": "Back to login button"
+  },
+  "checkSpamFolder": "If you don't receive an email within a few minutes, please check your spam folder or contact support.",
+  "@checkSpamFolder": {
+    "description": "Spam folder check message"
+  },
+  "passwordResetSent": "Password reset instructions sent to your email",
+  "@passwordResetSent": {
+    "description": "Password reset sent confirmation"
+  },
+  "failedToSendReset": "Failed to send reset email:",
+  "@failedToSendReset": {
+    "description": "Password reset send error"
+  },
+  "resetInstructionsResent": "Reset instructions resent to your email",
+  "@resetInstructionsResent": {
+    "description": "Resend confirmation message"
+  },
+  "failedToResend": "Failed to resend email:",
+  "@failedToResend": {
+    "description": "Resend error message"
+  },
+  "aiAssistant": "AI Assistant",
+  "@aiAssistant": {
+    "description": "AI assistant chat title"
+  },
+  "clearChat": "Clear chat",
+  "@clearChat": {
+    "description": "Clear chat tooltip"
+  },
+  "typeYourMessage": "Type your message...",
+  "@typeYourMessage": {
+    "description": "Chat input hint"
+  },
+  "welcomeMessage": "Hello! I'm your AI healthcare assistant. How can I help you today?",
+  "@welcomeMessage": {
+    "description": "AI assistant welcome message"
+  },
+  "justNow": "Just now",
+  "@justNow": {
+    "description": "Time format for recent messages"
+  },
+  "minutesAgo": "{count}m ago",
+  "@minutesAgo": {
+    "description": "Time format for minutes ago",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursAgo": "{count}h ago",
+  "@hoursAgo": {
+    "description": "Time format for hours ago",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "demoResponse": "Thank you for your message. This is a demo response. The actual AI integration is coming soon!",
+  "@demoResponse": {
+    "description": "AI demo response message"
+  },
+  "noAppointments": "No appointments",
+  "@noAppointments": {
+    "description": "Empty appointments message"
+  },
+  "noDoctors": "No doctors",
+  "@noDoctors": {
+    "description": "Empty doctors message"
+  },
+  "noNotifications": "No notifications",
+  "@noNotifications": {
+    "description": "Empty notifications message"
+  },
+  "noProfileData": "No profile data",
+  "@noProfileData": {
+    "description": "Empty profile message"
+  },
+  "organization": "Organization:",
+  "@organization": {
+    "description": "Organization label"
+  },
+  "describeYourSymptoms": "Describe your symptoms",
+  "@describeYourSymptoms": {
+    "description": "Symptom checker title"
+  },
+  "enterSymptomsHint": "Enter your symptoms (e.g., headache, fever, nausea)",
+  "@enterSymptomsHint": {
+    "description": "Symptoms input hint"
+  },
+  "clearAllSymptoms": "Clear all symptoms",
+  "@clearAllSymptoms": {
+    "description": "Clear symptoms tooltip"
+  },
+  "addSymptom": "Add Symptom",
+  "@addSymptom": {
+    "description": "Add symptom button"
+  },
+  "analyzeSymptoms": "Analyze Symptoms",
+  "@analyzeSymptoms": {
+    "description": "Analyze symptoms button"
+  },
+  "symptoms": "Symptoms",
+  "@symptoms": {
+    "description": "Symptoms label"
+  },
+  "analysisResults": "Analysis Results",
+  "@analysisResults": {
+    "description": "Analysis results title"
+  },
+  "possibleConditions": "Possible Conditions",
+  "@possibleConditions": {
+    "description": "Possible conditions label"
+  },
+  "recommendations": "Recommendations",
+  "@recommendations": {
+    "description": "Recommendations label"
+  },
+  "severity": "Severity",
+  "@severity": {
+    "description": "Severity label"
+  },
+  "confidence": "Confidence",
+  "@confidence": {
+    "description": "Confidence label"
+  },
+  "nextSteps": "Next Steps",
+  "@nextSteps": {
+    "description": "Next steps label"
+  },
+  "whenToSeekHelp": "When to Seek Help",
+  "@whenToSeekHelp": {
+    "description": "When to seek help label"
+  },
+  "emergency": "Emergency",
+  "@emergency": {
+    "description": "Emergency label"
+  },
+  "urgent": "Urgent",
+  "@urgent": {
+    "description": "Urgent label"
+  },
+  "moderate": "Moderate",
+  "@moderate": {
+    "description": "Moderate label"
+  },
+  "mild": "Mild",
+  "@mild": {
+    "description": "Mild label"
+  },
+  "high": "High",
+  "@high": {
+    "description": "High label"
+  },
+  "medium": "Medium",
+  "@medium": {
+    "description": "Medium label"
+  },
+  "low": "Low",
+  "@low": {
+    "description": "Low label"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Error message title"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "upcoming": "Upcoming",
+  "@upcoming": {
+    "description": "Upcoming label"
+  },
+  "unread": "Unread",
+  "@unread": {
+    "description": "Unread label"
+  },
+  "quickActions": "Quick Actions",
+  "@quickActions": {
+    "description": "Quick actions title"
+  },
+  "scheduleWithDoctor": "Schedule with a doctor",
+  "@scheduleWithDoctor": {
+    "description": "Book appointment subtitle"
+  },
+  "aiPoweredHealthCheck": "AI-powered health check",
+  "@aiPoweredHealthCheck": {
+    "description": "Symptom checker subtitle"
+  },
+  "getInstantMedicalAdvice": "Get instant medical advice",
+  "@getInstantMedicalAdvice": {
+    "description": "Chat subtitle"
+  },
+  "browseAvailableDoctors": "Browse available doctors",
+  "@browseAvailableDoctors": {
+    "description": "Find doctors subtitle"
+  },
+  "viewYourAlerts": "View your alerts",
+  "@viewYourAlerts": {
+    "description": "Notifications subtitle"
+  },
+  "manageYourAccount": "Manage your account",
+  "@manageYourAccount": {
+    "description": "Profile subtitle"
+  },
+  "overview": "Overview",
+  "@overview": {
+    "description": "Overview title"
+  },
+  "totalAppointments": "Total Appointments",
+  "@totalAppointments": {
+    "description": "Total appointments label"
+  },
+  "totalNotifications": "Total Notifications",
+  "@totalNotifications": {
+    "description": "Total notifications label"
   }
 }

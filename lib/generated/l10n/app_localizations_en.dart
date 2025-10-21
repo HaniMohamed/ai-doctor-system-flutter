@@ -160,4 +160,286 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get changeLanguage => 'Change Language';
+
+  @override
+  String get firstName => 'First Name';
+
+  @override
+  String get lastName => 'Last Name';
+
+  @override
+  String get phoneNumber => 'Phone Number';
+
+  @override
+  String get createAccount => 'Create Account';
+
+  @override
+  String get joinAIDoctorSystem => 'Join AI Doctor System';
+
+  @override
+  String get createYourAccount => 'Create your account to get started';
+
+  @override
+  String get iAmA => 'I am a:';
+
+  @override
+  String get patient => 'Patient';
+
+  @override
+  String get doctor => 'Doctor';
+
+  @override
+  String get iNeedMedicalCare => 'I need medical care';
+
+  @override
+  String get iProvideMedicalCare => 'I provide medical care';
+
+  @override
+  String get firstNameRequired => 'First name is required';
+
+  @override
+  String get lastNameRequired => 'Last name is required';
+
+  @override
+  String get emailRequired => 'Email is required';
+
+  @override
+  String get validEmailRequired => 'Please enter a valid email';
+
+  @override
+  String get phoneRequired => 'Phone number is required';
+
+  @override
+  String get passwordRequired => 'Password is required';
+
+  @override
+  String get passwordMinLength => 'Password must be at least 8 characters';
+
+  @override
+  String get confirmPasswordRequired => 'Please confirm your password';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match';
+
+  @override
+  String get agreeToTerms => 'I agree to the';
+
+  @override
+  String get termsOfService => 'Terms of Service';
+
+  @override
+  String get and => 'and';
+
+  @override
+  String get privacyPolicy => 'Privacy Policy';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account?';
+
+  @override
+  String get signIn => 'Sign In';
+
+  @override
+  String get agreeToTermsError =>
+      'Please agree to the Terms of Service and Privacy Policy';
+
+  @override
+  String get accountCreatedSuccessfully =>
+      'Account created successfully! Please sign in.';
+
+  @override
+  String get registrationFailed => 'Registration failed:';
+
+  @override
+  String get resetPassword => 'Reset Password';
+
+  @override
+  String get enterEmailForReset =>
+      'Enter your email address and we\'ll send you instructions to reset your password';
+
+  @override
+  String get checkYourEmail => 'Check Your Email';
+
+  @override
+  String get resetInstructionsSent =>
+      'We\'ve sent password reset instructions to your email address';
+
+  @override
+  String get enterRegisteredEmail => 'Enter your registered email';
+
+  @override
+  String get sendResetLink => 'Send Reset Link';
+
+  @override
+  String get resetLinkSent => 'Reset link sent!';
+
+  @override
+  String get checkEmailInstructions =>
+      'Please check your email and follow the instructions to reset your password. The link will expire in 24 hours.';
+
+  @override
+  String get resendEmail => 'Resend Email';
+
+  @override
+  String get backToSignIn => 'Back to Sign In';
+
+  @override
+  String get checkSpamFolder =>
+      'If you don\'t receive an email within a few minutes, please check your spam folder or contact support.';
+
+  @override
+  String get passwordResetSent =>
+      'Password reset instructions sent to your email';
+
+  @override
+  String get failedToSendReset => 'Failed to send reset email:';
+
+  @override
+  String get resetInstructionsResent =>
+      'Reset instructions resent to your email';
+
+  @override
+  String get failedToResend => 'Failed to resend email:';
+
+  @override
+  String get aiAssistant => 'AI Assistant';
+
+  @override
+  String get clearChat => 'Clear chat';
+
+  @override
+  String get typeYourMessage => 'Type your message...';
+
+  @override
+  String get welcomeMessage =>
+      'Hello! I\'m your AI healthcare assistant. How can I help you today?';
+
+  @override
+  String get justNow => 'Just now';
+
+  @override
+  String minutesAgo(int count) {
+    return '${count}m ago';
+  }
+
+  @override
+  String hoursAgo(int count) {
+    return '${count}h ago';
+  }
+
+  @override
+  String get demoResponse =>
+      'Thank you for your message. This is a demo response. The actual AI integration is coming soon!';
+
+  @override
+  String get noAppointments => 'No appointments';
+
+  @override
+  String get noDoctors => 'No doctors';
+
+  @override
+  String get noNotifications => 'No notifications';
+
+  @override
+  String get noProfileData => 'No profile data';
+
+  @override
+  String get organization => 'Organization:';
+
+  @override
+  String get describeYourSymptoms => 'Describe your symptoms';
+
+  @override
+  String get enterSymptomsHint =>
+      'Enter your symptoms (e.g., headache, fever, nausea)';
+
+  @override
+  String get clearAllSymptoms => 'Clear all symptoms';
+
+  @override
+  String get addSymptom => 'Add Symptom';
+
+  @override
+  String get analyzeSymptoms => 'Analyze Symptoms';
+
+  @override
+  String get symptoms => 'Symptoms';
+
+  @override
+  String get analysisResults => 'Analysis Results';
+
+  @override
+  String get possibleConditions => 'Possible Conditions';
+
+  @override
+  String get recommendations => 'Recommendations';
+
+  @override
+  String get severity => 'Severity';
+
+  @override
+  String get confidence => 'Confidence';
+
+  @override
+  String get nextSteps => 'Next Steps';
+
+  @override
+  String get whenToSeekHelp => 'When to Seek Help';
+
+  @override
+  String get emergency => 'Emergency';
+
+  @override
+  String get urgent => 'Urgent';
+
+  @override
+  String get moderate => 'Moderate';
+
+  @override
+  String get mild => 'Mild';
+
+  @override
+  String get high => 'High';
+
+  @override
+  String get medium => 'Medium';
+
+  @override
+  String get low => 'Low';
+
+  @override
+  String get upcoming => 'Upcoming';
+
+  @override
+  String get unread => 'Unread';
+
+  @override
+  String get quickActions => 'Quick Actions';
+
+  @override
+  String get scheduleWithDoctor => 'Schedule with a doctor';
+
+  @override
+  String get aiPoweredHealthCheck => 'AI-powered health check';
+
+  @override
+  String get getInstantMedicalAdvice => 'Get instant medical advice';
+
+  @override
+  String get browseAvailableDoctors => 'Browse available doctors';
+
+  @override
+  String get viewYourAlerts => 'View your alerts';
+
+  @override
+  String get manageYourAccount => 'Manage your account';
+
+  @override
+  String get overview => 'Overview';
+
+  @override
+  String get totalAppointments => 'Total Appointments';
+
+  @override
+  String get totalNotifications => 'Total Notifications';
 }

@@ -6,9 +6,18 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_ar.dart';
+import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_es.dart';
 import 'app_localizations_fr.dart';
+import 'app_localizations_hi.dart';
+import 'app_localizations_it.dart';
+import 'app_localizations_ja.dart';
+import 'app_localizations_ko.dart';
+import 'app_localizations_nl.dart';
+import 'app_localizations_pt.dart';
+import 'app_localizations_ru.dart';
+import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
 
@@ -98,8 +107,17 @@ abstract class AppLocalizations {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('ar'),
+    Locale('de'),
     Locale('es'),
-    Locale('fr')
+    Locale('fr'),
+    Locale('hi'),
+    Locale('it'),
+    Locale('ja'),
+    Locale('ko'),
+    Locale('nl'),
+    Locale('pt'),
+    Locale('ru'),
+    Locale('zh')
   ];
 
   /// The title of the application
@@ -150,7 +168,7 @@ abstract class AppLocalizations {
   /// **'Confirm Password'**
   String get confirmPassword;
 
-  /// Forgot password link text
+  /// Forgot password page title
   ///
   /// In en, this message translates to:
   /// **'Forgot Password?'**
@@ -407,6 +425,540 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Change Language'**
   String get changeLanguage;
+
+  /// First name field label
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
+  String get firstName;
+
+  /// Last name field label
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
+  String get lastName;
+
+  /// Phone number field label
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get phoneNumber;
+
+  /// Create account button text
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get createAccount;
+
+  /// Registration page title
+  ///
+  /// In en, this message translates to:
+  /// **'Join AI Doctor System'**
+  String get joinAIDoctorSystem;
+
+  /// Registration page subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Create your account to get started'**
+  String get createYourAccount;
+
+  /// Role selection label
+  ///
+  /// In en, this message translates to:
+  /// **'I am a:'**
+  String get iAmA;
+
+  /// Patient role option
+  ///
+  /// In en, this message translates to:
+  /// **'Patient'**
+  String get patient;
+
+  /// Doctor role option
+  ///
+  /// In en, this message translates to:
+  /// **'Doctor'**
+  String get doctor;
+
+  /// Patient role description
+  ///
+  /// In en, this message translates to:
+  /// **'I need medical care'**
+  String get iNeedMedicalCare;
+
+  /// Doctor role description
+  ///
+  /// In en, this message translates to:
+  /// **'I provide medical care'**
+  String get iProvideMedicalCare;
+
+  /// First name validation error
+  ///
+  /// In en, this message translates to:
+  /// **'First name is required'**
+  String get firstNameRequired;
+
+  /// Last name validation error
+  ///
+  /// In en, this message translates to:
+  /// **'Last name is required'**
+  String get lastNameRequired;
+
+  /// Email validation error
+  ///
+  /// In en, this message translates to:
+  /// **'Email is required'**
+  String get emailRequired;
+
+  /// Email format validation error
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email'**
+  String get validEmailRequired;
+
+  /// Phone validation error
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number is required'**
+  String get phoneRequired;
+
+  /// Password validation error
+  ///
+  /// In en, this message translates to:
+  /// **'Password is required'**
+  String get passwordRequired;
+
+  /// Password length validation error
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters'**
+  String get passwordMinLength;
+
+  /// Confirm password validation error
+  ///
+  /// In en, this message translates to:
+  /// **'Please confirm your password'**
+  String get confirmPasswordRequired;
+
+  /// Password mismatch error
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match'**
+  String get passwordsDoNotMatch;
+
+  /// Terms agreement text
+  ///
+  /// In en, this message translates to:
+  /// **'I agree to the'**
+  String get agreeToTerms;
+
+  /// Terms of service link text
+  ///
+  /// In en, this message translates to:
+  /// **'Terms of Service'**
+  String get termsOfService;
+
+  /// Conjunction word
+  ///
+  /// In en, this message translates to:
+  /// **'and'**
+  String get and;
+
+  /// Privacy policy link text
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy Policy'**
+  String get privacyPolicy;
+
+  /// Login link text
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get alreadyHaveAccount;
+
+  /// Sign in button text
+  ///
+  /// In en, this message translates to:
+  /// **'Sign In'**
+  String get signIn;
+
+  /// Terms agreement error message
+  ///
+  /// In en, this message translates to:
+  /// **'Please agree to the Terms of Service and Privacy Policy'**
+  String get agreeToTermsError;
+
+  /// Registration success message
+  ///
+  /// In en, this message translates to:
+  /// **'Account created successfully! Please sign in.'**
+  String get accountCreatedSuccessfully;
+
+  /// Registration error message
+  ///
+  /// In en, this message translates to:
+  /// **'Registration failed:'**
+  String get registrationFailed;
+
+  /// Reset password page title
+  ///
+  /// In en, this message translates to:
+  /// **'Reset Password'**
+  String get resetPassword;
+
+  /// Password reset instructions
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your email address and we\'ll send you instructions to reset your password'**
+  String get enterEmailForReset;
+
+  /// Email sent confirmation title
+  ///
+  /// In en, this message translates to:
+  /// **'Check Your Email'**
+  String get checkYourEmail;
+
+  /// Email sent confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'We\'ve sent password reset instructions to your email address'**
+  String get resetInstructionsSent;
+
+  /// Email field hint
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your registered email'**
+  String get enterRegisteredEmail;
+
+  /// Send reset link button
+  ///
+  /// In en, this message translates to:
+  /// **'Send Reset Link'**
+  String get sendResetLink;
+
+  /// Reset link sent confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Reset link sent!'**
+  String get resetLinkSent;
+
+  /// Email check instructions
+  ///
+  /// In en, this message translates to:
+  /// **'Please check your email and follow the instructions to reset your password. The link will expire in 24 hours.'**
+  String get checkEmailInstructions;
+
+  /// Resend email button
+  ///
+  /// In en, this message translates to:
+  /// **'Resend Email'**
+  String get resendEmail;
+
+  /// Back to login button
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Sign In'**
+  String get backToSignIn;
+
+  /// Spam folder check message
+  ///
+  /// In en, this message translates to:
+  /// **'If you don\'t receive an email within a few minutes, please check your spam folder or contact support.'**
+  String get checkSpamFolder;
+
+  /// Password reset sent confirmation
+  ///
+  /// In en, this message translates to:
+  /// **'Password reset instructions sent to your email'**
+  String get passwordResetSent;
+
+  /// Password reset send error
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to send reset email:'**
+  String get failedToSendReset;
+
+  /// Resend confirmation message
+  ///
+  /// In en, this message translates to:
+  /// **'Reset instructions resent to your email'**
+  String get resetInstructionsResent;
+
+  /// Resend error message
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to resend email:'**
+  String get failedToResend;
+
+  /// AI assistant chat title
+  ///
+  /// In en, this message translates to:
+  /// **'AI Assistant'**
+  String get aiAssistant;
+
+  /// Clear chat tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Clear chat'**
+  String get clearChat;
+
+  /// Chat input hint
+  ///
+  /// In en, this message translates to:
+  /// **'Type your message...'**
+  String get typeYourMessage;
+
+  /// AI assistant welcome message
+  ///
+  /// In en, this message translates to:
+  /// **'Hello! I\'m your AI healthcare assistant. How can I help you today?'**
+  String get welcomeMessage;
+
+  /// Time format for recent messages
+  ///
+  /// In en, this message translates to:
+  /// **'Just now'**
+  String get justNow;
+
+  /// Time format for minutes ago
+  ///
+  /// In en, this message translates to:
+  /// **'{count}m ago'**
+  String minutesAgo(int count);
+
+  /// Time format for hours ago
+  ///
+  /// In en, this message translates to:
+  /// **'{count}h ago'**
+  String hoursAgo(int count);
+
+  /// AI demo response message
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for your message. This is a demo response. The actual AI integration is coming soon!'**
+  String get demoResponse;
+
+  /// Empty appointments message
+  ///
+  /// In en, this message translates to:
+  /// **'No appointments'**
+  String get noAppointments;
+
+  /// Empty doctors message
+  ///
+  /// In en, this message translates to:
+  /// **'No doctors'**
+  String get noDoctors;
+
+  /// Empty notifications message
+  ///
+  /// In en, this message translates to:
+  /// **'No notifications'**
+  String get noNotifications;
+
+  /// Empty profile message
+  ///
+  /// In en, this message translates to:
+  /// **'No profile data'**
+  String get noProfileData;
+
+  /// Organization label
+  ///
+  /// In en, this message translates to:
+  /// **'Organization:'**
+  String get organization;
+
+  /// Symptom checker title
+  ///
+  /// In en, this message translates to:
+  /// **'Describe your symptoms'**
+  String get describeYourSymptoms;
+
+  /// Symptoms input hint
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your symptoms (e.g., headache, fever, nausea)'**
+  String get enterSymptomsHint;
+
+  /// Clear symptoms tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all symptoms'**
+  String get clearAllSymptoms;
+
+  /// Add symptom button
+  ///
+  /// In en, this message translates to:
+  /// **'Add Symptom'**
+  String get addSymptom;
+
+  /// Analyze symptoms button
+  ///
+  /// In en, this message translates to:
+  /// **'Analyze Symptoms'**
+  String get analyzeSymptoms;
+
+  /// Symptoms label
+  ///
+  /// In en, this message translates to:
+  /// **'Symptoms'**
+  String get symptoms;
+
+  /// Analysis results title
+  ///
+  /// In en, this message translates to:
+  /// **'Analysis Results'**
+  String get analysisResults;
+
+  /// Possible conditions label
+  ///
+  /// In en, this message translates to:
+  /// **'Possible Conditions'**
+  String get possibleConditions;
+
+  /// Recommendations label
+  ///
+  /// In en, this message translates to:
+  /// **'Recommendations'**
+  String get recommendations;
+
+  /// Severity label
+  ///
+  /// In en, this message translates to:
+  /// **'Severity'**
+  String get severity;
+
+  /// Confidence label
+  ///
+  /// In en, this message translates to:
+  /// **'Confidence'**
+  String get confidence;
+
+  /// Next steps label
+  ///
+  /// In en, this message translates to:
+  /// **'Next Steps'**
+  String get nextSteps;
+
+  /// When to seek help label
+  ///
+  /// In en, this message translates to:
+  /// **'When to Seek Help'**
+  String get whenToSeekHelp;
+
+  /// Emergency label
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency'**
+  String get emergency;
+
+  /// Urgent label
+  ///
+  /// In en, this message translates to:
+  /// **'Urgent'**
+  String get urgent;
+
+  /// Moderate label
+  ///
+  /// In en, this message translates to:
+  /// **'Moderate'**
+  String get moderate;
+
+  /// Mild label
+  ///
+  /// In en, this message translates to:
+  /// **'Mild'**
+  String get mild;
+
+  /// High label
+  ///
+  /// In en, this message translates to:
+  /// **'High'**
+  String get high;
+
+  /// Medium label
+  ///
+  /// In en, this message translates to:
+  /// **'Medium'**
+  String get medium;
+
+  /// Low label
+  ///
+  /// In en, this message translates to:
+  /// **'Low'**
+  String get low;
+
+  /// Upcoming label
+  ///
+  /// In en, this message translates to:
+  /// **'Upcoming'**
+  String get upcoming;
+
+  /// Unread label
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get unread;
+
+  /// Quick actions title
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Actions'**
+  String get quickActions;
+
+  /// Book appointment subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule with a doctor'**
+  String get scheduleWithDoctor;
+
+  /// Symptom checker subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'AI-powered health check'**
+  String get aiPoweredHealthCheck;
+
+  /// Chat subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Get instant medical advice'**
+  String get getInstantMedicalAdvice;
+
+  /// Find doctors subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Browse available doctors'**
+  String get browseAvailableDoctors;
+
+  /// Notifications subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'View your alerts'**
+  String get viewYourAlerts;
+
+  /// Profile subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Manage your account'**
+  String get manageYourAccount;
+
+  /// Overview title
+  ///
+  /// In en, this message translates to:
+  /// **'Overview'**
+  String get overview;
+
+  /// Total appointments label
+  ///
+  /// In en, this message translates to:
+  /// **'Total Appointments'**
+  String get totalAppointments;
+
+  /// Total notifications label
+  ///
+  /// In en, this message translates to:
+  /// **'Total Notifications'**
+  String get totalNotifications;
 }
 
 class _AppLocalizationsDelegate
@@ -419,8 +971,21 @@ class _AppLocalizationsDelegate
   }
 
   @override
-  bool isSupported(Locale locale) =>
-      <String>['ar', 'en', 'es', 'fr'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+        'ar',
+        'de',
+        'en',
+        'es',
+        'fr',
+        'hi',
+        'it',
+        'ja',
+        'ko',
+        'nl',
+        'pt',
+        'ru',
+        'zh'
+      ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -431,12 +996,30 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
   switch (locale.languageCode) {
     case 'ar':
       return AppLocalizationsAr();
+    case 'de':
+      return AppLocalizationsDe();
     case 'en':
       return AppLocalizationsEn();
     case 'es':
       return AppLocalizationsEs();
     case 'fr':
       return AppLocalizationsFr();
+    case 'hi':
+      return AppLocalizationsHi();
+    case 'it':
+      return AppLocalizationsIt();
+    case 'ja':
+      return AppLocalizationsJa();
+    case 'ko':
+      return AppLocalizationsKo();
+    case 'nl':
+      return AppLocalizationsNl();
+    case 'pt':
+      return AppLocalizationsPt();
+    case 'ru':
+      return AppLocalizationsRu();
+    case 'zh':
+      return AppLocalizationsZh();
   }
 
   throw FlutterError(

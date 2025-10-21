@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../generated/l10n/app_localizations.dart';
+import '../../../../shared/widgets/base_scaffold.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -21,12 +23,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Reset Password'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+    return BaseScaffold(
+      title: AppLocalizations.of(context)!.resetPassword,
+      showAppBar: true,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Form(
@@ -52,20 +51,22 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
               // Header Text
               Text(
-                _emailSent ? 'Check Your Email' : 'Forgot Password?',
+                _emailSent
+                    ? AppLocalizations.of(context)!.checkYourEmail
+                    : AppLocalizations.of(context)!.forgotPassword,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
-                _emailSent 
-                    ? 'We\'ve sent password reset instructions to your email address'
-                    : 'Enter your email address and we\'ll send you instructions to reset your password',
+                _emailSent
+                    ? AppLocalizations.of(context)!.resetInstructionsSent
+                    : AppLocalizations.of(context)!.enterEmailForReset,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
@@ -75,18 +76,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
-                  decoration: const InputDecoration(
-                    labelText: 'Email Address',
-                    hintText: 'Enter your registered email',
-                    prefixIcon: Icon(Icons.email_outlined),
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.email,
+                    hintText:
+                        AppLocalizations.of(context)!.enterRegisteredEmail,
+                    prefixIcon: const Icon(Icons.email_outlined),
+                    border: const OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Email is required';
+                      return AppLocalizations.of(context)!.emailRequired;
                     }
-                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                      return 'Please enter a valid email address';
+                    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value)) {
+                      return AppLocalizations.of(context)!.validEmailRequired;
                     }
                     return null;
                   },
@@ -105,7 +108,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           height: 20,
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
-                      : const Text('Send Reset Link'),
+                      : Text(AppLocalizations.of(context)!.sendResetLink),
                 ),
               ] else ...[
                 // Email Sent State
@@ -130,16 +133,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       Text(
                         'Reset link sent!',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onPrimaryContainer,
-                        ),
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
+                            ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         'Please check your email and follow the instructions to reset your password. The link will expire in 24 hours.',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimaryContainer,
-                        ),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onPrimaryContainer,
+                            ),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -162,7 +169,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       : const Text('Resend Email'),
                 ),
               ],
-              
+
               const SizedBox(height: 24),
 
               // Back to Login
@@ -190,8 +197,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               Text(
                 'If you don\'t receive an email within a few minutes, please check your spam folder or contact support.',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                 textAlign: TextAlign.center,
               ),
             ],
@@ -211,12 +218,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     try {
       // TODO: Implement actual password reset logic
       await Future.delayed(const Duration(seconds: 2));
-      
+
       if (mounted) {
         setState(() {
           _emailSent = true;
         });
-        
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Password reset instructions sent to your email'),
@@ -250,7 +257,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     try {
       // TODO: Implement actual resend logic
       await Future.delayed(const Duration(seconds: 1));
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

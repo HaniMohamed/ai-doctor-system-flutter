@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../generated/l10n/app_localizations.dart';
+import '../../../../shared/widgets/base_scaffold.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -28,7 +30,7 @@ class _ChatPageState extends State<ChatPage> {
 
   void _addWelcomeMessage() {
     _messages.add(ChatMessage(
-      text: 'Hello! I\'m your AI healthcare assistant. How can I help you today?',
+      text: AppLocalizations.of(context)!.welcomeMessage,
       isUser: false,
       timestamp: DateTime.now(),
     ));
@@ -36,17 +38,15 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('AI Assistant'),
-        actions: [
-          IconButton(
-            onPressed: _clearChat,
-            icon: const Icon(Icons.clear_all),
-            tooltip: 'Clear chat',
-          ),
-        ],
-      ),
+    return BaseScaffold(
+      title: AppLocalizations.of(context)!.aiAssistant,
+      actions: [
+        IconButton(
+          onPressed: _clearChat,
+          icon: const Icon(Icons.clear_all),
+          tooltip: AppLocalizations.of(context)!.clearChat,
+        ),
+      ],
       body: Column(
         children: [
           Expanded(
@@ -68,7 +68,10 @@ class _ChatPageState extends State<ChatPage> {
               color: Theme.of(context).colorScheme.surface,
               border: Border(
                 top: BorderSide(
-                  color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+                  color: Theme.of(context)
+                      .colorScheme
+                      .outline
+                      .withValues(alpha: 0.2),
                 ),
               ),
             ),
@@ -77,9 +80,9 @@ class _ChatPageState extends State<ChatPage> {
                 Expanded(
                   child: TextField(
                     controller: _messageController,
-                    decoration: const InputDecoration(
-                      hintText: 'Type your message...',
-                      border: OutlineInputBorder(),
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)!.typeYourMessage,
+                      border: const OutlineInputBorder(),
                       contentPadding: EdgeInsets.symmetric(
                         horizontal: 16,
                         vertical: 12,
@@ -92,7 +95,9 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 const SizedBox(width: 8),
                 FloatingActionButton.small(
-                  onPressed: _messageController.text.trim().isEmpty ? null : _sendMessage,
+                  onPressed: _messageController.text.trim().isEmpty
+                      ? null
+                      : _sendMessage,
                   child: const Icon(Icons.send),
                 ),
               ],
@@ -107,9 +112,8 @@ class _ChatPageState extends State<ChatPage> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
-        mainAxisAlignment: message.isUser 
-            ? MainAxisAlignment.end 
-            : MainAxisAlignment.start,
+        mainAxisAlignment:
+            message.isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (!message.isUser) ...[
@@ -132,8 +136,12 @@ class _ChatPageState extends State<ChatPage> {
                     ? Theme.of(context).colorScheme.primary
                     : Theme.of(context).colorScheme.surfaceContainerHighest,
                 borderRadius: BorderRadius.circular(20).copyWith(
-                  bottomLeft: message.isUser ? const Radius.circular(20) : const Radius.circular(4),
-                  bottomRight: message.isUser ? const Radius.circular(4) : const Radius.circular(20),
+                  bottomLeft: message.isUser
+                      ? const Radius.circular(20)
+                      : const Radius.circular(4),
+                  bottomRight: message.isUser
+                      ? const Radius.circular(4)
+                      : const Radius.circular(20),
                 ),
               ),
               child: Column(
@@ -153,8 +161,14 @@ class _ChatPageState extends State<ChatPage> {
                     style: TextStyle(
                       fontSize: 12,
                       color: message.isUser
-                          ? Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.7)
-                          : Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                          ? Theme.of(context)
+                              .colorScheme
+                              .onPrimary
+                              .withValues(alpha: 0.7)
+                          : Theme.of(context)
+                              .colorScheme
+                              .onSurfaceVariant
+                              .withValues(alpha: 0.7),
                     ),
                   ),
                 ],
@@ -224,7 +238,10 @@ class _ChatPageState extends State<ChatPage> {
       width: 8,
       height: 8,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+        color: Theme.of(context)
+            .colorScheme
+            .onSurfaceVariant
+            .withValues(alpha: 0.4),
         shape: BoxShape.circle,
       ),
     );
@@ -233,13 +250,13 @@ class _ChatPageState extends State<ChatPage> {
   String _formatTime(DateTime timestamp) {
     final now = DateTime.now();
     final difference = now.difference(timestamp);
-    
+
     if (difference.inMinutes < 1) {
-      return 'Just now';
+      return AppLocalizations.of(context)!.justNow;
     } else if (difference.inHours < 1) {
-      return '${difference.inMinutes}m ago';
+      return AppLocalizations.of(context)!.minutesAgo(difference.inMinutes);
     } else if (difference.inDays < 1) {
-      return '${difference.inHours}h ago';
+      return AppLocalizations.of(context)!.hoursAgo(difference.inHours);
     } else {
       return '${timestamp.day}/${timestamp.month} ${timestamp.hour}:${timestamp.minute.toString().padLeft(2, '0')}';
     }
@@ -266,7 +283,7 @@ class _ChatPageState extends State<ChatPage> {
       setState(() {
         _isTyping = false;
         _messages.add(ChatMessage(
-          text: 'Thank you for your message. This is a demo response. The actual AI integration is coming soon!',
+          text: AppLocalizations.of(context)!.demoResponse,
           isUser: false,
           timestamp: DateTime.now(),
         ));

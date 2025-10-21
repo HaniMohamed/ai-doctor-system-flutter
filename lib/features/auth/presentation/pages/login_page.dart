@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/auth_controller.dart';
+import '../../../../generated/l10n/app_localizations.dart';
+import '../../../../shared/widgets/base_scaffold.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -11,8 +13,8 @@ class LoginPage extends StatelessWidget {
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+    return BaseScaffold(
+      title: AppLocalizations.of(context)!.login,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -20,18 +22,18 @@ class LoginPage extends StatelessWidget {
           children: [
             TextField(
               controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.email,
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
             TextField(
               controller: passwordController,
               obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Password',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.password,
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 24),
@@ -44,13 +46,14 @@ class LoginPage extends StatelessWidget {
                         passwordController.text,
                       );
                     },
-                    child: const Text('Login'),
+                    child: Text(AppLocalizations.of(context)!.login),
                   )),
             const SizedBox(height: 16),
             Obx(() => controller.errorMessage.value.isNotEmpty
                 ? Text(
                     controller.errorMessage.value,
-                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.error),
                   )
                 : const SizedBox()),
           ],

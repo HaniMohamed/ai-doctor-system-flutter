@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../../generated/l10n/app_localizations.dart';
+import '../../../../shared/widgets/base_scaffold.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -15,7 +17,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _phoneController = TextEditingController();
-  
+
   bool _isLoading = false;
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -35,12 +37,9 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Create Account'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-      ),
+    return BaseScaffold(
+      title: AppLocalizations.of(context)!.createAccount,
+      showAppBar: true,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Form(
@@ -50,38 +49,44 @@ class _RegisterPageState extends State<RegisterPage> {
             children: [
               // Header
               Text(
-                'Join AI Doctor System',
+                AppLocalizations.of(context)!.joinAIDoctorSystem,
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                      fontWeight: FontWeight.bold,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
-                'Create your account to get started',
+                AppLocalizations.of(context)!.createYourAccount,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
 
               // Role Selection
               Text(
-                'I am a:',
+                AppLocalizations.of(context)!.iAmA,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w600,
-                ),
+                      fontWeight: FontWeight.w600,
+                    ),
               ),
               const SizedBox(height: 8),
               Row(
                 children: [
                   Expanded(
-                    child: _buildRoleOption('Patient', 'I need medical care', Icons.person),
+                    child: _buildRoleOption(
+                        AppLocalizations.of(context)!.patient,
+                        AppLocalizations.of(context)!.iNeedMedicalCare,
+                        Icons.person),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: _buildRoleOption('Doctor', 'I provide medical care', Icons.medical_services),
+                    child: _buildRoleOption(
+                        AppLocalizations.of(context)!.doctor,
+                        AppLocalizations.of(context)!.iProvideMedicalCare,
+                        Icons.medical_services),
                   ),
                 ],
               ),
@@ -93,13 +98,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   Expanded(
                     child: TextFormField(
                       controller: _firstNameController,
-                      decoration: const InputDecoration(
-                        labelText: 'First Name',
-                        prefixIcon: Icon(Icons.person_outline),
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.firstName,
+                        prefixIcon: const Icon(Icons.person_outline),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'First name is required';
+                          return AppLocalizations.of(context)!
+                              .firstNameRequired;
                         }
                         return null;
                       },
@@ -109,13 +115,13 @@ class _RegisterPageState extends State<RegisterPage> {
                   Expanded(
                     child: TextFormField(
                       controller: _lastNameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Last Name',
-                        prefixIcon: Icon(Icons.person_outline),
+                      decoration: InputDecoration(
+                        labelText: AppLocalizations.of(context)!.lastName,
+                        prefixIcon: const Icon(Icons.person_outline),
                       ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Last name is required';
+                          return AppLocalizations.of(context)!.lastNameRequired;
                         }
                         return null;
                       },
@@ -129,16 +135,17 @@ class _RegisterPageState extends State<RegisterPage> {
               TextFormField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                  labelText: 'Email Address',
-                  prefixIcon: Icon(Icons.email_outlined),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.email,
+                  prefixIcon: const Icon(Icons.email_outlined),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Email is required';
+                    return AppLocalizations.of(context)!.emailRequired;
                   }
-                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                    return 'Please enter a valid email';
+                  if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                      .hasMatch(value)) {
+                    return AppLocalizations.of(context)!.validEmailRequired;
                   }
                   return null;
                 },
@@ -149,13 +156,13 @@ class _RegisterPageState extends State<RegisterPage> {
               TextFormField(
                 controller: _phoneController,
                 keyboardType: TextInputType.phone,
-                decoration: const InputDecoration(
-                  labelText: 'Phone Number',
-                  prefixIcon: Icon(Icons.phone_outlined),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.phoneNumber,
+                  prefixIcon: const Icon(Icons.phone_outlined),
                 ),
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Phone number is required';
+                    return AppLocalizations.of(context)!.phoneRequired;
                   }
                   return null;
                 },
@@ -167,10 +174,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 controller: _passwordController,
                 obscureText: _obscurePassword,
                 decoration: InputDecoration(
-                  labelText: 'Password',
+                  labelText: AppLocalizations.of(context)!.password,
                   prefixIcon: const Icon(Icons.lock_outline),
                   suffixIcon: IconButton(
-                    icon: Icon(_obscurePassword ? Icons.visibility : Icons.visibility_off),
+                    icon: Icon(_obscurePassword
+                        ? Icons.visibility
+                        : Icons.visibility_off),
                     onPressed: () {
                       setState(() {
                         _obscurePassword = !_obscurePassword;
@@ -180,10 +189,10 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Password is required';
+                    return AppLocalizations.of(context)!.passwordRequired;
                   }
                   if (value.length < 8) {
-                    return 'Password must be at least 8 characters';
+                    return AppLocalizations.of(context)!.passwordMinLength;
                   }
                   return null;
                 },
@@ -195,10 +204,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 controller: _confirmPasswordController,
                 obscureText: _obscureConfirmPassword,
                 decoration: InputDecoration(
-                  labelText: 'Confirm Password',
+                  labelText: AppLocalizations.of(context)!.confirmPassword,
                   prefixIcon: const Icon(Icons.lock_outline),
                   suffixIcon: IconButton(
-                    icon: Icon(_obscureConfirmPassword ? Icons.visibility : Icons.visibility_off),
+                    icon: Icon(_obscureConfirmPassword
+                        ? Icons.visibility
+                        : Icons.visibility_off),
                     onPressed: () {
                       setState(() {
                         _obscureConfirmPassword = !_obscureConfirmPassword;
@@ -208,10 +219,11 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please confirm your password';
+                    return AppLocalizations.of(context)!
+                        .confirmPasswordRequired;
                   }
                   if (value != _passwordController.text) {
-                    return 'Passwords do not match';
+                    return AppLocalizations.of(context)!.passwordsDoNotMatch;
                   }
                   return null;
                 },
@@ -238,19 +250,22 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                       child: Text.rich(
                         TextSpan(
-                          text: 'I agree to the ',
+                          text:
+                              '${AppLocalizations.of(context)!.agreeToTerms} ',
                           style: Theme.of(context).textTheme.bodyMedium,
                           children: [
                             TextSpan(
-                              text: 'Terms of Service',
+                              text:
+                                  AppLocalizations.of(context)!.termsOfService,
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            const TextSpan(text: ' and '),
                             TextSpan(
-                              text: 'Privacy Policy',
+                                text: ' ${AppLocalizations.of(context)!.and} '),
+                            TextSpan(
+                              text: AppLocalizations.of(context)!.privacyPolicy,
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.w600,
@@ -277,7 +292,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         height: 20,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text('Create Account'),
+                    : Text(AppLocalizations.of(context)!.createAccount),
               ),
               const SizedBox(height: 16),
 
@@ -286,14 +301,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Already have an account? ',
+                    '${AppLocalizations.of(context)!.alreadyHaveAccount} ',
                     style: Theme.of(context).textTheme.bodyMedium,
                   ),
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: const Text('Sign In'),
+                    child: Text(AppLocalizations.of(context)!.signIn),
                   ),
                 ],
               ),
@@ -306,7 +321,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildRoleOption(String role, String description, IconData icon) {
     final isSelected = _selectedRole == role;
-    
+
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -317,21 +332,24 @@ class _RegisterPageState extends State<RegisterPage> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           border: Border.all(
-            color: isSelected 
+            color: isSelected
                 ? Theme.of(context).colorScheme.primary
                 : Theme.of(context).colorScheme.outline,
             width: isSelected ? 2 : 1,
           ),
           borderRadius: BorderRadius.circular(12),
-          color: isSelected 
-              ? Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.3)
+          color: isSelected
+              ? Theme.of(context)
+                  .colorScheme
+                  .primaryContainer
+                  .withValues(alpha: 0.3)
               : Colors.transparent,
         ),
         child: Column(
           children: [
             Icon(
               icon,
-              color: isSelected 
+              color: isSelected
                   ? Theme.of(context).colorScheme.primary
                   : Theme.of(context).colorScheme.onSurfaceVariant,
               size: 32,
@@ -340,18 +358,19 @@ class _RegisterPageState extends State<RegisterPage> {
             Text(
               role,
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                color: isSelected 
-                    ? Theme.of(context).colorScheme.primary
-                    : Theme.of(context).colorScheme.onSurface,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              ),
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.onSurface,
+                    fontWeight:
+                        isSelected ? FontWeight.w600 : FontWeight.normal,
+                  ),
             ),
             const SizedBox(height: 4),
             Text(
               description,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
               textAlign: TextAlign.center,
             ),
           ],
@@ -362,11 +381,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> _handleRegister() async {
     if (!_formKey.currentState!.validate()) return;
-    
+
     if (!_agreeToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Please agree to the Terms of Service and Privacy Policy'),
+          content:
+              Text('Please agree to the Terms of Service and Privacy Policy'),
         ),
       );
       return;
@@ -379,7 +399,7 @@ class _RegisterPageState extends State<RegisterPage> {
     try {
       // TODO: Implement actual registration logic
       await Future.delayed(const Duration(seconds: 2));
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

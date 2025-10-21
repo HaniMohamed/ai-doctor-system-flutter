@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/profile_controller.dart';
+import '../../../../generated/l10n/app_localizations.dart';
+import '../../../../shared/widgets/base_scaffold.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -9,8 +11,8 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<ProfileController>();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('Profile')),
+    return BaseScaffold(
+      title: AppLocalizations.of(context)!.profile,
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -20,7 +22,8 @@ class ProfilePage extends StatelessWidget {
         }
         final profile = controller.profile.value;
         if (profile == null) {
-          return const Center(child: Text('No profile data'));
+          return Center(
+              child: Text(AppLocalizations.of(context)!.noProfileData));
         }
         return Padding(
           padding: const EdgeInsets.all(16),
@@ -31,21 +34,28 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 32,
-                    backgroundImage: profile.avatarUrl != null ? NetworkImage(profile.avatarUrl!) : null,
-                    child: profile.avatarUrl == null ? const Icon(Icons.person) : null,
+                    backgroundImage: profile.avatarUrl != null
+                        ? NetworkImage(profile.avatarUrl!)
+                        : null,
+                    child: profile.avatarUrl == null
+                        ? const Icon(Icons.person)
+                        : null,
                   ),
                   const SizedBox(width: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(profile.fullName, style: Theme.of(context).textTheme.titleLarge),
-                      Text(profile.email, style: Theme.of(context).textTheme.bodyMedium),
+                      Text(profile.fullName,
+                          style: Theme.of(context).textTheme.titleLarge),
+                      Text(profile.email,
+                          style: Theme.of(context).textTheme.bodyMedium),
                     ],
                   )
                 ],
               ),
               const SizedBox(height: 24),
-              Text('Organization: ${profile.organizationId}')
+              Text(
+                  '${AppLocalizations.of(context)!.organization} ${profile.organizationId}')
             ],
           ),
         );
