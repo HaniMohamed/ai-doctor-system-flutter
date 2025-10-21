@@ -9,4 +9,5 @@ abstract class AuthService {
   Future<String?> getAccessToken();
   Future<void> refreshToken();
   Future<bool> validateAndRefreshToken();
+  Future<void> initializeFromStorage();
 }

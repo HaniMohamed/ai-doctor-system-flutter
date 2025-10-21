@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import '../../../../../core/network/api_client.dart';
 import '../../data/models/analysis_result_model.dart';
 import '../../domain/entities/analysis_result.dart';
@@ -5,7 +6,7 @@ import '../../domain/entities/symptom.dart';
 
 abstract class SymptomCheckerRemoteDataSource {
   Future<AnalysisResult> analyzeSymptoms(List<Symptom> symptoms,
-      {int? age, String? gender});
+      {required int age, required String gender});
 }
 
 class SymptomCheckerRemoteDataSourceImpl
@@ -15,13 +16,23 @@ class SymptomCheckerRemoteDataSourceImpl
 
   @override
   Future<AnalysisResult> analyzeSymptoms(List<Symptom> symptoms,
-      {int? age, String? gender}) async {
+      {required int age, required String gender}) async {
     final payload = {
       'symptoms': symptoms.map((s) => s.name).join(', '),
-      if (age != null) 'age': age,
-      if (gender != null) 'gender': gender,
+      'session_id': '', // Empty session_id as shown in example
+      'age': age,
+      'gender': gender,
     };
-    final res = await _apiClient.post('/ai/symptom-checker', data: payload);
+
+    final res = await _apiClient.post(
+      '/ai/symptom-checker',
+      data: payload,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
+    );
 
     // Extract data from the API response structure
     final responseData = res.data['data'] as Map<String, dynamic>;

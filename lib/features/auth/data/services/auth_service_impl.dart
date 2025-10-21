@@ -3,10 +3,12 @@ import '../../../../core/storage/secure_storage.dart';
 import '../../domain/entities/auth_tokens.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/services/auth_service.dart';
+import '../datasources/auth_local_datasource.dart';
 import '../datasources/auth_remote_datasource.dart';
 
 class AuthServiceImpl implements AuthService {
   final AuthRemoteDataSource _remoteDataSource;
+  final AuthLocalDataSource _localDataSource;
   final SecureStorage _secureStorage;
 
   User? _currentUser;
@@ -15,8 +17,10 @@ class AuthServiceImpl implements AuthService {
 
   AuthServiceImpl({
     required AuthRemoteDataSource remoteDataSource,
+    required AuthLocalDataSource localDataSource,
     required SecureStorage secureStorage,
   })  : _remoteDataSource = remoteDataSource,
+        _localDataSource = localDataSource,
         _secureStorage = secureStorage;
 
   @override
@@ -149,7 +153,47 @@ class AuthServiceImpl implements AuthService {
     }
   }
 
+  /// Initialize authentication state from storage (non-destructive)
+  @override
+  Future<void> initializeFromStorage() async {
+    try {
+      final isAuthStored = await _secureStorage.read('is_authenticated');
+      if (isAuthStored == 'true') {
+        // Try to get cached user data from local storage
+        try {
+          final cachedUser = await _localDataSource.getCachedUser();
+          if (cachedUser != null) {
+            _currentUser = cachedUser;
+            _isAuthenticated = true;
+            Logger.info('Restored auth state from cached user data', 'AUTH');
+            return;
+          }
+        } catch (e) {
+          Logger.warning('Failed to get cached user data', 'AUTH', e);
+        }
+
+        // Fallback: create basic user from stored email
+        final email = await _secureStorage.read('user_email');
+        if (email != null) {
+          _isAuthenticated = true;
+          _currentUser = User(
+            id: 'cached-user',
+            email: email,
+            fullName: 'User', // Will be updated when API call succeeds
+            role: 'patient',
+            organizationId: 'cached-org',
+            // Age and gender should come from stored user data
+          );
+          Logger.info('Restored basic auth state from storage', 'AUTH');
+        }
+      }
+    } catch (e) {
+      Logger.error('Failed to initialize auth state from storage', 'AUTH', e);
+    }
+  }
+
   /// Validate current token and refresh if needed
+  @override
   Future<bool> validateAndRefreshToken() async {
     try {
       final accessToken = await getAccessToken();
@@ -180,13 +224,13 @@ class AuthServiceImpl implements AuthService {
           return true;
         } catch (refreshError) {
           Logger.error('Token refresh failed', 'AUTH', refreshError);
-          await logout();
+          // Don't logout here - let the user try to use the app
+          // Token will be validated on actual API calls
           return false;
         }
       }
     } catch (e) {
       Logger.error('Token validation error', 'AUTH', e);
-      await logout();
       return false;
     }
   }

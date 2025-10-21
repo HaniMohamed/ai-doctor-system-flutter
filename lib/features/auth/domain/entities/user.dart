@@ -4,6 +4,8 @@ class User {
   final String fullName;
   final String role;
   final String organizationId;
+  final int? age;
+  final String? gender;
 
   const User({
     required this.id,
@@ -11,5 +13,7 @@ class User {
     required this.fullName,
     required this.role,
     required this.organizationId,
+    this.age,
+    this.gender,
   });
 }

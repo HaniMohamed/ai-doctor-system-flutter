@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../core/di/injection_container.dart';
+import '../../core/logging/logger.dart';
 import '../../features/auth/domain/services/auth_service.dart';
 import '../../routes/app_routes.dart';
 
@@ -26,16 +27,31 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       final authService = sl<AuthService>();
 
-      // Validate token and refresh if needed
-      final isValidToken = await authService.validateAndRefreshToken();
+      // First check if user has stored authentication state
+      if (authService.isAuthenticated && authService.currentUser != null) {
+        // User appears to be authenticated locally, try to validate token
+        try {
+          final isValidToken = await authService.validateAndRefreshToken();
+          if (isValidToken) {
+            Get.offNamed(AppRoutes.dashboard);
+            return;
+          }
+        } catch (e) {
+          // If validation fails, don't logout immediately - let user try to use the app
+          // They'll be redirected to login if token is actually invalid when making API calls
+          Logger.warning(
+              'Token validation failed on startup, but keeping local auth state',
+              'AUTH',
+              e);
+        }
 
-      if (isValidToken &&
-          authService.isAuthenticated &&
-          authService.currentUser != null) {
+        // If we have local auth state, go to dashboard (token will be validated on first API call)
         Get.offNamed(AppRoutes.dashboard);
-      } else {
-        Get.offNamed(AppRoutes.login);
+        return;
       }
+
+      // No local auth state, go to login
+      Get.offNamed(AppRoutes.login);
     } catch (e) {
       // If there's any error with auth service, navigate to login
       Get.offNamed(AppRoutes.login);

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/symptom_checker_controller.dart';
 import '../../domain/entities/symptom.dart';
+import '../controllers/symptom_checker_controller.dart';
 
 class SymptomCheckerPage extends StatefulWidget {
   const SymptomCheckerPage({super.key});
@@ -150,6 +150,11 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
                       const SizedBox(height: 16),
                       Expanded(
                         child: Obx(() {
+                          // Show error message if there's an error
+                          if (_controller.errorMessage.value.isNotEmpty) {
+                            return _buildErrorMessage(context);
+                          }
+
                           if (_controller.result.value != null) {
                             return _buildAnalysisResults(context);
                           } else {
@@ -189,6 +194,8 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
           Symptom(name: symptomText.trim(), severity: 5); // Default severity
       _controller.symptoms.add(symptom);
       _symptomController.clear();
+      // Clear any previous error messages when adding new symptoms
+      _controller.errorMessage.value = '';
     }
   }
 
@@ -202,6 +209,8 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
 
   Future<void> _analyzeSymptoms() async {
     if (_controller.symptoms.isEmpty) return;
+    // Clear any previous error messages when starting new analysis
+    _controller.errorMessage.value = '';
     await _controller.analyze();
   }
 
@@ -260,6 +269,53 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Theme.of(context).colorScheme.onSurfaceVariant,
                 ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildErrorMessage(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.error_outline,
+            size: 64,
+            color: Theme.of(context).colorScheme.error,
+          ),
+          const SizedBox(height: 16),
+          Text(
+            'Analysis Failed',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.error,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Text(
+              _controller.errorMessage.value,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(height: 24),
+          ElevatedButton.icon(
+            onPressed: () {
+              _controller.errorMessage.value = '';
+              _analyzeSymptoms();
+            },
+            icon: const Icon(Icons.refresh),
+            label: const Text('Try Again'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+            ),
           ),
         ],
       ),
