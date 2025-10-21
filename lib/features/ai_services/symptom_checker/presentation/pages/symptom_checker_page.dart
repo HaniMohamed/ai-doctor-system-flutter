@@ -1,20 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-class SymptomAnalysisResult {
-  final List<String> possibleConditions;
-  final List<String> recommendations;
-  final double confidence;
-  final String severity;
-  final bool shouldSeeDoctor;
-
-  SymptomAnalysisResult({
-    required this.possibleConditions,
-    required this.recommendations,
-    required this.confidence,
-    required this.severity,
-    required this.shouldSeeDoctor,
-  });
-}
+import '../controllers/symptom_checker_controller.dart';
+import '../../domain/entities/symptom.dart';
 
 class SymptomCheckerPage extends StatefulWidget {
   const SymptomCheckerPage({super.key});
@@ -25,14 +13,27 @@ class SymptomCheckerPage extends StatefulWidget {
 
 class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
   final TextEditingController _symptomController = TextEditingController();
-  final List<String> _symptoms = [];
-  bool _isAnalyzing = false;
-  SymptomAnalysisResult? _analysisResult;
+  bool _canAddSymptom = false;
+  late SymptomCheckerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = Get.find<SymptomCheckerController>();
+    _symptomController.addListener(_onTextChanged);
+  }
 
   @override
   void dispose() {
+    _symptomController.removeListener(_onTextChanged);
     _symptomController.dispose();
     super.dispose();
+  }
+
+  void _onTextChanged() {
+    setState(() {
+      _canAddSymptom = _symptomController.text.trim().isNotEmpty;
+    });
   }
 
   @override
@@ -41,12 +42,16 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
       appBar: AppBar(
         title: const Text('Symptom Checker'),
         actions: [
-          if (_symptoms.isNotEmpty)
-            IconButton(
-              onPressed: _clearSymptoms,
-              icon: const Icon(Icons.clear_all),
-              tooltip: 'Clear all symptoms',
-            ),
+          Obx(() {
+            if (_controller.symptoms.isNotEmpty) {
+              return IconButton(
+                onPressed: _clearSymptoms,
+                icon: const Icon(Icons.clear_all),
+                tooltip: 'Clear all symptoms',
+              );
+            }
+            return const SizedBox.shrink();
+          }),
         ],
       ),
       body: Padding(
@@ -71,7 +76,9 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
-              onPressed: _symptoms.isEmpty ? null : _analyzeSymptoms,
+              onPressed: _canAddSymptom
+                  ? () => _addSymptom(_symptomController.text)
+                  : null,
               icon: const Icon(Icons.add),
               label: const Text('Add Symptom'),
               style: ElevatedButton.styleFrom(
@@ -79,40 +86,55 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
               ),
             ),
             const SizedBox(height: 24),
-            if (_symptoms.isNotEmpty) ...[
-              Text(
-                'Current Symptoms',
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: _symptoms.map((symptom) => Chip(
-                  label: Text(symptom),
-                  deleteIcon: const Icon(Icons.close, size: 18),
-                  onDeleted: () => _removeSymptom(symptom),
-                )).toList(),
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton.icon(
-                  onPressed: _isAnalyzing ? null : _analyzeSymptoms,
-                  icon: _isAnalyzing 
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.analytics),
-                  label: Text(_isAnalyzing ? 'Analyzing...' : 'Analyze Symptoms'),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 56),
-                  ),
-                ),
-              ),
-            ],
+            Obx(() {
+              if (_controller.symptoms.isNotEmpty) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Current Symptoms',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: _controller.symptoms
+                          .map((symptom) => Chip(
+                                label: Text(symptom.name),
+                                deleteIcon: const Icon(Icons.close, size: 18),
+                                onDeleted: () => _removeSymptom(symptom),
+                              ))
+                          .toList(),
+                    ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: _controller.isLoading.value
+                            ? null
+                            : _analyzeSymptoms,
+                        icon: _controller.isLoading.value
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
+                              )
+                            : const Icon(Icons.analytics),
+                        label: Text(_controller.isLoading.value
+                            ? 'Analyzing...'
+                            : 'Analyze Symptoms'),
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 56),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+              return const SizedBox.shrink();
+            }),
             const SizedBox(height: 24),
             Expanded(
               child: Card(
@@ -127,19 +149,28 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
                       ),
                       const SizedBox(height: 16),
                       Expanded(
-                        child: _analysisResult != null 
-                            ? _buildAnalysisResults(context)
-                            : Center(
-                                child: Text(
-                                  _symptoms.isEmpty 
-                                      ? 'Add symptoms above to get AI-powered analysis'
-                                      : 'Click "Analyze Symptoms" to get recommendations',
-                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
+                        child: Obx(() {
+                          if (_controller.result.value != null) {
+                            return _buildAnalysisResults(context);
+                          } else {
+                            return Center(
+                              child: Text(
+                                _controller.symptoms.isEmpty
+                                    ? 'Add symptoms above to get AI-powered analysis'
+                                    : 'Click "Analyze Symptoms" to get recommendations',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge
+                                    ?.copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurfaceVariant,
+                                    ),
+                                textAlign: TextAlign.center,
                               ),
+                            );
+                          }
+                        }),
                       ),
                     ],
                   ),
@@ -152,273 +183,91 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
     );
   }
 
-  void _addSymptom(String? symptom) {
-    if (symptom != null && symptom.trim().isNotEmpty) {
-      setState(() {
-        _symptoms.add(symptom.trim());
-        _symptomController.clear();
-      });
+  void _addSymptom(String? symptomText) {
+    if (symptomText != null && symptomText.trim().isNotEmpty) {
+      final symptom =
+          Symptom(name: symptomText.trim(), severity: 5); // Default severity
+      _controller.symptoms.add(symptom);
+      _symptomController.clear();
     }
   }
 
-  void _removeSymptom(String symptom) {
-    setState(() {
-      _symptoms.remove(symptom);
-    });
+  void _removeSymptom(Symptom symptom) {
+    _controller.symptoms.remove(symptom);
   }
 
   void _clearSymptoms() {
-    setState(() {
-      _symptoms.clear();
-    });
+    _controller.symptoms.clear();
   }
 
   Future<void> _analyzeSymptoms() async {
-    if (_symptoms.isEmpty) return;
-
-    setState(() {
-      _isAnalyzing = true;
-      _analysisResult = null;
-    });
-
-    // Simulate AI analysis processing
-    await Future.delayed(const Duration(seconds: 2));
-
-    if (mounted) {
-      // Generate realistic analysis results based on symptoms
-      final result = _generateAnalysisResult(_symptoms);
-      
-      setState(() {
-        _isAnalyzing = false;
-        _analysisResult = result;
-      });
-    }
-  }
-
-  SymptomAnalysisResult _generateAnalysisResult(List<String> symptoms) {
-    // Simple rule-based analysis (in real app, this would call AI service)
-    final symptomText = symptoms.join(' ').toLowerCase();
-    
-    List<String> possibleConditions = [];
-    List<String> recommendations = [];
-    double confidence = 0.7;
-    String severity = 'Low';
-    bool shouldSeeDoctor = false;
-
-    // Analyze based on common symptom patterns
-    if (symptomText.contains('fever') || symptomText.contains('temperature')) {
-      possibleConditions.addAll(['Viral Infection', 'Bacterial Infection', 'Flu']);
-      recommendations.addAll([
-        'Rest and stay hydrated',
-        'Monitor temperature regularly',
-        'Use fever reducers if temperature exceeds 38.5°C'
-      ]);
-      if (symptomText.contains('high') || symptomText.contains('severe')) {
-        severity = 'High';
-        shouldSeeDoctor = true;
-        confidence = 0.9;
-      }
-    }
-
-    if (symptomText.contains('headache') || symptomText.contains('head pain')) {
-      possibleConditions.addAll(['Tension Headache', 'Migraine', 'Sinusitis']);
-      recommendations.addAll([
-        'Apply cold compress to forehead',
-        'Ensure adequate sleep',
-        'Stay hydrated and avoid caffeine'
-      ]);
-      if (symptomText.contains('severe') || symptomText.contains('throbbing')) {
-        severity = 'Medium';
-        shouldSeeDoctor = true;
-      }
-    }
-
-    if (symptomText.contains('cough') || symptomText.contains('throat')) {
-      possibleConditions.addAll(['Common Cold', 'Bronchitis', 'Allergies']);
-      recommendations.addAll([
-        'Use throat lozenges',
-        'Drink warm liquids',
-        'Avoid irritants like smoke'
-      ]);
-    }
-
-    if (symptomText.contains('nausea') || symptomText.contains('vomit')) {
-      possibleConditions.addAll(['Gastroenteritis', 'Food Poisoning', 'Morning Sickness']);
-      recommendations.addAll([
-        'Eat bland foods (BRAT diet)',
-        'Stay hydrated with small sips',
-        'Avoid dairy and fatty foods'
-      ]);
-      if (symptomText.contains('severe') || symptomText.contains('persistent')) {
-        severity = 'Medium';
-        shouldSeeDoctor = true;
-      }
-    }
-
-    if (symptomText.contains('rash') || symptomText.contains('skin')) {
-      possibleConditions.addAll(['Allergic Reaction', 'Contact Dermatitis', 'Viral Rash']);
-      recommendations.addAll([
-        'Avoid scratching the affected area',
-        'Use gentle, fragrance-free moisturizers',
-        'Identify and avoid potential allergens'
-      ]);
-      severity = 'Medium';
-      shouldSeeDoctor = true;
-    }
-
-    // Default recommendations if no specific conditions found
-    if (possibleConditions.isEmpty) {
-      possibleConditions = ['General Malaise', 'Stress-related Symptoms'];
-      recommendations = [
-        'Get adequate rest',
-        'Maintain a healthy diet',
-        'Stay hydrated',
-        'Consider stress management techniques'
-      ];
-    }
-
-    // Add general recommendations
-    recommendations.addAll([
-      'Monitor symptoms and seek medical attention if they worsen',
-      'Maintain good hygiene practices',
-      'Consider over-the-counter medications for symptom relief'
-    ]);
-
-    return SymptomAnalysisResult(
-      possibleConditions: possibleConditions,
-      recommendations: recommendations,
-      confidence: confidence,
-      severity: severity,
-      shouldSeeDoctor: shouldSeeDoctor,
-    );
+    if (_controller.symptoms.isEmpty) return;
+    await _controller.analyze();
   }
 
   Widget _buildAnalysisResults(BuildContext context) {
-    if (_analysisResult == null) return const SizedBox.shrink();
+    final result = _controller.result.value!;
 
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Severity and Confidence
-          Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: _getSeverityColor(_analysisResult!.severity),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Text(
-                  '${_analysisResult!.severity} Risk',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                ),
+          // Urgency Level
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: _getUrgencyColor(result.urgencyLevel),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Text(
+              '${result.urgencyLevel.toUpperCase()} URGENCY',
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
               ),
-              const SizedBox(width: 12),
-              Text(
-                'Confidence: ${(_analysisResult!.confidence * 100).toInt()}%',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
-              ),
-            ],
+            ),
           ),
           const SizedBox(height: 16),
 
-          // Should see doctor warning
-          if (_analysisResult!.shouldSeeDoctor)
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.errorContainer,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.error,
-                  width: 1,
-                ),
-              ),
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.warning_amber_rounded,
-                    color: Theme.of(context).colorScheme.error,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Text(
-                      'Consider consulting a healthcare professional',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onErrorContainer,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          if (_analysisResult!.shouldSeeDoctor) const SizedBox(height: 16),
-
-          // Possible Conditions
+          // Recommended Specialties
           Text(
-            'Possible Conditions',
+            'Recommended Specialties',
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+                  fontWeight: FontWeight.bold,
+                ),
           ),
           const SizedBox(height: 8),
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: _analysisResult!.possibleConditions.map((condition) => Chip(
-              label: Text(condition),
-              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-              labelStyle: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimaryContainer,
-              ),
-            )).toList(),
+            children: result.recommendedSpecialties
+                .map((specialty) => Chip(
+                      label: Text(specialty),
+                      backgroundColor:
+                          Theme.of(context).colorScheme.primaryContainer,
+                      labelStyle: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
+                    ))
+                .toList(),
           ),
           const SizedBox(height: 16),
 
-          // Recommendations
+          // Confidence Score
           Text(
-            'Recommendations',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            'Confidence: ${(result.confidence * 100).toInt()}%',
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
           ),
-          const SizedBox(height: 8),
-          ..._analysisResult!.recommendations.map((recommendation) => Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Icon(
-                  Icons.check_circle_outline,
-                  size: 16,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    recommendation,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ),
-              ],
-            ),
-          )),
         ],
       ),
     );
   }
 
-  Color _getSeverityColor(String severity) {
-    switch (severity.toLowerCase()) {
+  Color _getUrgencyColor(String urgency) {
+    switch (urgency.toLowerCase()) {
       case 'low':
         return Colors.green;
       case 'medium':

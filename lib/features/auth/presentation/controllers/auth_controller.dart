@@ -2,22 +2,14 @@ import 'package:get/get.dart';
 
 import '../../../../core/errors/failures.dart';
 import '../../domain/entities/user.dart';
-import '../../domain/usecases/get_current_user_usecase.dart';
-import '../../domain/usecases/login_usecase.dart';
-import '../../domain/usecases/logout_usecase.dart';
+import '../../domain/services/auth_service.dart';
 
 class AuthController extends GetxController {
-  final LoginUsecase _loginUsecase;
-  final LogoutUsecase _logoutUsecase;
-  final GetCurrentUserUsecase _getCurrentUserUsecase;
+  final AuthService _authService;
 
   AuthController({
-    required LoginUsecase loginUsecase,
-    required LogoutUsecase logoutUsecase,
-    required GetCurrentUserUsecase getCurrentUserUsecase,
-  }) : _loginUsecase = loginUsecase,
-       _logoutUsecase = logoutUsecase,
-       _getCurrentUserUsecase = getCurrentUserUsecase;
+    required AuthService authService,
+  }) : _authService = authService;
 
   final Rx<User?> currentUser = Rx<User?>(null);
   final RxBool isLoading = false.obs;
@@ -32,11 +24,9 @@ class AuthController extends GetxController {
   Future<void> _checkAuthStatus() async {
     isLoading.value = true;
     try {
-      final result = await _getCurrentUserUsecase.execute();
-      result.fold(
-        (failure) => _handleError(failure),
-        (user) => currentUser.value = user,
-      );
+      if (_authService.isAuthenticated) {
+        currentUser.value = _authService.currentUser;
+      }
     } catch (e) {
       _handleError(ServerFailure(e.toString()));
     } finally {
@@ -47,16 +37,11 @@ class AuthController extends GetxController {
   Future<void> login(String email, String password) async {
     isLoading.value = true;
     errorMessage.value = '';
-    
+
     try {
-      final result = await _loginUsecase.execute(email, password);
-      result.fold(
-        (failure) => _handleError(failure),
-        (user) {
-          currentUser.value = user;
-          Get.offNamed('/dashboard');
-        },
-      );
+      final user = await _authService.login(email, password);
+      currentUser.value = user;
+      Get.offNamed('/dashboard');
     } catch (e) {
       _handleError(ServerFailure(e.toString()));
     } finally {
@@ -67,14 +52,9 @@ class AuthController extends GetxController {
   Future<void> logout() async {
     isLoading.value = true;
     try {
-      final result = await _logoutUsecase.execute();
-      result.fold(
-        (failure) => _handleError(failure),
-        (_) {
-          currentUser.value = null;
-          Get.offNamed('/login');
-        },
-      );
+      await _authService.logout();
+      currentUser.value = null;
+      Get.offNamed('/login');
     } catch (e) {
       _handleError(ServerFailure(e.toString()));
     } finally {

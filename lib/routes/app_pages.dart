@@ -9,6 +9,7 @@ import '../features/auth/presentation/pages/forgot_password_page.dart';
 import '../features/auth/presentation/pages/login_page.dart';
 import '../features/auth/presentation/pages/register_page.dart';
 import '../features/chat/presentation/pages/chat_page.dart';
+import '../features/dashboard/presentation/bindings/dashboard_binding.dart';
 import '../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../features/doctors/presentation/bindings/doctors_binding.dart';
 import '../features/doctors/presentation/pages/doctors_list_page.dart';
@@ -46,6 +47,7 @@ class AppPages {
     GetPage(
       name: AppRoutes.dashboard,
       page: () => const DashboardPage(),
+      binding: DashboardBinding(),
       middlewares: [AuthMiddleware()],
     ),
     GetPage(

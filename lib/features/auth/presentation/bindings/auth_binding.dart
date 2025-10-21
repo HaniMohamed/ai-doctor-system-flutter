@@ -9,6 +9,7 @@ import '../../data/datasources/auth_local_datasource.dart';
 import '../../data/datasources/auth_remote_datasource.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/repositories/auth_repository.dart';
+import '../../domain/services/auth_service.dart';
 import '../../domain/usecases/get_current_user_usecase.dart';
 import '../../domain/usecases/login_usecase.dart';
 import '../../domain/usecases/logout_usecase.dart';
@@ -45,9 +46,7 @@ class AuthBinding extends Bindings {
     // Controller
     Get.lazyPut<AuthController>(
       () => AuthController(
-        loginUsecase: Get.find(),
-        logoutUsecase: Get.find(),
-        getCurrentUserUsecase: Get.find(),
+        authService: sl<AuthService>(),
       ),
     );
   }

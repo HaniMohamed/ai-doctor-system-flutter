@@ -9,11 +9,10 @@ class AnalysisResultModel extends AnalysisResult {
 
   factory AnalysisResultModel.fromJson(Map<String, dynamic> json) {
     return AnalysisResultModel(
-      recommendedSpecialties: (json['recommended_specialties'] as List).cast<String>(),
+      recommendedSpecialties:
+          (json['recommended_specialties'] as List).cast<String>(),
       urgencyLevel: json['urgency_level'] as String,
-      confidence: (json['confidence'] as num).toDouble(),
+      confidence: 0.8, // Default confidence since API doesn't return this field
     );
   }
 }
-
-

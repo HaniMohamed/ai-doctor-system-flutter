@@ -148,4 +148,46 @@ class AuthServiceImpl implements AuthService {
       await logout();
     }
   }
+
+  /// Validate current token and refresh if needed
+  Future<bool> validateAndRefreshToken() async {
+    try {
+      final accessToken = await getAccessToken();
+      if (accessToken == null) {
+        Logger.info('No access token found', 'AUTH');
+        return false;
+      }
+
+      // Try to get current user to validate token
+      try {
+        final userModel = await _remoteDataSource.getCurrentUser();
+        _currentUser = userModel;
+        _isAuthenticated = true;
+        Logger.info('Token is valid', 'AUTH');
+        return true;
+      } catch (e) {
+        Logger.warning(
+            'Token validation failed, attempting refresh', 'AUTH', e);
+
+        // Try to refresh token
+        try {
+          await refreshToken();
+          // Verify the new token works
+          final userModel = await _remoteDataSource.getCurrentUser();
+          _currentUser = userModel;
+          _isAuthenticated = true;
+          Logger.info('Token refreshed successfully', 'AUTH');
+          return true;
+        } catch (refreshError) {
+          Logger.error('Token refresh failed', 'AUTH', refreshError);
+          await logout();
+          return false;
+        }
+      }
+    } catch (e) {
+      Logger.error('Token validation error', 'AUTH', e);
+      await logout();
+      return false;
+    }
+  }
 }
