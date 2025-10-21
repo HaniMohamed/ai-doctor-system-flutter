@@ -39,6 +39,9 @@ class AuthServiceImpl implements AuthService {
       _currentUser = loginResponse.user; // UserModel extends User
       _isAuthenticated = true;
 
+      // Cache the complete user data to local storage
+      await _localDataSource.cacheUser(loginResponse.user);
+
       // Store authentication state in secure storage
       await _secureStorage.write('is_authenticated', 'true');
       await _secureStorage.write('user_email', email);
@@ -46,24 +49,9 @@ class AuthServiceImpl implements AuthService {
 
       return _currentUser!;
     } catch (e) {
-      // If remote authentication fails, fall back to mock for development
-      Logger.warning('Authentication failed, using mock user', 'AUTH', e);
-      await Future.delayed(const Duration(seconds: 1));
-
-      _currentUser = User(
-        id: 'user-123',
-        email: email,
-        fullName: 'Test User',
-        role: 'patient',
-        organizationId: 'org-123',
-      );
-      _isAuthenticated = true;
-
-      // Store mock authentication state
-      await _secureStorage.write('is_authenticated', 'true');
-      await _secureStorage.write('user_email', email);
-
-      return _currentUser!;
+      // Authentication failed - rethrow the error for proper handling
+      Logger.error('Authentication failed', 'AUTH', e);
+      rethrow;
     }
   }
 
@@ -172,20 +160,8 @@ class AuthServiceImpl implements AuthService {
           Logger.warning('Failed to get cached user data', 'AUTH', e);
         }
 
-        // Fallback: create basic user from stored email
-        final email = await _secureStorage.read('user_email');
-        if (email != null) {
-          _isAuthenticated = true;
-          _currentUser = User(
-            id: 'cached-user',
-            email: email,
-            fullName: 'User', // Will be updated when API call succeeds
-            role: 'patient',
-            organizationId: 'cached-org',
-            // Age and gender should come from stored user data
-          );
-          Logger.info('Restored basic auth state from storage', 'AUTH');
-        }
+        // No cached user data available - user needs to log in again
+        Logger.info('No cached user data found, user needs to log in', 'AUTH');
       }
     } catch (e) {
       Logger.error('Failed to initialize auth state from storage', 'AUTH', e);

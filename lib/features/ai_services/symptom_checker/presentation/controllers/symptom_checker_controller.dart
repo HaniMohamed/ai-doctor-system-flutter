@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../../core/di/injection_container.dart';
+import '../../../../../core/logging/logger.dart';
 import '../../../../../features/auth/domain/services/auth_service.dart';
 import '../../domain/entities/analysis_result.dart';
 import '../../domain/entities/symptom.dart';
@@ -8,12 +10,22 @@ import '../../domain/usecases/analyze_symptoms_usecase.dart';
 
 class SymptomCheckerController extends GetxController {
   final AnalyzeSymptomsUsecase _analyzeSymptomsUsecase;
+  final Uuid _uuid = const Uuid();
+
   SymptomCheckerController(this._analyzeSymptomsUsecase);
 
   final RxList<Symptom> symptoms = <Symptom>[].obs;
   final Rx<AnalysisResult?> result = Rx<AnalysisResult?>(null);
   final RxBool isLoading = false.obs;
   final RxString errorMessage = ''.obs;
+  final RxString sessionId = ''.obs;
+
+  /// Clear the current session and start a new one
+  void startNewSession() {
+    sessionId.value = '';
+    result.value = null;
+    errorMessage.value = '';
+  }
 
   Future<void> analyze() async {
     isLoading.value = true;
@@ -40,9 +52,23 @@ class SymptomCheckerController extends GetxController {
       final int age = user.age!;
       final String gender = user.gender!;
 
-      result.value = await _analyzeSymptomsUsecase.execute(symptoms,
-          age: age, gender: gender);
-    } catch (e) {
+      // Generate session_id if none exists
+      if (sessionId.value.isEmpty) {
+        sessionId.value = _uuid.v4();
+      }
+
+      final analysisResult = await _analyzeSymptomsUsecase.execute(symptoms,
+          age: age, gender: gender, sessionId: sessionId.value);
+
+      // Update session_id with the one returned from API
+      if (analysisResult.sessionId.isNotEmpty) {
+        sessionId.value = analysisResult.sessionId;
+      }
+
+      result.value = analysisResult;
+    } catch (e, stackTrace) {
+      Logger.error(
+          'Error during symptom analysis', 'SYMPTOM_CHECKER', e, stackTrace);
       errorMessage.value = _getUserFriendlyErrorMessage(e);
     } finally {
       isLoading.value = false;
@@ -68,15 +94,7 @@ class SymptomCheckerController extends GetxController {
       return 'Your gender is required for accurate medical analysis. Please update your profile with your gender.';
     }
 
-    // Network errors
-    if (errorString.contains('network') ||
-        errorString.contains('connection') ||
-        errorString.contains('timeout')) {
-      return 'Unable to connect to the server. Please check your internet connection and try again.';
-    }
-
-    if (errorString.contains('server') ||
-        errorString.contains('500') ||
+    if (errorString.contains('500') ||
         errorString.contains('502') ||
         errorString.contains('503')) {
       return 'The server is temporarily unavailable. Please try again in a few moments.';
@@ -94,9 +112,20 @@ class SymptomCheckerController extends GetxController {
       return 'The symptom analysis service is not available. Please try again later.';
     }
 
+    if (errorString.contains('429')) {
+      return 'You have reached the limit for AI requests. Please try again later.';
+    }
+
     // API errors
-    if (errorString.contains('bad request') || errorString.contains('400')) {
+    if (errorString.contains('400')) {
       return 'Invalid request. Please check your symptoms and try again.';
+    }
+
+    // Network errors
+    if (errorString.contains('network') ||
+        errorString.contains('connection') ||
+        errorString.contains('timeout')) {
+      return 'Unable to connect to the server. Please check your internet connection and try again.';
     }
 
     // Generic fallback

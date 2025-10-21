@@ -19,6 +19,7 @@ dependencies:
   dartz: ^0.10.1
   connectivity_plus: ^5.0.2
   cryptography: ^2.7.0
+  uuid: ^4.2.1
 
 dev_dependencies:
   flutter_test:

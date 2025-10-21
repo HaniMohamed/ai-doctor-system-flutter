@@ -3,5 +3,5 @@ import '../entities/symptom.dart';
 
 abstract class SymptomCheckerRepository {
   Future<AnalysisResult> analyzeSymptoms(List<Symptom> symptoms,
-      {required int age, required String gender});
+      {required int age, required String gender, required String sessionId});
 }

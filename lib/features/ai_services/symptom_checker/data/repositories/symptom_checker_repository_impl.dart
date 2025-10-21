@@ -9,7 +9,8 @@ class SymptomCheckerRepositoryImpl implements SymptomCheckerRepository {
 
   @override
   Future<AnalysisResult> analyzeSymptoms(List<Symptom> symptoms,
-      {required int age, required String gender}) {
-    return _remote.analyzeSymptoms(symptoms, age: age, gender: gender);
+      {required int age, required String gender, required String sessionId}) {
+    return _remote.analyzeSymptoms(symptoms,
+        age: age, gender: gender, sessionId: sessionId);
   }
 }

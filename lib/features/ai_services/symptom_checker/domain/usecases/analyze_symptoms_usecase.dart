@@ -7,7 +7,8 @@ class AnalyzeSymptomsUsecase {
   AnalyzeSymptomsUsecase(this._repository);
 
   Future<AnalysisResult> execute(List<Symptom> symptoms,
-      {required int age, required String gender}) {
-    return _repository.analyzeSymptoms(symptoms, age: age, gender: gender);
+      {required int age, required String gender, required String sessionId}) {
+    return _repository.analyzeSymptoms(symptoms,
+        age: age, gender: gender, sessionId: sessionId);
   }
 }

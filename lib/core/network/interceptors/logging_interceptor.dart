@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import '../../logging/logger.dart';
 
@@ -56,12 +57,13 @@ class LoggingInterceptor extends Interceptor {
       if (options.data is String) {
         dataString = options.data as String;
       } else if (options.data is Map || options.data is List) {
-        dataString = options.data.toString();
+        // Convert to proper JSON string using jsonEncode
+        dataString = jsonEncode(options.data);
       } else {
         dataString = options.data.toString();
       }
 
-      // Escape quotes in data
+      // Escape quotes in data for shell
       dataString = dataString.replaceAll('"', '\\"');
       buffer.write(' -d "$dataString"');
     }

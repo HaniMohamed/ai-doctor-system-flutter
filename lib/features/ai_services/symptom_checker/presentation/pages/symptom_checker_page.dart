@@ -1,3 +1,4 @@
+import 'package:ai_doctor_system/features/ai_services/symptom_checker/domain/entities/analysis_result.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -54,7 +55,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
           }),
         ],
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -136,49 +137,43 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
               return const SizedBox.shrink();
             }),
             const SizedBox(height: 24),
-            Expanded(
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Analysis Results',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 16),
-                      Expanded(
-                        child: Obx(() {
-                          // Show error message if there's an error
-                          if (_controller.errorMessage.value.isNotEmpty) {
-                            return _buildErrorMessage(context);
-                          }
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Analysis Results',
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 16),
+                    Obx(() {
+                      // Show error message if there's an error
+                      if (_controller.errorMessage.value.isNotEmpty) {
+                        return _buildErrorMessage(context);
+                      }
 
-                          if (_controller.result.value != null) {
-                            return _buildAnalysisResults(context);
-                          } else {
-                            return Center(
-                              child: Text(
-                                _controller.symptoms.isEmpty
-                                    ? 'Add symptoms above to get AI-powered analysis'
-                                    : 'Click "Analyze Symptoms" to get recommendations',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyLarge
-                                    ?.copyWith(
+                      if (_controller.result.value != null) {
+                        return _buildAnalysisResults(context);
+                      } else {
+                        return Center(
+                          child: Text(
+                            _controller.symptoms.isEmpty
+                                ? 'Add symptoms above to get AI-powered analysis'
+                                : 'Click "Analyze Symptoms" to get recommendations',
+                            style:
+                                Theme.of(context).textTheme.bodyLarge?.copyWith(
                                       color: Theme.of(context)
                                           .colorScheme
                                           .onSurfaceVariant,
                                     ),
-                                textAlign: TextAlign.center,
-                              ),
-                            );
-                          }
-                        }),
-                      ),
-                    ],
-                  ),
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      }
+                    }),
+                  ],
                 ),
               ),
             ),
@@ -215,11 +210,11 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
   }
 
   Widget _buildAnalysisResults(BuildContext context) {
-    final result = _controller.result.value!;
+    final AnalysisResult result = _controller.result.value!;
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      // Top Row: Urgency Level and Confidence
+      Row(
         children: [
           // Urgency Level
           Container(
@@ -237,42 +232,78 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
               ),
             ),
           ),
-          const SizedBox(height: 16),
-
-          // Recommended Specialties
-          Text(
-            'Recommended Specialties',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-          ),
-          const SizedBox(height: 8),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: result.recommendedSpecialties
-                .map((specialty) => Chip(
-                      label: Text(specialty),
-                      backgroundColor:
-                          Theme.of(context).colorScheme.primaryContainer,
-                      labelStyle: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                      ),
-                    ))
-                .toList(),
-          ),
-          const SizedBox(height: 16),
-
+          const SizedBox(width: 16),
           // Confidence Score
-          Text(
-            'Confidence: ${(result.confidence * 100).toInt()}%',
-            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                ),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Text(
+              'Confidence: ${((result.confidence) * 100).toInt()}%',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
+                fontWeight: FontWeight.bold,
+                fontSize: 12,
+              ),
+            ),
           ),
         ],
       ),
-    );
+      const SizedBox(height: 16),
+
+      // Recommended Specialties
+      Text(
+        'Recommended Specialties',
+        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+      ),
+      const SizedBox(height: 8),
+      Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: (result.recommendedSpecialties)
+            .map((specialty) => Chip(
+                  label: Text(specialty),
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primaryContainer,
+                  labelStyle: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
+                ))
+            .toList(),
+      ),
+      const SizedBox(height: 16),
+
+      // Bottom Row: Explanation and Suggested Questions
+      if (result.explanation.isNotEmpty ||
+          result.suggestedQuestions.isNotEmpty) ...[
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // AI Explanation Section
+            if (result.explanation.isNotEmpty) ...[
+              Expanded(
+                flex: 1,
+                child: _buildExplanationCard(context, result.explanation),
+              ),
+              if (result.suggestedQuestions.isNotEmpty)
+                const SizedBox(width: 16),
+            ],
+            // Suggested Questions Section
+            if (result.suggestedQuestions.isNotEmpty) ...[
+              Expanded(
+                flex: 1,
+                child: _buildSuggestedQuestionsCard(
+                    context, result.suggestedQuestions),
+              ),
+            ],
+          ],
+        ),
+      ],
+    ]);
   }
 
   Widget _buildErrorMessage(BuildContext context) {
@@ -333,5 +364,251 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
       default:
         return Colors.grey;
     }
+  }
+
+  Widget _buildExplanationCard(BuildContext context, String explanation) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Theme.of(context)
+                .colorScheme
+                .primaryContainer
+                .withValues(alpha: 0.1),
+            Theme.of(context)
+                .colorScheme
+                .secondaryContainer
+                .withValues(alpha: 0.1),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+          width: 1,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .primary
+                        .withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.psychology,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 16,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'AI Analysis',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .shadow
+                        .withValues(alpha: 0.1),
+                    blurRadius: 4,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: Text(
+                explanation,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      height: 1.4,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSuggestedQuestionsCard(
+      BuildContext context, List<String> questions) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Theme.of(context)
+                .colorScheme
+                .secondaryContainer
+                .withValues(alpha: 0.1),
+            Theme.of(context)
+                .colorScheme
+                .tertiaryContainer
+                .withValues(alpha: 0.1),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+          width: 1,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(6),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .secondary
+                        .withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Icon(
+                    Icons.quiz,
+                    color: Theme.of(context).colorScheme.secondary,
+                    size: 16,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    'Suggested Questions',
+                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            ...questions.asMap().entries.map((entry) {
+              final index = entry.key;
+              final question = entry.value;
+              return Container(
+                margin: EdgeInsets.only(
+                    bottom: index < questions.length - 1 ? 8 : 0),
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () => _handleQuestionTap(question),
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .outline
+                              .withValues(alpha: 0.2),
+                          width: 1,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .shadow
+                                .withValues(alpha: 0.05),
+                            blurRadius: 2,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 24,
+                            height: 24,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withValues(alpha: 0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${index + 1}',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              question,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                    height: 1.3,
+                                  ),
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 12,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withValues(alpha: 0.6),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _handleQuestionTap(String question) {
+    // Add the question to the symptom input field
+    _symptomController.text = question;
+    _onTextChanged(); // Update the UI state
   }
 }
