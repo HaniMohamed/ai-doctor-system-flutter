@@ -129,7 +129,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Current Symptoms',
+                      AppLocalizations.of(context)!.currentSymptoms,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 8),
@@ -160,8 +160,8 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
                               )
                             : const Icon(Icons.analytics),
                         label: Text(_controller.isLoading.value
-                            ? 'Analyzing...'
-                            : 'Analyze Symptoms'),
+                            ? AppLocalizations.of(context)!.analyzing
+                            : AppLocalizations.of(context)!.analyzeSymptoms),
                         style: ElevatedButton.styleFrom(
                           minimumSize: const Size(double.infinity, 56),
                         ),
@@ -180,7 +180,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Analysis Results',
+                      AppLocalizations.of(context)!.analysisResults,
                       style: Theme.of(context).textTheme.titleMedium,
                     ),
                     const SizedBox(height: 16),
@@ -206,8 +206,10 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
                         return Center(
                           child: Text(
                             _controller.symptoms.isEmpty
-                                ? 'Add symptoms above to get AI-powered analysis'
-                                : 'Click "Analyze Symptoms" to get recommendations',
+                                ? AppLocalizations.of(context)!
+                                    .addSymptomsAboveToGetAnalysis
+                                : AppLocalizations.of(context)!
+                                    .clickAnalyzeSymptomsToGetRecommendations,
                             style:
                                 Theme.of(context).textTheme.bodyLarge?.copyWith(
                                       color: Theme.of(context)
@@ -290,7 +292,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
-              '${result.urgencyLevel.toUpperCase()} URGENCY',
+              '${result.urgencyLevel.toUpperCase()} ${AppLocalizations.of(context)!.urgency}',
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -307,7 +309,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
               borderRadius: BorderRadius.circular(16),
             ),
             child: Text(
-              'Confidence: ${((result.confidence) * 100).toInt()}%',
+              '${AppLocalizations.of(context)!.confidence}: ${((result.confidence) * 100).toInt()}%',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSecondaryContainer,
                 fontWeight: FontWeight.bold,
@@ -321,7 +323,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
 
       // Recommended Specialties
       Text(
-        'Recommended Specialties',
+        AppLocalizations.of(context)!.recommendedSpecialties,
         style: Theme.of(context).textTheme.titleSmall?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -384,7 +386,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Analysis Failed',
+            AppLocalizations.of(context)!.analysisFailed,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   color: Theme.of(context).colorScheme.error,
                   fontWeight: FontWeight.bold,
@@ -480,7 +482,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'AI Analysis',
+                    AppLocalizations.of(context)!.aiAnalysis,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.primary,
@@ -569,7 +571,7 @@ class _SymptomCheckerPageState extends State<SymptomCheckerPage> {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Suggested Questions',
+                    AppLocalizations.of(context)!.suggestedQuestions,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.secondary,

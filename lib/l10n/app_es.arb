@@ -203,5 +203,15 @@
   "aiGeneratingInsights": "💡 Generando insights...",
   "aiEvaluatingBiomarkers": "🔬 Evaluando biomarcadores...",
   "aiCalculatingProbabilities": "🎯 Calculando probabilidades...",
-  "aiFinalizingRecommendations": "✨ Finalizando recomendaciones..."
+  "aiFinalizingRecommendations": "✨ Finalizando recomendaciones...",
+  "currentSymptoms": "Síntomas Actuales",
+  "analyzing": "Analizando...",
+  "addSymptomsAboveToGetAnalysis": "Agrega síntomas arriba para obtener análisis con IA",
+  "clickAnalyzeSymptomsToGetRecommendations": "Haz clic en \"Analizar Síntomas\" para obtener recomendaciones",
+  "urgency": "URGENCIA",
+  "confidence": "Confianza",
+  "recommendedSpecialties": "Especialidades Recomendadas",
+  "analysisFailed": "Análisis Fallido",
+  "aiAnalysis": "Análisis de IA",
+  "suggestedQuestions": "Preguntas Sugeridas"
 }

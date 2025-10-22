@@ -171,5 +171,15 @@
   "aiGeneratingInsights": "💡 توليد الرؤى...",
   "aiEvaluatingBiomarkers": "🔬 تقييم المؤشرات الحيوية...",
   "aiCalculatingProbabilities": "🎯 حساب الاحتمالات...",
-  "aiFinalizingRecommendations": "✨ إنهاء التوصيات..."
+  "aiFinalizingRecommendations": "✨ إنهاء التوصيات...",
+  "currentSymptoms": "الأعراض الحالية",
+  "analyzing": "جاري التحليل...",
+  "addSymptomsAboveToGetAnalysis": "أضف الأعراض أعلاه للحصول على تحليل بالذكاء الاصطناعي",
+  "clickAnalyzeSymptomsToGetRecommendations": "انقر على \"تحليل الأعراض\" للحصول على التوصيات",
+  "urgency": "الطوارئ",
+  "confidence": "الثقة",
+  "recommendedSpecialties": "التخصصات الموصى بها",
+  "analysisFailed": "فشل التحليل",
+  "aiAnalysis": "تحليل الذكاء الاصطناعي",
+  "suggestedQuestions": "الأسئلة المقترحة"
 }

@@ -481,4 +481,33 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get aiFinalizingRecommendations => '✨ إنهاء التوصيات...';
+
+  @override
+  String get currentSymptoms => 'الأعراض الحالية';
+
+  @override
+  String get analyzing => 'جاري التحليل...';
+
+  @override
+  String get addSymptomsAboveToGetAnalysis =>
+      'أضف الأعراض أعلاه للحصول على تحليل بالذكاء الاصطناعي';
+
+  @override
+  String get clickAnalyzeSymptomsToGetRecommendations =>
+      'انقر على \"تحليل الأعراض\" للحصول على التوصيات';
+
+  @override
+  String get urgency => 'الطوارئ';
+
+  @override
+  String get recommendedSpecialties => 'التخصصات الموصى بها';
+
+  @override
+  String get analysisFailed => 'فشل التحليل';
+
+  @override
+  String get aiAnalysis => 'تحليل الذكاء الاصطناعي';
+
+  @override
+  String get suggestedQuestions => 'الأسئلة المقترحة';
 }

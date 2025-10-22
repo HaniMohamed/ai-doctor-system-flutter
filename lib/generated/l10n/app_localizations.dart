@@ -828,7 +828,7 @@ abstract class AppLocalizations {
   /// **'Severity'**
   String get severity;
 
-  /// Confidence label
+  /// Confidence score label
   ///
   /// In en, this message translates to:
   /// **'Confidence'**
@@ -1037,6 +1037,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'✨ Finalizing recommendations...'**
   String get aiFinalizingRecommendations;
+
+  /// Current symptoms section title
+  ///
+  /// In en, this message translates to:
+  /// **'Current Symptoms'**
+  String get currentSymptoms;
+
+  /// Analysis in progress text
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing...'**
+  String get analyzing;
+
+  /// Empty state message when no symptoms added
+  ///
+  /// In en, this message translates to:
+  /// **'Add symptoms above to get AI-powered analysis'**
+  String get addSymptomsAboveToGetAnalysis;
+
+  /// Empty state message when symptoms are added but not analyzed
+  ///
+  /// In en, this message translates to:
+  /// **'Click \"Analyze Symptoms\" to get recommendations'**
+  String get clickAnalyzeSymptomsToGetRecommendations;
+
+  /// Urgency level label
+  ///
+  /// In en, this message translates to:
+  /// **'URGENCY'**
+  String get urgency;
+
+  /// Recommended specialties section title
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended Specialties'**
+  String get recommendedSpecialties;
+
+  /// Analysis failure title
+  ///
+  /// In en, this message translates to:
+  /// **'Analysis Failed'**
+  String get analysisFailed;
+
+  /// AI analysis section title
+  ///
+  /// In en, this message translates to:
+  /// **'AI Analysis'**
+  String get aiAnalysis;
+
+  /// Suggested questions section title
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested Questions'**
+  String get suggestedQuestions;
 }
 
 class _AppLocalizationsDelegate

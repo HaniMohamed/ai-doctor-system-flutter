@@ -485,4 +485,33 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get aiFinalizingRecommendations => '✨ Finalizing recommendations...';
+
+  @override
+  String get currentSymptoms => 'Current Symptoms';
+
+  @override
+  String get analyzing => 'Analyzing...';
+
+  @override
+  String get addSymptomsAboveToGetAnalysis =>
+      'Add symptoms above to get AI-powered analysis';
+
+  @override
+  String get clickAnalyzeSymptomsToGetRecommendations =>
+      'Click \"Analyze Symptoms\" to get recommendations';
+
+  @override
+  String get urgency => 'URGENCY';
+
+  @override
+  String get recommendedSpecialties => 'Recommended Specialties';
+
+  @override
+  String get analysisFailed => 'Analysis Failed';
+
+  @override
+  String get aiAnalysis => 'AI Analysis';
+
+  @override
+  String get suggestedQuestions => 'Suggested Questions';
 }

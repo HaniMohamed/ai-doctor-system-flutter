@@ -602,5 +602,45 @@
   "aiGeneratingInsights": "💡 Generating insights...",
   "aiEvaluatingBiomarkers": "🔬 Evaluating biomarkers...",
   "aiCalculatingProbabilities": "🎯 Calculating probabilities...",
-  "aiFinalizingRecommendations": "✨ Finalizing recommendations..."
+  "aiFinalizingRecommendations": "✨ Finalizing recommendations...",
+  "currentSymptoms": "Current Symptoms",
+  "@currentSymptoms": {
+    "description": "Current symptoms section title"
+  },
+  "analyzing": "Analyzing...",
+  "@analyzing": {
+    "description": "Analysis in progress text"
+  },
+  "addSymptomsAboveToGetAnalysis": "Add symptoms above to get AI-powered analysis",
+  "@addSymptomsAboveToGetAnalysis": {
+    "description": "Empty state message when no symptoms added"
+  },
+  "clickAnalyzeSymptomsToGetRecommendations": "Click \"Analyze Symptoms\" to get recommendations",
+  "@clickAnalyzeSymptomsToGetRecommendations": {
+    "description": "Empty state message when symptoms are added but not analyzed"
+  },
+  "urgency": "URGENCY",
+  "@urgency": {
+    "description": "Urgency level label"
+  },
+  "confidence": "Confidence",
+  "@confidence": {
+    "description": "Confidence score label"
+  },
+  "recommendedSpecialties": "Recommended Specialties",
+  "@recommendedSpecialties": {
+    "description": "Recommended specialties section title"
+  },
+  "analysisFailed": "Analysis Failed",
+  "@analysisFailed": {
+    "description": "Analysis failure title"
+  },
+  "aiAnalysis": "AI Analysis",
+  "@aiAnalysis": {
+    "description": "AI analysis section title"
+  },
+  "suggestedQuestions": "Suggested Questions",
+  "@suggestedQuestions": {
+    "description": "Suggested questions section title"
+  }
 }
