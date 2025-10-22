@@ -14,7 +14,7 @@ class ApiClient {
     _dio = dio.Dio(
       dio.BaseOptions(
         baseUrl: '${EnvironmentConfig.apiBaseUrl}/api/v1',
-        connectTimeout: const Duration(seconds: 10),
+        connectTimeout: const Duration(minutes: 1),
         receiveTimeout: const Duration(minutes: 4),
         sendTimeout: const Duration(seconds: 20),
         headers: {
