@@ -216,6 +216,78 @@ abstract class AppLocalizations {
   /// **'Appointments'**
   String get appointments;
 
+  /// Booking assistant page title
+  ///
+  /// In en, this message translates to:
+  /// **'Booking Assistant'**
+  String get bookingAssistant;
+
+  /// Welcome message for booking assistant
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to AI Booking Assistant'**
+  String get welcomeToBookingAssistant;
+
+  /// Description of booking assistant capabilities
+  ///
+  /// In en, this message translates to:
+  /// **'I can help you book appointments, find doctors, and manage your healthcare schedule. Just tell me what you need!'**
+  String get bookingAssistantDescription;
+
+  /// Quick start message for booking assistant
+  ///
+  /// In en, this message translates to:
+  /// **'I need to book an appointment'**
+  String get iNeedToBookAnAppointment;
+
+  /// Start booking button text
+  ///
+  /// In en, this message translates to:
+  /// **'Start Booking'**
+  String get startBooking;
+
+  /// Clear conversation button text
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Conversation'**
+  String get clearConversation;
+
+  /// Chat input hint
+  ///
+  /// In en, this message translates to:
+  /// **'Type your message...'**
+  String get typeYourMessage;
+
+  /// Send message button text
+  ///
+  /// In en, this message translates to:
+  /// **'Send Message'**
+  String get sendMessage;
+
+  /// Suggestions section title
+  ///
+  /// In en, this message translates to:
+  /// **'Suggestions'**
+  String get suggestions;
+
+  /// Available doctors section title
+  ///
+  /// In en, this message translates to:
+  /// **'Available Doctors'**
+  String get availableDoctors;
+
+  /// Suggested time slots section title
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested Time Slots'**
+  String get suggestedTimeSlots;
+
+  /// Select button text
+  ///
+  /// In en, this message translates to:
+  /// **'Select'**
+  String get select;
+
   /// Doctors page title
   ///
   /// In en, this message translates to:
@@ -701,12 +773,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Clear chat'**
   String get clearChat;
-
-  /// Chat input hint
-  ///
-  /// In en, this message translates to:
-  /// **'Type your message...'**
-  String get typeYourMessage;
 
   /// AI assistant welcome message
   ///

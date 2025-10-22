@@ -64,6 +64,54 @@
   "@appointments": {
     "description": "Appointments page title"
   },
+  "bookingAssistant": "Booking Assistant",
+  "@bookingAssistant": {
+    "description": "Booking assistant page title"
+  },
+  "welcomeToBookingAssistant": "Welcome to AI Booking Assistant",
+  "@welcomeToBookingAssistant": {
+    "description": "Welcome message for booking assistant"
+  },
+  "bookingAssistantDescription": "I can help you book appointments, find doctors, and manage your healthcare schedule. Just tell me what you need!",
+  "@bookingAssistantDescription": {
+    "description": "Description of booking assistant capabilities"
+  },
+  "iNeedToBookAnAppointment": "I need to book an appointment",
+  "@iNeedToBookAnAppointment": {
+    "description": "Quick start message for booking assistant"
+  },
+  "startBooking": "Start Booking",
+  "@startBooking": {
+    "description": "Start booking button text"
+  },
+  "clearConversation": "Clear Conversation",
+  "@clearConversation": {
+    "description": "Clear conversation button text"
+  },
+  "typeYourMessage": "Type your message...",
+  "@typeYourMessage": {
+    "description": "Input placeholder for booking assistant"
+  },
+  "sendMessage": "Send Message",
+  "@sendMessage": {
+    "description": "Send message button text"
+  },
+  "suggestions": "Suggestions",
+  "@suggestions": {
+    "description": "Suggestions section title"
+  },
+  "availableDoctors": "Available Doctors",
+  "@availableDoctors": {
+    "description": "Available doctors section title"
+  },
+  "suggestedTimeSlots": "Suggested Time Slots",
+  "@suggestedTimeSlots": {
+    "description": "Suggested time slots section title"
+  },
+  "select": "Select",
+  "@select": {
+    "description": "Select button text"
+  },
   "doctors": "Doctors",
   "@doctors": {
     "description": "Doctors page title"

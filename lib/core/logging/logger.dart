@@ -222,6 +222,11 @@ class Logger {
     }
   }
 
+  // Public helper to safely truncate/preview data structures in logs
+  static dynamic preview(dynamic data, {int maxLength = 1000}) {
+    return _truncateData(data, maxLength: maxLength);
+  }
+
   // Helper methods for enhanced API logging
   static String _calculateDataSize(dynamic data) {
     try {

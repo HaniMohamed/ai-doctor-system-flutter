@@ -57,6 +57,43 @@ class AppLocalizationsDe extends AppLocalizations {
   String get appointments => 'Termine';
 
   @override
+  String get bookingAssistant => 'Booking Assistant';
+
+  @override
+  String get welcomeToBookingAssistant => 'Welcome to AI Booking Assistant';
+
+  @override
+  String get bookingAssistantDescription =>
+      'I can help you book appointments, find doctors, and manage your healthcare schedule. Just tell me what you need!';
+
+  @override
+  String get iNeedToBookAnAppointment => 'I need to book an appointment';
+
+  @override
+  String get startBooking => 'Start Booking';
+
+  @override
+  String get clearConversation => 'Clear Conversation';
+
+  @override
+  String get typeYourMessage => 'Geben Sie Ihre Nachricht ein...';
+
+  @override
+  String get sendMessage => 'Send Message';
+
+  @override
+  String get suggestions => 'Suggestions';
+
+  @override
+  String get availableDoctors => 'Available Doctors';
+
+  @override
+  String get suggestedTimeSlots => 'Suggested Time Slots';
+
+  @override
+  String get select => 'Select';
+
+  @override
   String get doctors => 'Ärzte finden';
 
   @override
@@ -307,9 +344,6 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get clearChat => 'Chat löschen';
-
-  @override
-  String get typeYourMessage => 'Geben Sie Ihre Nachricht ein...';
 
   @override
   String get welcomeMessage =>

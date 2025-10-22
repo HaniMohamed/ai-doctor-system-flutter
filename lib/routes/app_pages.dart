@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../features/ai_services/symptom_checker/presentation/bindings/symptom_checker_binding.dart';
 import '../features/ai_services/symptom_checker/presentation/pages/symptom_checker_page.dart';
+import '../features/ai_services/booking_assistant/presentation/bindings/booking_assistant_binding.dart';
+import '../features/ai_services/booking_assistant/presentation/pages/booking_assistant_page.dart';
 import '../features/appointments/presentation/bindings/appointments_binding.dart';
 import '../features/appointments/presentation/pages/appointments_list_page.dart';
 import '../features/auth/presentation/bindings/auth_binding.dart';
@@ -88,6 +90,12 @@ class AppPages {
       name: AppRoutes.symptomChecker,
       page: () => const SymptomCheckerPage(),
       binding: SymptomCheckerBinding(),
+      middlewares: [AuthMiddleware()],
+    ),
+    GetPage(
+      name: AppRoutes.bookingAssistant,
+      page: () => const BookingAssistantPage(),
+      binding: BookingAssistantBinding(),
       middlewares: [AuthMiddleware()],
     ),
     GetPage(

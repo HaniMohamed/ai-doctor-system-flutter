@@ -11,5 +11,6 @@ abstract class AppRoutes {
   static const String chat = '/chat';
   static const String notifications = '/notifications';
   static const String symptomChecker = '/symptom-checker';
+  static const String bookingAssistant = '/booking-assistant';
   static const String settings = '/settings';
 }

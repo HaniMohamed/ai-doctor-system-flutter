@@ -1,0 +1,116 @@
+---
+alwaysApply: true
+---
+
+# =========================================================
+# Cursor AI Rules — Flutter Frontend Project
+# Purpose: Enforce clean, modern, and AI-enhanced Flutter code standards
+# Targets: Web, Android, iOS
+# =========================================================
+
+version: 1.0
+
+project:
+  name: "AI_doctor_flutter"
+  type: "flutter"
+  platforms: ["web", "android", "ios"]
+  description: >
+    A cross-platform Flutter application with responsive design, 
+    modern Material 3 UI, and optional AI-enhanced interactions or animations.
+
+rules:
+
+  # ---------------------------------------------
+  # 🧱 General Code Architecture
+  # ---------------------------------------------
+  - match: "*.dart"
+    apply:
+      - "Maintain clean, modular code with clear separation of UI, logic, and data."
+      - "Avoid mixing business logic inside UI widgets."
+      - "Favor composition over inheritance for reusable widgets."
+      - "Apply SOLID principles where appropriate."
+      - "Use clear folder naming (e.g., core, features, shared, services)."
+      - "Prefer state management solutions like Riverpod, Bloc, or Provider."
+
+  # ---------------------------------------------
+  # 🎨 UI & Responsiveness
+  # ---------------------------------------------
+  - match: "lib/**.dart"
+    apply:
+      - "All UI must be responsive across devices and screen sizes."
+      - "Use LayoutBuilder, MediaQuery, and flexible widgets (e.g., Expanded, Flexible)."
+      - "Avoid fixed pixel sizes — use scalable dimensions or responsive units."
+      - "Text styling should rely on ThemeData (Theme.of(context).textTheme)."
+      - "Apply Material 3 or Cupertino design principles depending on platform."
+      - "Maintain accessibility: color contrast, tap target size, semantic labels."
+      - "Animations should enhance UX, not distract."
+
+  # ---------------------------------------------
+  # 🤖 AI / Data-Driven Enhancements (Optional)
+  # ---------------------------------------------
+  - match: "lib/**"
+    apply:
+      - "AI features (if present) should be modular — separate logic from UI."
+      - "Encourage adaptive UI behavior based on data or model predictions."
+      - "Animations or visuals inspired by AI insights should be subtle and meaningful."
+      - "Always maintain user privacy and security when handling sensitive data."
+
+  # ---------------------------------------------
+  # ⚙️ Performance & Optimization
+  # ---------------------------------------------
+  - match: "*.dart"
+    apply:
+      - "Use const constructors where possible."
+      - "Minimize rebuilds — use const widgets, keys, and selectors."
+      - "Run flutter analyze and flutter test before committing."
+      - "Avoid performing async operations in build() methods."
+      - "Profile on all targets (web, Android, iOS) to ensure smooth rendering."
+
+  # ---------------------------------------------
+  # 🌐 Cross-Platform Consistency
+  # ---------------------------------------------
+  - match: "lib/**"
+    apply:
+      - "Ensure consistent behavior on web, Android, and iOS."
+      - "Use kIsWeb or Platform checks only in dedicated helper files."
+      - "Avoid using platform-exclusive plugins without fallbacks."
+      - "Keep the visual experience consistent across platforms."
+
+  # ---------------------------------------------
+  # 🧩 Naming, Documentation & Code Style
+  # ---------------------------------------------
+  - match: "*.dart"
+    apply:
+      - "Class names: UpperCamelCase."
+      - "Methods and variables: lowerCamelCase."
+      - "Files: snake_case.dart."
+      - "Widget classes should end with 'Widget'."
+      - "Keep one primary class per file where practical."
+      - "Add /// documentation for public methods, classes, and complex logic."
+      - "Use meaningful names — avoid abbreviations or unclear labels."
+
+  # ---------------------------------------------
+  # ✅ Testing & Quality
+  # ---------------------------------------------
+  - match: "test/**"
+    apply:
+      - "Write tests for critical logic and custom widgets."
+      - "Use flutter_test and mocktail (or similar) for unit testing."
+      - "Include at least one golden test per major UI screen."
+      - "Automate lint and format checks (dart format, flutter analyze)."
+      - "Maintain a clean commit history with clear messages."
+
+  # ---------------------------------------------
+  # 💡 Design & Innovation
+  # ---------------------------------------------
+  - match: "*"
+    apply:
+      - "Encourage intuitive and minimal UI design."
+      - "Use animations to convey state changes and feedback smoothly."
+      - "Favor calm, professional visual cues for medical or data apps."
+      - "Be open to AI-inspired motion, adaptive themes, or predictive UX where appropriate."
+      - "Ensure the app feels modern, fluid, and trustworthy across all devices."
+
+# =========================================================
+# End of cursor.rules
+# =========================================================

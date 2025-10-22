@@ -7,6 +7,7 @@ import '../../features/auth/data/services/auth_service_impl.dart';
 import '../../features/auth/domain/services/auth_service.dart';
 import '../network/api_client.dart';
 import '../network/network_info.dart';
+import '../network/websocket/websocket_client.dart';
 import '../storage/cache_manager.dart';
 import '../storage/local_storage.dart';
 import '../storage/secure_storage.dart';
@@ -21,6 +22,7 @@ class ServiceLocator {
 
     // Network
     sl.registerLazySingleton<ApiClient>(() => ApiClient());
+    sl.registerLazySingleton<WebSocketClient>(() => WebSocketClient());
 
     // Storage
     sl.registerLazySingleton<LocalStorage>(() => LocalStorage());
@@ -60,7 +62,7 @@ class ServiceLocator {
     await sl<LocalStorage>().initialize();
     await sl<SecureStorage>().initialize();
     await sl<CacheManager>().initialize();
-    
+
     // Initialize language service
     await sl<LanguageService>().onInit();
   }

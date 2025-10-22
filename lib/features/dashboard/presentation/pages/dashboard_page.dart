@@ -144,6 +144,16 @@ class DashboardPage extends StatelessWidget {
           children: [
             Expanded(
               child: _ActionCard(
+                title: AppLocalizations.of(context)!.bookingAssistant,
+                subtitle: 'AI-powered appointment booking',
+                icon: Icons.smart_toy,
+                color: Colors.indigo,
+                onTap: () => Get.toNamed(AppRoutes.bookingAssistant),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _ActionCard(
                 title: AppLocalizations.of(context)!.notifications,
                 subtitle: 'View your alerts',
                 icon: Icons.notifications,
@@ -151,7 +161,11 @@ class DashboardPage extends StatelessWidget {
                 onTap: () => Get.toNamed(AppRoutes.notifications),
               ),
             ),
-            const SizedBox(width: 12),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
             Expanded(
               child: _ActionCard(
                 title: AppLocalizations.of(context)!.profile,
@@ -159,6 +173,16 @@ class DashboardPage extends StatelessWidget {
                 icon: Icons.person,
                 color: Colors.teal,
                 onTap: () => Get.toNamed(AppRoutes.profile),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _ActionCard(
+                title: AppLocalizations.of(context)!.settings,
+                subtitle: 'App preferences',
+                icon: Icons.settings,
+                color: Colors.grey,
+                onTap: () => Get.toNamed(AppRoutes.settings),
               ),
             ),
           ],
