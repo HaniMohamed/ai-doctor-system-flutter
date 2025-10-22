@@ -9,7 +9,7 @@ import '../di/injection_container.dart';
 
 class LanguageService extends GetxController {
   static LanguageService get instance => Get.find<LanguageService>();
-  
+
   final SharedPreferences _prefs;
   final Rx<Locale> _currentLocale = Rx<Locale>(LanguageConfig.defaultLocale);
   final Rx<SupportedLanguage> _currentLanguage = Rx<SupportedLanguage>(
@@ -21,7 +21,8 @@ class LanguageService extends GetxController {
   Locale get currentLocale => _currentLocale.value;
   SupportedLanguage get currentLanguage => _currentLanguage.value;
   String get currentLanguageCode => _currentLanguage.value.code;
-  String get currentLanguageHeader => LanguageConfig.getLanguageHeaderValue(currentLanguageCode);
+  String get currentLanguageHeader =>
+      LanguageConfig.getLanguageHeaderValue(currentLanguageCode);
 
   @override
   Future<void> onInit() async {
@@ -42,6 +43,7 @@ class LanguageService extends GetxController {
       // If loading fails, use default language
       await _setLanguage(LanguageConfig.supportedLanguages.first);
     }
+    _updateApiClientLanguage();
   }
 
   Future<void> setLanguage(SupportedLanguage language) async {
@@ -53,7 +55,7 @@ class LanguageService extends GetxController {
   Future<void> _setLanguage(SupportedLanguage language) async {
     _currentLanguage.value = language;
     _currentLocale.value = language.locale;
-    
+
     // Update GetX locale
     Get.updateLocale(language.locale);
   }
@@ -80,14 +82,16 @@ class LanguageService extends GetxController {
     }
   }
 
-  List<SupportedLanguage> get supportedLanguages => LanguageConfig.supportedLanguages;
+  List<SupportedLanguage> get supportedLanguages =>
+      LanguageConfig.supportedLanguages;
 
   bool isRTL() {
-    return _currentLanguage.value.code == 'ar' || 
-           _currentLanguage.value.code == 'he' ||
-           _currentLanguage.value.code == 'fa' ||
-           _currentLanguage.value.code == 'ur';
+    return _currentLanguage.value.code == 'ar' ||
+        _currentLanguage.value.code == 'he' ||
+        _currentLanguage.value.code == 'fa' ||
+        _currentLanguage.value.code == 'ur';
   }
 
-  TextDirection get textDirection => isRTL() ? TextDirection.rtl : TextDirection.ltr;
+  TextDirection get textDirection =>
+      isRTL() ? TextDirection.rtl : TextDirection.ltr;
 }

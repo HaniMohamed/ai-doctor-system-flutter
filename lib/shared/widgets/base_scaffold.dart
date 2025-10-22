@@ -87,7 +87,7 @@ class BaseScaffold extends StatelessWidget {
           icon: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor.withOpacity(0.1),
+              color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.12),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -103,7 +103,7 @@ class BaseScaffold extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: Theme.of(context).primaryColor,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
               ],

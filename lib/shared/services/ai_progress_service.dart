@@ -18,60 +18,45 @@ class AIProgressService {
 
   Timer? _progressTimer;
   Timer? _messageTimer;
-  BuildContext? _context;
+  List<String>? _analysisStepsCache;
 
   List<String> get _analysisSteps {
-    if (_context == null) {
-      // Fallback to English if no context
-      return [
-        "🧠 Initializing neural network...",
-        "🔍 Scanning symptom patterns...",
-        "📊 Analyzing medical history...",
-        "🧬 Processing genetic data...",
-        "🤖 Running AI diagnostics...",
-        "📈 Cross-referencing databases...",
-        "💡 Generating insights...",
-        "🔬 Evaluating biomarkers...",
-        "🎯 Calculating probabilities...",
-        "✨ Finalizing recommendations...",
-      ];
-    }
-
-    final l10n = AppLocalizations.of(_context!);
-    if (l10n == null) {
-      // Fallback to English if localization is not available
-      return [
-        "🧠 Initializing neural network...",
-        "🔍 Scanning symptom patterns...",
-        "📊 Analyzing medical history...",
-        "🧬 Processing genetic data...",
-        "🤖 Running AI diagnostics...",
-        "📈 Cross-referencing databases...",
-        "💡 Generating insights...",
-        "🔬 Evaluating biomarkers...",
-        "🎯 Calculating probabilities...",
-        "✨ Finalizing recommendations...",
-      ];
-    }
-    return [
-      l10n.aiInitializingNeuralNetwork,
-      l10n.aiScanningSymptomPatterns,
-      l10n.aiAnalyzingMedicalHistory,
-      l10n.aiProcessingGeneticData,
-      l10n.aiRunningDiagnostics,
-      l10n.aiCrossReferencingDatabases,
-      l10n.aiGeneratingInsights,
-      l10n.aiEvaluatingBiomarkers,
-      l10n.aiCalculatingProbabilities,
-      l10n.aiFinalizingRecommendations,
-    ];
+    return _analysisStepsCache ??
+        const [
+          "🧠 Initializing neural network...",
+          "🔍 Scanning symptom patterns...",
+          "📊 Analyzing medical history...",
+          "🧬 Processing genetic data...",
+          "🤖 Running AI diagnostics...",
+          "📈 Cross-referencing databases...",
+          "💡 Generating insights...",
+          "🔬 Evaluating biomarkers...",
+          "🎯 Calculating probabilities...",
+          "✨ Finalizing recommendations...",
+        ];
   }
 
   int _currentStep = 0;
   double _currentProgress = 0.0;
 
   void setContext(BuildContext context) {
-    _context = context;
+    final l10n = AppLocalizations.of(context);
+    if (l10n != null) {
+      _analysisStepsCache = [
+        l10n.aiInitializingNeuralNetwork,
+        l10n.aiScanningSymptomPatterns,
+        l10n.aiAnalyzingMedicalHistory,
+        l10n.aiProcessingGeneticData,
+        l10n.aiRunningDiagnostics,
+        l10n.aiCrossReferencingDatabases,
+        l10n.aiGeneratingInsights,
+        l10n.aiEvaluatingBiomarkers,
+        l10n.aiCalculatingProbabilities,
+        l10n.aiFinalizingRecommendations,
+      ];
+    } else {
+      _analysisStepsCache = null;
+    }
   }
 
   void startProgress() {
