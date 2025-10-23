@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../generated/l10n/app_localizations.dart';
+
 /// Enhanced progress indicator for streaming AI responses
 class StreamingProgressIndicator extends StatefulWidget {
   final bool isStreaming;
@@ -171,8 +173,8 @@ class _StreamingProgressIndicatorState extends State<StreamingProgressIndicator>
                 // Status text
                 Text(
                   widget.isStreaming
-                      ? 'AI is responding...'
-                      : 'AI is thinking...',
+                      ? AppLocalizations.of(context)!.aiIsResponding
+                      : AppLocalizations.of(context)!.aiIsThinking,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                     fontWeight: FontWeight.w600,
@@ -181,7 +183,7 @@ class _StreamingProgressIndicatorState extends State<StreamingProgressIndicator>
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Analyzing your request and preparing the best response',
+                  AppLocalizations.of(context)!.analyzingYourRequest,
                   style: TextStyle(
                     color: Theme.of(context)
                         .colorScheme
@@ -230,7 +232,7 @@ class _StreamingProgressIndicatorState extends State<StreamingProgressIndicator>
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          'Intent: ${widget.currentIntent}',
+                          '${AppLocalizations.of(context)!.intent}: ${widget.currentIntent}',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             fontSize: 12,
@@ -242,7 +244,7 @@ class _StreamingProgressIndicatorState extends State<StreamingProgressIndicator>
                         if (widget.currentIntent != null)
                           const SizedBox(width: 12),
                         Text(
-                          'Confidence: ${(widget.confidence! * 100).toStringAsFixed(0)}%',
+                          '${AppLocalizations.of(context)!.confidence}: ${(widget.confidence! * 100).toStringAsFixed(0)}%',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             fontSize: 12,

@@ -9,19 +9,19 @@ class AppLocalizationsKo extends AppLocalizations {
   AppLocalizationsKo([String locale = 'ko']) : super(locale);
 
   @override
-  String get appTitle => 'AI Doctor System';
+  String get appTitle => 'AI 의사 시스템';
 
   @override
-  String get welcome => 'Welcome';
+  String get welcome => '환영합니다';
 
   @override
   String get login => '로그인';
 
   @override
-  String get logout => 'Logout';
+  String get logout => '로그아웃';
 
   @override
-  String get register => 'Register';
+  String get register => '등록';
 
   @override
   String get email => '이메일';
@@ -30,7 +30,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get password => '비밀번호';
 
   @override
-  String get confirmPassword => 'Confirm Password';
+  String get confirmPassword => '비밀번호 확인';
 
   @override
   String get forgotPassword => '비밀번호를 잊으셨나요?';
@@ -45,7 +45,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get settings => '설정';
 
   @override
-  String get language => 'Language';
+  String get language => '언어';
 
   @override
   String get selectLanguage => '언어 선택';
@@ -57,47 +57,47 @@ class AppLocalizationsKo extends AppLocalizations {
   String get appointments => '예약';
 
   @override
-  String get bookingAssistant => 'Booking Assistant';
+  String get bookingAssistant => '예약 어시스턴트';
 
   @override
-  String get welcomeToBookingAssistant => 'Welcome to AI Booking Assistant';
+  String get welcomeToBookingAssistant => 'AI 예약 어시스턴트에 오신 것을 환영합니다';
 
   @override
   String get bookingAssistantDescription =>
-      'I can help you book appointments, find doctors, and manage your healthcare schedule. Just tell me what you need!';
+      '예약을 도와드리고, 의사를 찾고, 의료 일정을 관리할 수 있습니다. 무엇이 필요한지 알려주세요!';
 
   @override
-  String get iNeedToBookAnAppointment => 'I need to book an appointment';
+  String get iNeedToBookAnAppointment => '예약을 해야 합니다';
 
   @override
-  String get startBooking => 'Start Booking';
+  String get startBooking => '예약 시작';
 
   @override
-  String get clearConversation => 'Clear Conversation';
+  String get clearConversation => '대화 지우기';
 
   @override
   String get typeYourMessage => '메시지를 입력하세요...';
 
   @override
-  String get sendMessage => 'Send Message';
+  String get sendMessage => '메시지 보내기';
 
   @override
-  String get suggestions => 'Suggestions';
+  String get suggestions => '제안';
 
   @override
-  String get availableDoctors => 'Available Doctors';
+  String get availableDoctors => '사용 가능한 의사';
 
   @override
-  String get suggestedTimeSlots => 'Suggested Time Slots';
+  String get suggestedTimeSlots => '제안된 시간대';
 
   @override
-  String get select => 'Select';
+  String get select => '선택';
 
   @override
   String get doctors => '의사 찾기';
 
   @override
-  String get patients => 'Patients';
+  String get patients => '환자';
 
   @override
   String get notifications => '알림';
@@ -106,37 +106,37 @@ class AppLocalizationsKo extends AppLocalizations {
   String get chat => 'AI 채팅';
 
   @override
-  String get send => 'Send';
+  String get send => '보내기';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => '취소';
 
   @override
-  String get save => 'Save';
+  String get save => '저장';
 
   @override
-  String get edit => 'Edit';
+  String get edit => '편집';
 
   @override
-  String get delete => 'Delete';
+  String get delete => '삭제';
 
   @override
-  String get confirm => 'Confirm';
+  String get confirm => '확인';
 
   @override
-  String get yes => 'Yes';
+  String get yes => '예';
 
   @override
-  String get no => 'No';
+  String get no => '아니오';
 
   @override
-  String get ok => 'OK';
+  String get ok => '확인';
 
   @override
   String get error => '오류';
 
   @override
-  String get success => 'Success';
+  String get success => '성공';
 
   @override
   String get loading => '로딩 중...';
@@ -145,55 +145,55 @@ class AppLocalizationsKo extends AppLocalizations {
   String get retry => '다시 시도';
 
   @override
-  String get close => 'Close';
+  String get close => '닫기';
 
   @override
-  String get back => 'Back';
+  String get back => '뒤로';
 
   @override
-  String get next => 'Next';
+  String get next => '다음';
 
   @override
-  String get previous => 'Previous';
+  String get previous => '이전';
 
   @override
-  String get finish => 'Finish';
+  String get finish => '완료';
 
   @override
-  String get search => 'Search';
+  String get search => '검색';
 
   @override
-  String get filter => 'Filter';
+  String get filter => '필터';
 
   @override
-  String get sort => 'Sort';
+  String get sort => '정렬';
 
   @override
-  String get refresh => 'Refresh';
+  String get refresh => '새로고침';
 
   @override
-  String get share => 'Share';
+  String get share => '공유';
 
   @override
-  String get copy => 'Copy';
+  String get copy => '복사';
 
   @override
-  String get paste => 'Paste';
+  String get paste => '붙여넣기';
 
   @override
-  String get cut => 'Cut';
+  String get cut => '잘라내기';
 
   @override
-  String get undo => 'Undo';
+  String get undo => '실행 취소';
 
   @override
-  String get redo => 'Redo';
+  String get redo => '다시 하기';
 
   @override
-  String get selectAll => 'Select All';
+  String get selectAll => '모두 선택';
 
   @override
-  String get deselectAll => 'Deselect All';
+  String get deselectAll => '모두 선택 해제';
 
   @override
   String get changeLanguage => '언어 변경';
@@ -468,72 +468,138 @@ class AppLocalizationsKo extends AppLocalizations {
   String get totalNotifications => '총 알림';
 
   @override
-  String get appDescription =>
-      'A comprehensive healthcare management platform powered by AI.';
+  String get appDescription => 'AI로 구동되는 포괄적인 의료 관리 플랫폼.';
 
   @override
-  String get appBuiltWith =>
-      'Built with Flutter for cross-platform compatibility.';
+  String get appBuiltWith => '크로스 플랫폼 호환성을 위해 Flutter로 구축.';
 
   @override
-  String get confirmSignOut => 'Are you sure you want to sign out?';
+  String get confirmSignOut => '로그아웃하시겠습니까?';
 
   @override
-  String get aiInitializingNeuralNetwork => '🧠 Initializing neural network...';
+  String get aiInitializingNeuralNetwork => '🧠 신경망 초기화 중...';
 
   @override
-  String get aiScanningSymptomPatterns => '🔍 Scanning symptom patterns...';
+  String get aiScanningSymptomPatterns => '🔍 증상 패턴 스캔 중...';
 
   @override
-  String get aiAnalyzingMedicalHistory => '📊 Analyzing medical history...';
+  String get aiAnalyzingMedicalHistory => '📊 의료 기록 분석 중...';
 
   @override
-  String get aiProcessingGeneticData => '🧬 Processing genetic data...';
+  String get aiProcessingGeneticData => '🧬 유전자 데이터 처리 중...';
 
   @override
-  String get aiRunningDiagnostics => '🤖 Running AI diagnostics...';
+  String get aiRunningDiagnostics => '🤖 AI 진단 실행 중...';
 
   @override
-  String get aiCrossReferencingDatabases => '📈 Cross-referencing databases...';
+  String get aiCrossReferencingDatabases => '📈 데이터베이스 교차 참조 중...';
 
   @override
-  String get aiGeneratingInsights => '💡 Generating insights...';
+  String get aiGeneratingInsights => '💡 통찰력 생성 중...';
 
   @override
-  String get aiEvaluatingBiomarkers => '🔬 Evaluating biomarkers...';
+  String get aiEvaluatingBiomarkers => '🔬 생체표지자 평가 중...';
 
   @override
-  String get aiCalculatingProbabilities => '🎯 Calculating probabilities...';
+  String get aiCalculatingProbabilities => '🎯 확률 계산 중...';
 
   @override
-  String get aiFinalizingRecommendations => '✨ Finalizing recommendations...';
+  String get aiFinalizingRecommendations => '✨ 권장사항 최종화 중...';
 
   @override
-  String get currentSymptoms => 'Current Symptoms';
+  String get currentSymptoms => '현재 증상';
 
   @override
-  String get analyzing => 'Analyzing...';
+  String get analyzing => '분석 중...';
 
   @override
-  String get addSymptomsAboveToGetAnalysis =>
-      'Add symptoms above to get AI-powered analysis';
+  String get addSymptomsAboveToGetAnalysis => '위에 증상을 추가하여 AI 분석 받기';
 
   @override
   String get clickAnalyzeSymptomsToGetRecommendations =>
-      'Click \"Analyze Symptoms\" to get recommendations';
+      '권장사항을 받으려면 \"증상 분석\"을 클릭하세요';
 
   @override
-  String get urgency => 'URGENCY';
+  String get urgency => '긴급도';
 
   @override
-  String get recommendedSpecialties => 'Recommended Specialties';
+  String get recommendedSpecialties => '추천 전문 분야';
 
   @override
-  String get analysisFailed => 'Analysis Failed';
+  String get analysisFailed => '분석 실패';
 
   @override
-  String get aiAnalysis => 'AI Analysis';
+  String get aiAnalysis => 'AI 분석';
 
   @override
-  String get suggestedQuestions => 'Suggested Questions';
+  String get suggestedQuestions => '제안된 질문';
+
+  @override
+  String get actionCompleted => '작업 완료';
+
+  @override
+  String get somethingWentWrong => '문제가 발생했습니다';
+
+  @override
+  String get dismiss => '거부';
+
+  @override
+  String get findADoctor => '의사 찾기';
+
+  @override
+  String get iNeedToFindADoctor => '의사를 찾아야 합니다';
+
+  @override
+  String get checkAvailability => '가용성 확인';
+
+  @override
+  String get showMeAvailableAppointments => '사용 가능한 예약 보여주기';
+
+  @override
+  String get aiIsResponding => 'AI가 응답 중입니다...';
+
+  @override
+  String get aiIsThinking => 'AI가 생각 중입니다...';
+
+  @override
+  String get intent => '의도';
+
+  @override
+  String get aiIntent => 'AI 의도';
+
+  @override
+  String percent(String value) {
+    return '$value%';
+  }
+
+  @override
+  String get analyzingYourRequest => '요청을 분석하고 최상의 응답을 준비하는 중';
+
+  @override
+  String get aiRecommendations => 'AI 권장사항';
+
+  @override
+  String get recommendedDoctors => '추천 의사';
+
+  @override
+  String get basedOnYourPreferences => '귀하의 선호도와 가용성에 따라';
+
+  @override
+  String get drUnknown => 'Dr. 알 수 없음';
+
+  @override
+  String get book => '예약';
+
+  @override
+  String get today => '오늘';
+
+  @override
+  String get tomorrow => '내일';
+
+  @override
+  String get askYourAIAssistant => 'AI 어시스턴트에게 물어보세요...';
+
+  @override
+  String get bookingAssistantWelcomeMessage =>
+      '안녕하세요! 저는 당신의 AI 예약 어시스턴트입니다. 오늘 어떻게 도와드릴까요?';
 }

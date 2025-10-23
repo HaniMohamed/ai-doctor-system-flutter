@@ -57,41 +57,43 @@ class AppLocalizationsFr extends AppLocalizations {
   String get appointments => 'Rendez-vous';
 
   @override
-  String get bookingAssistant => 'Booking Assistant';
+  String get bookingAssistant => 'Assistant de Réservation';
 
   @override
-  String get welcomeToBookingAssistant => 'Welcome to AI Booking Assistant';
+  String get welcomeToBookingAssistant =>
+      'Bienvenue dans l\'Assistant de Réservation IA';
 
   @override
   String get bookingAssistantDescription =>
-      'I can help you book appointments, find doctors, and manage your healthcare schedule. Just tell me what you need!';
+      'Je peux vous aider à réserver des rendez-vous, trouver des médecins et gérer votre planning de soins. Dites-moi simplement ce dont vous avez besoin !';
 
   @override
-  String get iNeedToBookAnAppointment => 'I need to book an appointment';
+  String get iNeedToBookAnAppointment =>
+      'J\'ai besoin de réserver un rendez-vous';
 
   @override
-  String get startBooking => 'Start Booking';
+  String get startBooking => 'Commencer la Réservation';
 
   @override
-  String get clearConversation => 'Clear Conversation';
+  String get clearConversation => 'Effacer la Conversation';
 
   @override
   String get typeYourMessage => 'Tapez votre message...';
 
   @override
-  String get sendMessage => 'Send Message';
+  String get sendMessage => 'Envoyer un Message';
 
   @override
   String get suggestions => 'Suggestions';
 
   @override
-  String get availableDoctors => 'Available Doctors';
+  String get availableDoctors => 'Médecins Disponibles';
 
   @override
-  String get suggestedTimeSlots => 'Suggested Time Slots';
+  String get suggestedTimeSlots => 'Créneaux Horaires Sugérés';
 
   @override
-  String get select => 'Select';
+  String get select => 'Sélectionner';
 
   @override
   String get doctors => 'Médecins';
@@ -482,14 +484,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get appDescription =>
-      'A comprehensive healthcare management platform powered by AI.';
+      'Une plateforme complète de gestion des soins de santé alimentée par l\'IA.';
 
   @override
   String get appBuiltWith =>
-      'Built with Flutter for cross-platform compatibility.';
+      'Construit avec Flutter pour la compatibilité multiplateforme.';
 
   @override
-  String get confirmSignOut => 'Are you sure you want to sign out?';
+  String get confirmSignOut => 'Êtes-vous sûr de vouloir vous déconnecter ?';
 
   @override
   String get aiInitializingNeuralNetwork =>
@@ -555,4 +557,76 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get suggestedQuestions => 'Questions Suggérées';
+
+  @override
+  String get actionCompleted => 'Action Terminée';
+
+  @override
+  String get somethingWentWrong => 'Quelque chose s\'est mal passé';
+
+  @override
+  String get dismiss => 'Ignorer';
+
+  @override
+  String get findADoctor => 'Trouver un Médecin';
+
+  @override
+  String get iNeedToFindADoctor => 'J\'ai besoin de trouver un médecin';
+
+  @override
+  String get checkAvailability => 'Vérifier la Disponibilité';
+
+  @override
+  String get showMeAvailableAppointments =>
+      'Montrez-moi les rendez-vous disponibles';
+
+  @override
+  String get aiIsResponding => 'L\'IA répond...';
+
+  @override
+  String get aiIsThinking => 'L\'IA réfléchit...';
+
+  @override
+  String get intent => 'Intention';
+
+  @override
+  String get aiIntent => 'Intention de l\'IA';
+
+  @override
+  String percent(String value) {
+    return '$value%';
+  }
+
+  @override
+  String get analyzingYourRequest =>
+      'Analyse de votre demande et préparation de la meilleure réponse';
+
+  @override
+  String get aiRecommendations => 'Recommandations IA';
+
+  @override
+  String get recommendedDoctors => 'Médecins Recommandés';
+
+  @override
+  String get basedOnYourPreferences =>
+      'Basé sur vos préférences et disponibilité';
+
+  @override
+  String get drUnknown => 'Dr. Inconnu';
+
+  @override
+  String get book => 'Réserver';
+
+  @override
+  String get today => 'Aujourd\'hui';
+
+  @override
+  String get tomorrow => 'Demain';
+
+  @override
+  String get askYourAIAssistant => 'Demandez à votre assistant IA...';
+
+  @override
+  String get bookingAssistantWelcomeMessage =>
+      'Bonjour ! Je suis votre assistant IA de réservation. Comment puis-je vous aider aujourd\'hui ?';
 }

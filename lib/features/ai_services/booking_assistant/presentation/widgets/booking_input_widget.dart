@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../generated/l10n/app_localizations.dart';
+
 /// Widget for inputting messages to the booking assistant
 class BookingInputWidget extends StatefulWidget {
   final TextEditingController controller;
@@ -75,7 +77,7 @@ class _BookingInputWidgetState extends State<BookingInputWidget> {
                 focusNode: _focusNode,
                 enabled: !widget.isLoading,
                 decoration: InputDecoration(
-                  hintText: 'Ask your AI assistant...',
+                  hintText: AppLocalizations.of(context)!.askYourAIAssistant,
                   hintStyle: TextStyle(
                     color: Theme.of(context)
                         .colorScheme

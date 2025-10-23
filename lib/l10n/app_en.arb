@@ -690,5 +690,102 @@
   "suggestedQuestions": "Suggested Questions",
   "@suggestedQuestions": {
     "description": "Suggested questions section title"
+  },
+  "actionCompleted": "Action Completed",
+  "@actionCompleted": {
+    "description": "Action completed success message"
+  },
+  "somethingWentWrong": "Something went wrong",
+  "@somethingWentWrong": {
+    "description": "Error message title"
+  },
+  "dismiss": "Dismiss",
+  "@dismiss": {
+    "description": "Dismiss button tooltip"
+  },
+  "findADoctor": "Find a Doctor",
+  "@findADoctor": {
+    "description": "Find a doctor quick action button"
+  },
+  "iNeedToFindADoctor": "I need to find a doctor",
+  "@iNeedToFindADoctor": {
+    "description": "Find a doctor quick action message"
+  },
+  "checkAvailability": "Check Availability",
+  "@checkAvailability": {
+    "description": "Check availability quick action button"
+  },
+  "showMeAvailableAppointments": "Show me available appointments",
+  "@showMeAvailableAppointments": {
+    "description": "Check availability quick action message"
+  },
+  "aiIsResponding": "AI is responding...",
+  "@aiIsResponding": {
+    "description": "AI is responding status message"
+  },
+  "aiIsThinking": "AI is thinking...",
+  "@aiIsThinking": {
+    "description": "AI is thinking status message"
+  },
+  "intent": "Intent",
+  "@intent": {
+    "description": "Intent label"
+  },
+  "aiIntent": "AI Intent",
+  "@aiIntent": {
+    "description": "AI intent label"
+  },
+  "confidence": "Confidence",
+  "@confidence": {
+    "description": "Confidence label"
+  },
+  "percent": "{value}%",
+  "@percent": {
+    "description": "Percentage format",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "analyzingYourRequest": "Analyzing your request and preparing the best response",
+  "@analyzingYourRequest": {
+    "description": "AI processing status message"
+  },
+  "aiRecommendations": "AI Recommendations",
+  "@aiRecommendations": {
+    "description": "AI recommendations section title"
+  },
+  "recommendedDoctors": "Recommended Doctors",
+  "@recommendedDoctors": {
+    "description": "Recommended doctors section title"
+  },
+  "basedOnYourPreferences": "Based on your preferences and availability",
+  "@basedOnYourPreferences": {
+    "description": "AI recommendations subtitle"
+  },
+  "drUnknown": "Dr. Unknown",
+  "@drUnknown": {
+    "description": "Unknown doctor placeholder"
+  },
+  "book": "Book",
+  "@book": {
+    "description": "Book appointment button"
+  },
+  "today": "Today",
+  "@today": {
+    "description": "Today label"
+  },
+  "tomorrow": "Tomorrow",
+  "@tomorrow": {
+    "description": "Tomorrow label"
+  },
+  "askYourAIAssistant": "Ask your AI assistant...",
+  "@askYourAIAssistant": {
+    "description": "AI assistant input placeholder"
+  },
+  "bookingAssistantWelcomeMessage": "Hello! I'm your AI booking assistant. How can I help you today?",
+  "@bookingAssistantWelcomeMessage": {
+    "description": "Welcome message from AI booking assistant"
   }
 }

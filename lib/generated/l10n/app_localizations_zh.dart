@@ -535,4 +535,75 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get suggestedQuestions => 'Suggested Questions';
+
+  @override
+  String get actionCompleted => 'Action Completed';
+
+  @override
+  String get somethingWentWrong => 'Something went wrong';
+
+  @override
+  String get dismiss => 'Dismiss';
+
+  @override
+  String get findADoctor => 'Find a Doctor';
+
+  @override
+  String get iNeedToFindADoctor => 'I need to find a doctor';
+
+  @override
+  String get checkAvailability => 'Check Availability';
+
+  @override
+  String get showMeAvailableAppointments => 'Show me available appointments';
+
+  @override
+  String get aiIsResponding => 'AI is responding...';
+
+  @override
+  String get aiIsThinking => 'AI is thinking...';
+
+  @override
+  String get intent => 'Intent';
+
+  @override
+  String get aiIntent => 'AI Intent';
+
+  @override
+  String percent(String value) {
+    return '$value%';
+  }
+
+  @override
+  String get analyzingYourRequest =>
+      'Analyzing your request and preparing the best response';
+
+  @override
+  String get aiRecommendations => 'AI Recommendations';
+
+  @override
+  String get recommendedDoctors => 'Recommended Doctors';
+
+  @override
+  String get basedOnYourPreferences =>
+      'Based on your preferences and availability';
+
+  @override
+  String get drUnknown => 'Dr. Unknown';
+
+  @override
+  String get book => 'Book';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get tomorrow => 'Tomorrow';
+
+  @override
+  String get askYourAIAssistant => 'Ask your AI assistant...';
+
+  @override
+  String get bookingAssistantWelcomeMessage =>
+      'Hello! I\'m your AI booking assistant. How can I help you today?';
 }

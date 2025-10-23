@@ -9,19 +9,19 @@ class AppLocalizationsJa extends AppLocalizations {
   AppLocalizationsJa([String locale = 'ja']) : super(locale);
 
   @override
-  String get appTitle => 'AI Doctor System';
+  String get appTitle => 'AI医師システム';
 
   @override
-  String get welcome => 'Welcome';
+  String get welcome => 'ようこそ';
 
   @override
   String get login => 'ログイン';
 
   @override
-  String get logout => 'Logout';
+  String get logout => 'ログアウト';
 
   @override
-  String get register => 'Register';
+  String get register => '登録';
 
   @override
   String get email => 'メール';
@@ -30,7 +30,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get password => 'パスワード';
 
   @override
-  String get confirmPassword => 'Confirm Password';
+  String get confirmPassword => 'パスワード確認';
 
   @override
   String get forgotPassword => 'パスワードを忘れましたか？';
@@ -45,7 +45,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settings => '設定';
 
   @override
-  String get language => 'Language';
+  String get language => '言語';
 
   @override
   String get selectLanguage => '言語を選択';
@@ -57,47 +57,47 @@ class AppLocalizationsJa extends AppLocalizations {
   String get appointments => '予約';
 
   @override
-  String get bookingAssistant => 'Booking Assistant';
+  String get bookingAssistant => '予約アシスタント';
 
   @override
-  String get welcomeToBookingAssistant => 'Welcome to AI Booking Assistant';
+  String get welcomeToBookingAssistant => 'AI予約アシスタントへようこそ';
 
   @override
   String get bookingAssistantDescription =>
-      'I can help you book appointments, find doctors, and manage your healthcare schedule. Just tell me what you need!';
+      '予約の予約、医師の検索、ヘルスケアスケジュールの管理をお手伝いできます。何が必要か教えてください！';
 
   @override
-  String get iNeedToBookAnAppointment => 'I need to book an appointment';
+  String get iNeedToBookAnAppointment => '予約をする必要があります';
 
   @override
-  String get startBooking => 'Start Booking';
+  String get startBooking => '予約を開始';
 
   @override
-  String get clearConversation => 'Clear Conversation';
+  String get clearConversation => '会話をクリア';
 
   @override
   String get typeYourMessage => 'メッセージを入力...';
 
   @override
-  String get sendMessage => 'Send Message';
+  String get sendMessage => 'メッセージを送信';
 
   @override
-  String get suggestions => 'Suggestions';
+  String get suggestions => '提案';
 
   @override
-  String get availableDoctors => 'Available Doctors';
+  String get availableDoctors => '利用可能な医師';
 
   @override
-  String get suggestedTimeSlots => 'Suggested Time Slots';
+  String get suggestedTimeSlots => '提案された時間枠';
 
   @override
-  String get select => 'Select';
+  String get select => '選択';
 
   @override
   String get doctors => '医師を探す';
 
   @override
-  String get patients => 'Patients';
+  String get patients => '患者';
 
   @override
   String get notifications => '通知';
@@ -106,28 +106,28 @@ class AppLocalizationsJa extends AppLocalizations {
   String get chat => 'AIチャット';
 
   @override
-  String get send => 'Send';
+  String get send => '送信';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => 'キャンセル';
 
   @override
-  String get save => 'Save';
+  String get save => '保存';
 
   @override
-  String get edit => 'Edit';
+  String get edit => '編集';
 
   @override
-  String get delete => 'Delete';
+  String get delete => '削除';
 
   @override
-  String get confirm => 'Confirm';
+  String get confirm => '確認';
 
   @override
-  String get yes => 'Yes';
+  String get yes => 'はい';
 
   @override
-  String get no => 'No';
+  String get no => 'いいえ';
 
   @override
   String get ok => 'OK';
@@ -136,7 +136,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get error => 'エラー';
 
   @override
-  String get success => 'Success';
+  String get success => '成功';
 
   @override
   String get loading => '読み込み中...';
@@ -145,55 +145,55 @@ class AppLocalizationsJa extends AppLocalizations {
   String get retry => '再試行';
 
   @override
-  String get close => 'Close';
+  String get close => '閉じる';
 
   @override
-  String get back => 'Back';
+  String get back => '戻る';
 
   @override
-  String get next => 'Next';
+  String get next => '次へ';
 
   @override
-  String get previous => 'Previous';
+  String get previous => '前へ';
 
   @override
-  String get finish => 'Finish';
+  String get finish => '完了';
 
   @override
-  String get search => 'Search';
+  String get search => '検索';
 
   @override
-  String get filter => 'Filter';
+  String get filter => 'フィルター';
 
   @override
-  String get sort => 'Sort';
+  String get sort => '並び替え';
 
   @override
-  String get refresh => 'Refresh';
+  String get refresh => '更新';
 
   @override
-  String get share => 'Share';
+  String get share => '共有';
 
   @override
-  String get copy => 'Copy';
+  String get copy => 'コピー';
 
   @override
-  String get paste => 'Paste';
+  String get paste => '貼り付け';
 
   @override
-  String get cut => 'Cut';
+  String get cut => '切り取り';
 
   @override
-  String get undo => 'Undo';
+  String get undo => '元に戻す';
 
   @override
-  String get redo => 'Redo';
+  String get redo => 'やり直し';
 
   @override
-  String get selectAll => 'Select All';
+  String get selectAll => 'すべて選択';
 
   @override
-  String get deselectAll => 'Deselect All';
+  String get deselectAll => 'すべて選択解除';
 
   @override
   String get changeLanguage => '言語を変更';
@@ -469,72 +469,138 @@ class AppLocalizationsJa extends AppLocalizations {
   String get totalNotifications => '総通知数';
 
   @override
-  String get appDescription =>
-      'A comprehensive healthcare management platform powered by AI.';
+  String get appDescription => 'AIを活用した包括的なヘルスケア管理プラットフォーム。';
 
   @override
-  String get appBuiltWith =>
-      'Built with Flutter for cross-platform compatibility.';
+  String get appBuiltWith => 'クロスプラットフォーム互換性のためにFlutterで構築。';
 
   @override
-  String get confirmSignOut => 'Are you sure you want to sign out?';
+  String get confirmSignOut => 'サインアウトしてもよろしいですか？';
 
   @override
-  String get aiInitializingNeuralNetwork => '🧠 Initializing neural network...';
+  String get aiInitializingNeuralNetwork => '🧠 ニューラルネットワークを初期化中...';
 
   @override
-  String get aiScanningSymptomPatterns => '🔍 Scanning symptom patterns...';
+  String get aiScanningSymptomPatterns => '🔍 症状パターンをスキャン中...';
 
   @override
-  String get aiAnalyzingMedicalHistory => '📊 Analyzing medical history...';
+  String get aiAnalyzingMedicalHistory => '📊 病歴を分析中...';
 
   @override
-  String get aiProcessingGeneticData => '🧬 Processing genetic data...';
+  String get aiProcessingGeneticData => '🧬 遺伝子データを処理中...';
 
   @override
-  String get aiRunningDiagnostics => '🤖 Running AI diagnostics...';
+  String get aiRunningDiagnostics => '🤖 AI診断を実行中...';
 
   @override
-  String get aiCrossReferencingDatabases => '📈 Cross-referencing databases...';
+  String get aiCrossReferencingDatabases => '📈 データベースを照合中...';
 
   @override
-  String get aiGeneratingInsights => '💡 Generating insights...';
+  String get aiGeneratingInsights => '💡 洞察を生成中...';
 
   @override
-  String get aiEvaluatingBiomarkers => '🔬 Evaluating biomarkers...';
+  String get aiEvaluatingBiomarkers => '🔬 バイオマーカーを評価中...';
 
   @override
-  String get aiCalculatingProbabilities => '🎯 Calculating probabilities...';
+  String get aiCalculatingProbabilities => '🎯 確率を計算中...';
 
   @override
-  String get aiFinalizingRecommendations => '✨ Finalizing recommendations...';
+  String get aiFinalizingRecommendations => '✨ 推奨事項を最終化中...';
 
   @override
-  String get currentSymptoms => 'Current Symptoms';
+  String get currentSymptoms => '現在の症状';
 
   @override
-  String get analyzing => 'Analyzing...';
+  String get analyzing => '分析中...';
 
   @override
-  String get addSymptomsAboveToGetAnalysis =>
-      'Add symptoms above to get AI-powered analysis';
+  String get addSymptomsAboveToGetAnalysis => '上記に症状を追加してAI分析を取得';
 
   @override
   String get clickAnalyzeSymptomsToGetRecommendations =>
-      'Click \"Analyze Symptoms\" to get recommendations';
+      '推奨事項を取得するには「症状を分析」をクリック';
 
   @override
-  String get urgency => 'URGENCY';
+  String get urgency => '緊急度';
 
   @override
-  String get recommendedSpecialties => 'Recommended Specialties';
+  String get recommendedSpecialties => '推奨専門分野';
 
   @override
-  String get analysisFailed => 'Analysis Failed';
+  String get analysisFailed => '分析失敗';
 
   @override
-  String get aiAnalysis => 'AI Analysis';
+  String get aiAnalysis => 'AI分析';
 
   @override
-  String get suggestedQuestions => 'Suggested Questions';
+  String get suggestedQuestions => '提案された質問';
+
+  @override
+  String get actionCompleted => 'アクション完了';
+
+  @override
+  String get somethingWentWrong => '何か問題が発生しました';
+
+  @override
+  String get dismiss => '却下';
+
+  @override
+  String get findADoctor => '医師を探す';
+
+  @override
+  String get iNeedToFindADoctor => '医師を見つける必要があります';
+
+  @override
+  String get checkAvailability => '空き状況を確認';
+
+  @override
+  String get showMeAvailableAppointments => '利用可能な予約を表示';
+
+  @override
+  String get aiIsResponding => 'AIが応答しています...';
+
+  @override
+  String get aiIsThinking => 'AIが考えています...';
+
+  @override
+  String get intent => '意図';
+
+  @override
+  String get aiIntent => 'AI意図';
+
+  @override
+  String percent(String value) {
+    return '$value%';
+  }
+
+  @override
+  String get analyzingYourRequest => 'リクエストを分析し、最適な応答を準備中';
+
+  @override
+  String get aiRecommendations => 'AI推奨事項';
+
+  @override
+  String get recommendedDoctors => '推奨医師';
+
+  @override
+  String get basedOnYourPreferences => 'あなたの好みと空き状況に基づいて';
+
+  @override
+  String get drUnknown => 'Dr.不明';
+
+  @override
+  String get book => '予約';
+
+  @override
+  String get today => '今日';
+
+  @override
+  String get tomorrow => '明日';
+
+  @override
+  String get askYourAIAssistant => 'AIアシスタントに質問してください...';
+
+  @override
+  String get bookingAssistantWelcomeMessage =>
+      'こんにちは！私はあなたのAI予約アシスタントです。今日はどのようにお手伝いできますか？';
 }

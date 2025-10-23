@@ -57,41 +57,42 @@ class AppLocalizationsAr extends AppLocalizations {
   String get appointments => 'المواعيد';
 
   @override
-  String get bookingAssistant => 'Booking Assistant';
+  String get bookingAssistant => 'مساعد الحجز';
 
   @override
-  String get welcomeToBookingAssistant => 'Welcome to AI Booking Assistant';
+  String get welcomeToBookingAssistant =>
+      'مرحباً بك في مساعد الحجز بالذكاء الاصطناعي';
 
   @override
   String get bookingAssistantDescription =>
-      'I can help you book appointments, find doctors, and manage your healthcare schedule. Just tell me what you need!';
+      'يمكنني مساعدتك في حجز المواعيد والعثور على الأطباء وإدارة جدول الرعاية الصحية الخاص بك. فقط أخبرني بما تحتاجه!';
 
   @override
-  String get iNeedToBookAnAppointment => 'I need to book an appointment';
+  String get iNeedToBookAnAppointment => 'أحتاج إلى حجز موعد';
 
   @override
-  String get startBooking => 'Start Booking';
+  String get startBooking => 'بدء الحجز';
 
   @override
-  String get clearConversation => 'Clear Conversation';
+  String get clearConversation => 'مسح المحادثة';
 
   @override
   String get typeYourMessage => 'اكتب رسالتك...';
 
   @override
-  String get sendMessage => 'Send Message';
+  String get sendMessage => 'إرسال رسالة';
 
   @override
-  String get suggestions => 'Suggestions';
+  String get suggestions => 'اقتراحات';
 
   @override
-  String get availableDoctors => 'Available Doctors';
+  String get availableDoctors => 'الأطباء المتاحون';
 
   @override
-  String get suggestedTimeSlots => 'Suggested Time Slots';
+  String get suggestedTimeSlots => 'أوقات المواعيد المقترحة';
 
   @override
-  String get select => 'Select';
+  String get select => 'اختر';
 
   @override
   String get doctors => 'الأطباء';
@@ -544,4 +545,73 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get suggestedQuestions => 'الأسئلة المقترحة';
+
+  @override
+  String get actionCompleted => 'اكتملت العملية';
+
+  @override
+  String get somethingWentWrong => 'حدث خطأ ما';
+
+  @override
+  String get dismiss => 'تجاهل';
+
+  @override
+  String get findADoctor => 'العثور على طبيب';
+
+  @override
+  String get iNeedToFindADoctor => 'أحتاج إلى العثور على طبيب';
+
+  @override
+  String get checkAvailability => 'التحقق من التوفر';
+
+  @override
+  String get showMeAvailableAppointments => 'أرني المواعيد المتاحة';
+
+  @override
+  String get aiIsResponding => 'الذكاء الاصطناعي يرد...';
+
+  @override
+  String get aiIsThinking => 'الذكاء الاصطناعي يفكر...';
+
+  @override
+  String get intent => 'النية';
+
+  @override
+  String get aiIntent => 'نية الذكاء الاصطناعي';
+
+  @override
+  String percent(String value) {
+    return '$value%';
+  }
+
+  @override
+  String get analyzingYourRequest => 'جارٍ تحليل طلبك وإعداد أفضل استجابة';
+
+  @override
+  String get aiRecommendations => 'توصيات الذكاء الاصطناعي';
+
+  @override
+  String get recommendedDoctors => 'الأطباء الموصى بهم';
+
+  @override
+  String get basedOnYourPreferences => 'بناءً على تفضيلاتك والتوفر';
+
+  @override
+  String get drUnknown => 'د. غير معروف';
+
+  @override
+  String get book => 'احجز';
+
+  @override
+  String get today => 'اليوم';
+
+  @override
+  String get tomorrow => 'غداً';
+
+  @override
+  String get askYourAIAssistant => 'اسأل مساعد الذكاء الاصطناعي...';
+
+  @override
+  String get bookingAssistantWelcomeMessage =>
+      'مرحباً! أنا مساعد الذكاء الاصطناعي للحجز. كيف يمكنني مساعدتك اليوم؟';
 }

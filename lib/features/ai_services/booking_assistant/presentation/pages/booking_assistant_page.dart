@@ -27,6 +27,14 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
   void initState() {
     super.initState();
     _controller = Get.find<BookingAssistantController>();
+    // Set localized welcome message if messages are empty
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_controller.messages.isEmpty) {
+        _controller.setWelcomeMessage(
+          AppLocalizations.of(context)!.bookingAssistantWelcomeMessage,
+        );
+      }
+    });
     _scrollToBottom();
   }
 
@@ -72,7 +80,10 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
             ),
           ),
           child: IconButton(
-            onPressed: _controller.clearConversation,
+            onPressed: () => _controller.clearConversation(
+              welcomeMessage:
+                  AppLocalizations.of(context)!.bookingAssistantWelcomeMessage,
+            ),
             icon: Icon(
               Icons.refresh_rounded,
               color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -234,7 +245,7 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Action Completed',
+                              AppLocalizations.of(context)!.actionCompleted,
                               style: TextStyle(
                                 color: Colors.green.shade800,
                                 fontWeight: FontWeight.w600,
@@ -309,7 +320,7 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Something went wrong',
+                              AppLocalizations.of(context)!.somethingWentWrong,
                               style: TextStyle(
                                 color: Colors.red.shade800,
                                 fontWeight: FontWeight.w600,
@@ -333,7 +344,7 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
                           Icons.close_rounded,
                           color: Colors.red.shade700,
                         ),
-                        tooltip: 'Dismiss',
+                        tooltip: AppLocalizations.of(context)!.dismiss,
                       ),
                     ],
                   ),
@@ -449,17 +460,21 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
               _buildQuickActionButton(
                 context,
                 icon: Icons.medical_services_rounded,
-                label: 'Find a Doctor',
+                label: AppLocalizations.of(context)!.findADoctor,
                 onTap: () {
-                  _controller.sendMessage('I need to find a doctor');
+                  _controller.sendMessage(
+                    AppLocalizations.of(context)!.iNeedToFindADoctor,
+                  );
                 },
               ),
               _buildQuickActionButton(
                 context,
                 icon: Icons.schedule_rounded,
-                label: 'Check Availability',
+                label: AppLocalizations.of(context)!.checkAvailability,
                 onTap: () {
-                  _controller.sendMessage('Show me available appointments');
+                  _controller.sendMessage(
+                    AppLocalizations.of(context)!.showMeAvailableAppointments,
+                  );
                 },
               ),
             ],
@@ -613,7 +628,7 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
                         ? _controller.responseMessage
                         : _controller.streamingMessage.isNotEmpty
                             ? _controller.streamingMessage
-                            : 'AI is responding...',
+                            : AppLocalizations.of(context)!.aiIsResponding,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontSize: 16,
@@ -646,7 +661,7 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
                             ),
                             const SizedBox(width: 4),
                             Text(
-                              'Intent: ${_controller.currentIntent}',
+                              '${AppLocalizations.of(context)!.intent}: ${_controller.currentIntent}',
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontSize: 12,
@@ -658,7 +673,7 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
                             if (_controller.currentIntent.isNotEmpty)
                               const SizedBox(width: 8),
                             Text(
-                              'Confidence: ${(_controller.currentConfidence * 100).toStringAsFixed(0)}%',
+                              '${AppLocalizations.of(context)!.confidence}: ${(_controller.currentConfidence * 100).toStringAsFixed(0)}%',
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontSize: 12,

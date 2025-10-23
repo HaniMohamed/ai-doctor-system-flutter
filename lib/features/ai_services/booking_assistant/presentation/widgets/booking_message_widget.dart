@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../../../generated/l10n/app_localizations.dart';
 import '../../domain/entities/booking_message.dart';
 
 /// Widget for displaying booking assistant messages
@@ -84,7 +86,7 @@ class BookingMessageWidget extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    _formatTimestamp(message.timestamp),
+                    _formatTimestamp(context, message.timestamp),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontSize: 11,
@@ -220,7 +222,7 @@ class BookingMessageWidget extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'AI Intent: $intent',
+                    '${AppLocalizations.of(context)!.aiIntent}: $intent',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontSize: 13,
@@ -251,7 +253,7 @@ class BookingMessageWidget extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Confidence: ${(confidence * 100).toStringAsFixed(1)}%',
+                    '${AppLocalizations.of(context)!.confidence}: ${(confidence * 100).toStringAsFixed(1)}%',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontSize: 13,
@@ -281,7 +283,7 @@ class BookingMessageWidget extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'AI Recommendations:',
+                  '${AppLocalizations.of(context)!.aiRecommendations}:',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                     fontSize: 13,
@@ -349,16 +351,16 @@ class BookingMessageWidget extends StatelessWidget {
     );
   }
 
-  String _formatTimestamp(DateTime timestamp) {
+  String _formatTimestamp(BuildContext context, DateTime timestamp) {
     final now = DateTime.now();
     final difference = now.difference(timestamp);
 
     if (difference.inMinutes < 1) {
-      return 'Just now';
+      return AppLocalizations.of(context)!.justNow;
     } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m ago';
+      return AppLocalizations.of(context)!.minutesAgo(difference.inMinutes);
     } else if (difference.inHours < 24) {
-      return '${difference.inHours}h ago';
+      return AppLocalizations.of(context)!.hoursAgo(difference.inHours);
     } else {
       return '${difference.inDays}d ago';
     }

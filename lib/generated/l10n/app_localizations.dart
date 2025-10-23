@@ -894,7 +894,7 @@ abstract class AppLocalizations {
   /// **'Severity'**
   String get severity;
 
-  /// Confidence score label
+  /// Confidence label
   ///
   /// In en, this message translates to:
   /// **'Confidence'**
@@ -1157,6 +1157,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Suggested Questions'**
   String get suggestedQuestions;
+
+  /// Action completed success message
+  ///
+  /// In en, this message translates to:
+  /// **'Action Completed'**
+  String get actionCompleted;
+
+  /// Error message title
+  ///
+  /// In en, this message translates to:
+  /// **'Something went wrong'**
+  String get somethingWentWrong;
+
+  /// Dismiss button tooltip
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get dismiss;
+
+  /// Find a doctor quick action button
+  ///
+  /// In en, this message translates to:
+  /// **'Find a Doctor'**
+  String get findADoctor;
+
+  /// Find a doctor quick action message
+  ///
+  /// In en, this message translates to:
+  /// **'I need to find a doctor'**
+  String get iNeedToFindADoctor;
+
+  /// Check availability quick action button
+  ///
+  /// In en, this message translates to:
+  /// **'Check Availability'**
+  String get checkAvailability;
+
+  /// Check availability quick action message
+  ///
+  /// In en, this message translates to:
+  /// **'Show me available appointments'**
+  String get showMeAvailableAppointments;
+
+  /// AI is responding status message
+  ///
+  /// In en, this message translates to:
+  /// **'AI is responding...'**
+  String get aiIsResponding;
+
+  /// AI is thinking status message
+  ///
+  /// In en, this message translates to:
+  /// **'AI is thinking...'**
+  String get aiIsThinking;
+
+  /// Intent label
+  ///
+  /// In en, this message translates to:
+  /// **'Intent'**
+  String get intent;
+
+  /// AI intent label
+  ///
+  /// In en, this message translates to:
+  /// **'AI Intent'**
+  String get aiIntent;
+
+  /// Percentage format
+  ///
+  /// In en, this message translates to:
+  /// **'{value}%'**
+  String percent(String value);
+
+  /// AI processing status message
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing your request and preparing the best response'**
+  String get analyzingYourRequest;
+
+  /// AI recommendations section title
+  ///
+  /// In en, this message translates to:
+  /// **'AI Recommendations'**
+  String get aiRecommendations;
+
+  /// Recommended doctors section title
+  ///
+  /// In en, this message translates to:
+  /// **'Recommended Doctors'**
+  String get recommendedDoctors;
+
+  /// AI recommendations subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'Based on your preferences and availability'**
+  String get basedOnYourPreferences;
+
+  /// Unknown doctor placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'Dr. Unknown'**
+  String get drUnknown;
+
+  /// Book appointment button
+  ///
+  /// In en, this message translates to:
+  /// **'Book'**
+  String get book;
+
+  /// Today label
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// Tomorrow label
+  ///
+  /// In en, this message translates to:
+  /// **'Tomorrow'**
+  String get tomorrow;
+
+  /// AI assistant input placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'Ask your AI assistant...'**
+  String get askYourAIAssistant;
+
+  /// Welcome message from AI booking assistant
+  ///
+  /// In en, this message translates to:
+  /// **'Hello! I\'m your AI booking assistant. How can I help you today?'**
+  String get bookingAssistantWelcomeMessage;
 }
 
 class _AppLocalizationsDelegate

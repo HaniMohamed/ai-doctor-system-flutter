@@ -98,10 +98,18 @@ class BookingAssistantController extends GetxController {
   }
 
   /// Initialize a new booking session
-  void _initializeSession() {
+  void _initializeSession({String? welcomeMessage}) {
     _currentSessionId.value = DateTime.now().millisecondsSinceEpoch.toString();
-    _addSystemMessage(
-        'Hello! I\'m your AI booking assistant. How can I help you today?');
+    if (welcomeMessage != null) {
+      _addSystemMessage(welcomeMessage);
+    }
+  }
+
+  /// Set the welcome message for the session
+  void setWelcomeMessage(String message) {
+    if (_messages.isEmpty) {
+      _addSystemMessage(message);
+    }
   }
 
   /// Add a system message to the conversation
@@ -723,7 +731,7 @@ class BookingAssistantController extends GetxController {
   }
 
   /// Clear conversation
-  void clearConversation() {
+  void clearConversation({String? welcomeMessage}) {
     _messages.clear();
     _availableDoctors.clear();
     _availableTimeSlots.clear();
@@ -740,7 +748,7 @@ class BookingAssistantController extends GetxController {
     _actionResult.value = '';
     _actionTaken.value = false;
     JsonChunkParser.reset(); // Reset JSON parser
-    _initializeSession();
+    _initializeSession(welcomeMessage: welcomeMessage);
   }
 
   /// Select a time slot

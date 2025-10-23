@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../../../../../generated/l10n/app_localizations.dart';
 import '../../domain/entities/booking_message.dart';
 
 /// Modern AI-powered smart suggestions widget
@@ -92,7 +94,7 @@ class AiSmartSuggestions extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'AI Recommendations',
+                  AppLocalizations.of(context)!.aiRecommendations,
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onPrimaryContainer,
                     fontWeight: FontWeight.w600,
@@ -101,7 +103,7 @@ class AiSmartSuggestions extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Based on your preferences and availability',
+                  AppLocalizations.of(context)!.basedOnYourPreferences,
                   style: TextStyle(
                     color: Theme.of(context)
                         .colorScheme
@@ -125,7 +127,7 @@ class AiSmartSuggestions extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Recommended Doctors',
+            AppLocalizations.of(context)!.recommendedDoctors,
             style: TextStyle(
               color: Theme.of(context).colorScheme.onPrimaryContainer,
               fontWeight: FontWeight.w600,
@@ -156,7 +158,7 @@ class AiSmartSuggestions extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Suggested Time Slots',
+            AppLocalizations.of(context)!.suggestedTimeSlots,
             style: TextStyle(
               color: Theme.of(context).colorScheme.onPrimaryContainer,
               fontWeight: FontWeight.w600,
@@ -237,7 +239,8 @@ class AiSmartSuggestions extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            doctor['name'] ?? 'Dr. Unknown',
+                            doctor['name'] ??
+                                AppLocalizations.of(context)!.drUnknown,
                             style: const TextStyle(
                               fontWeight: FontWeight.w600,
                               fontSize: 14,
@@ -290,10 +293,10 @@ class AiSmartSuggestions extends StatelessWidget {
                     color: Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Text(
-                    'Select',
+                  child: Text(
+                    AppLocalizations.of(context)!.select,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
@@ -367,7 +370,7 @@ class AiSmartSuggestions extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  _formatDate(slot.startTime),
+                  _formatDate(context, slot.startTime),
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                     fontSize: 12,
@@ -393,10 +396,10 @@ class AiSmartSuggestions extends StatelessWidget {
                     color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Text(
-                    'Book',
+                  child: Text(
+                    AppLocalizations.of(context)!.book,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
@@ -425,16 +428,16 @@ class AiSmartSuggestions extends StatelessWidget {
     return '$displayHour:${minute.toString().padLeft(2, '0')} $period';
   }
 
-  String _formatDate(DateTime dateTime) {
+  String _formatDate(BuildContext context, DateTime dateTime) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final tomorrow = today.add(const Duration(days: 1));
     final date = DateTime(dateTime.year, dateTime.month, dateTime.day);
 
     if (date == today) {
-      return 'Today';
+      return AppLocalizations.of(context)!.today;
     } else if (date == tomorrow) {
-      return 'Tomorrow';
+      return AppLocalizations.of(context)!.tomorrow;
     } else {
       return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
     }
