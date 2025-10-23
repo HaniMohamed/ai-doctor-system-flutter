@@ -1,12 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:get/get.dart';
 
 import '../../../../../core/logging/logger.dart';
 import '../../../../auth/domain/services/auth_service.dart';
 import '../../data/datasources/booking_assistant_remote_datasource.dart';
-import '../../data/models/booking_message_model.dart';
+import '../../data/models/streaming_message_model.dart';
 import '../../domain/entities/booking_message.dart';
 import '../../domain/usecases/book_appointment_usecase.dart';
 import '../../domain/usecases/get_available_doctors_usecase.dart';
@@ -55,6 +54,12 @@ class BookingAssistantController extends GetxController {
   final RxBool _isStreaming = false.obs;
   final RxString _streamingMessage = ''.obs;
   final RxString _chunkBuffer = ''.obs;
+  final RxBool _isProcessing = false.obs;
+  final RxString _currentIntent = ''.obs;
+  final RxDouble _currentConfidence = 0.0.obs;
+  final RxList<String> _nextSteps = <String>[].obs;
+  final RxString _actionResult = ''.obs;
+  final RxBool _actionTaken = false.obs;
 
   // Getters
   List<BookingMessage> get messages => _messages;
@@ -67,6 +72,12 @@ class BookingAssistantController extends GetxController {
   String get errorMessage => _errorMessage.value;
   bool get isStreaming => _isStreaming.value;
   String get streamingMessage => _streamingMessage.value;
+  bool get isProcessing => _isProcessing.value;
+  String get currentIntent => _currentIntent.value;
+  double get currentConfidence => _currentConfidence.value;
+  List<String> get nextSteps => _nextSteps;
+  String get actionResult => _actionResult.value;
+  bool get actionTaken => _actionTaken.value;
 
   @override
   void onInit() {
@@ -124,9 +135,11 @@ class BookingAssistantController extends GetxController {
         sessionId: _currentSessionId.value,
       )
           .listen(
-        (response) {
-          Logger.debug('Controller WS ← response received', 'BA_WS');
-          _handleWebSocketResponse(response);
+        (streamMessage) {
+          Logger.debug(
+              'Controller WS ← stream message received: ${streamMessage.type}',
+              'BA_WS');
+          _handleStreamMessage(streamMessage);
         },
         onError: (error, st) {
           Logger.error(
@@ -161,270 +174,207 @@ class BookingAssistantController extends GetxController {
     }
   }
 
-  /// Handle WebSocket response
-  void _handleWebSocketResponse(dynamic response) {
-    Logger.debug('Handling WS response', 'BA_WS');
-
-    // Handle BookingResponseModel objects
-    if (response is BookingResponseModel) {
-      // Check if this is a chunk message
-      if (response.metadata?['is_chunk'] == true) {
-        Logger.debug('BA: Handling chunk from BookingResponseModel', 'BA_WS');
-        _handleChunkedMessage({
-          'chunk': response.responseMessage,
-          'is_complete': response.metadata?['is_complete'] ?? false,
-          'session_id': response.sessionId,
-        });
-        return;
-      }
-
-      // Handle regular BookingResponseModel
-      _handleBookingResponseModel(response);
-      return;
-    }
-
-    // Handle Map responses (legacy)
-    if (response is Map<String, dynamic>) {
-      final type = response['type'] as String?;
-
-      switch (type) {
-        case 'chunk':
-          _handleChunkedMessage(response);
-          break;
-        case 'message':
-          _handleStreamingMessage(response);
-          break;
-        case 'doctors':
-          _handleDoctorsUpdate(response);
-          break;
-        case 'time_slots':
-          _handleTimeSlotsUpdate(response);
-          break;
-        case 'booking_confirmation':
-          _handleBookingConfirmation(response);
-          break;
-        case 'error':
-          _handleWebSocketError(response);
-          break;
-        default:
-          _handleGenericResponse(response);
-      }
-    }
-  }
-
-  /// Handle BookingResponseModel objects
-  void _handleBookingResponseModel(BookingResponseModel response) {
-    Logger.debug('BA: Handling BookingResponseModel', 'BA_WS');
-
-    // Add AI response message
-    final aiMessage = BookingMessage(
-      id: DateTime.now().millisecondsSinceEpoch.toString(),
-      content: response.responseMessage,
-      isUser: false,
-      timestamp: DateTime.now(),
-      type: BookingMessageType.text,
-      metadata: {
-        'intent': response.intent,
-        'confidence': response.confidence,
-        'next_steps': response.nextSteps,
-      },
-    );
-    _messages.add(aiMessage);
-
-    // Update available doctors if provided
-    if (response.suggestedDoctors != null) {
-      _availableDoctors.value = response.suggestedDoctors!;
-    }
-
-    // Update suggested time slots if provided
-    if (response.suggestedSlots != null) {
-      _suggestedTimeSlots.value = response.suggestedSlots!;
-    }
-  }
-
-  /// Handle chunked message response
-  void _handleChunkedMessage(Map<String, dynamic> response) {
-    final chunk = response['chunk'] as String? ?? '';
-    final isComplete = response['is_complete'] as bool? ?? false;
-
+  /// Handle streaming message based on type
+  void _handleStreamMessage(StreamMessage streamMessage) {
     Logger.debug(
-        'BA: Handling chunk (complete: $isComplete, chunk: "${chunk.length} chars")',
+        'Handling stream message type: ${streamMessage.type}', 'BA_WS');
+
+    switch (streamMessage.type) {
+      case 'metadata':
+        _handleMetadataMessage(streamMessage as MetadataMessage);
+        break;
+      case 'chunk':
+        _handleChunkMessage(streamMessage as ChunkMessage);
+        break;
+      case 'action':
+        _handleActionMessage(streamMessage as ActionMessage);
+        break;
+      case 'complete':
+        _handleCompleteMessage(streamMessage as CompleteMessage);
+        break;
+      case 'error':
+        _handleErrorMessage(streamMessage as ErrorMessage);
+        break;
+      default:
+        Logger.warning(
+            'Unknown stream message type: ${streamMessage.type}', 'BA_WS');
+    }
+  }
+
+  /// Handle metadata message
+  void _handleMetadataMessage(MetadataMessage message) {
+    Logger.debug('BA: Handling metadata message', 'BA_WS');
+    _isProcessing.value = true;
+    _currentSessionId.value = message.sessionId ?? _currentSessionId.value;
+
+    // Update session context with processing info
+    Logger.info('Processing started: ${message.processingInfo}', 'BA_WS');
+  }
+
+  /// Handle chunk message
+  void _handleChunkMessage(ChunkMessage message) {
+    Logger.debug('BA: Handling chunk message (complete: ${message.isComplete})',
         'BA_WS');
 
     // Accumulate chunks in buffer
-    _chunkBuffer.value += chunk;
-
-    // Show streaming indicator and current accumulated text
+    _chunkBuffer.value += message.chunk;
     _isStreaming.value = true;
 
-    // Try to extract a preview of the message content from the JSON
-    String previewMessage = 'AI is thinking...';
-    try {
-      final currentJson = _chunkBuffer.value;
-
-      // Only show streaming content if we have a valid response_message field
-      if (currentJson.contains('"response_message"')) {
-        // Try to extract the response_message value using string manipulation
-        final responseMessageStart = currentJson.indexOf('"response_message"');
-        if (responseMessageStart != -1) {
-          final colonIndex = currentJson.indexOf(':', responseMessageStart);
-          if (colonIndex != -1) {
-            final quoteStart = currentJson.indexOf('"', colonIndex);
-            if (quoteStart != -1) {
-              final quoteEnd = currentJson.indexOf('"', quoteStart + 1);
-              if (quoteEnd != -1) {
-                final extractedMessage =
-                    currentJson.substring(quoteStart + 1, quoteEnd);
-                if (extractedMessage.isNotEmpty &&
-                    !extractedMessage.contains('{') &&
-                    !extractedMessage.contains('}')) {
-                  previewMessage = extractedMessage;
-                }
-              }
-            }
-          }
-        }
-      }
-    } catch (e, stackTrace) {
-      // Keep the engaging message
-      previewMessage = 'AI is thinking...';
-      Logger.error(
-          'BA: Failed to extract preview message: $e', 'BA_WS', e, stackTrace);
+    // Don't show internal "thinking" messages to user
+    // Only show actual content when streaming
+    if (message.chunk.trim().isNotEmpty) {
+      _streamingMessage.value = message.chunk;
     }
 
-    _streamingMessage.value = previewMessage;
-    Logger.debug('BA: Updated streaming message: "$previewMessage"', 'BA_WS');
-    Logger.debug('BA: Current JSON buffer length: ${_chunkBuffer.value.length}',
-        'BA_WS');
-
-    if (isComplete) {
-      // All chunks received, try to parse the complete JSON
-      try {
-        final completeJson = _chunkBuffer.value;
-        Logger.debug('BA: Complete JSON received: ${completeJson.length} chars',
-            'BA_WS');
-
-        // Try to parse the complete JSON directly
-        final parsedJson = jsonDecode(completeJson) as Map<String, dynamic>;
-
-        // Extract the actual message content
-        final messageContent = parsedJson['response_message'] as String? ??
-            parsedJson['content'] as String? ??
-            parsedJson['message'] as String? ??
-            completeJson;
-
-        Logger.debug(
-            'BA: Extracted message content: "${messageContent.length} chars"',
-            'BA_WS');
-
-        // Reset buffer
-        _chunkBuffer.value = '';
-        _isStreaming.value = false;
-        _streamingMessage.value = '';
-
-        // Add the final message to the conversation
-        final aiMessage = BookingMessage(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          content: messageContent,
-          isUser: false,
-          timestamp: DateTime.now(),
-          type: BookingMessageType.text,
-          metadata: {
-            'intent': parsedJson['intent'],
-            'confidence': parsedJson['confidence'],
-            'next_steps':
-                (parsedJson['next_steps'] as List<dynamic>?)?.cast<String>(),
-          },
-        );
-        _messages.add(aiMessage);
-      } catch (e) {
-        Logger.error('BA: Failed to parse complete JSON: $e', 'BA_WS');
-        // If JSON parsing fails, treat the accumulated text as a plain message
-        final aiMessage = BookingMessage(
-          id: DateTime.now().millisecondsSinceEpoch.toString(),
-          content: _chunkBuffer.value,
-          isUser: false,
-          timestamp: DateTime.now(),
-          type: BookingMessageType.text,
-        );
-        _messages.add(aiMessage);
-
-        // Reset buffer
-        _chunkBuffer.value = '';
-        _isStreaming.value = false;
-        _streamingMessage.value = '';
-      }
+    if (message.isComplete) {
+      // All chunks received, finalize the message
+      _finalizeStreamingMessage();
     }
   }
 
-  /// Handle streaming message response
-  void _handleStreamingMessage(Map<String, dynamic> response) {
-    final content = response['content'] as String? ?? '';
-    final isComplete = response['is_complete'] as bool? ?? false;
+  /// Handle action message
+  void _handleActionMessage(ActionMessage message) {
+    Logger.debug('BA: Handling action message', 'BA_WS');
 
-    if (isComplete) {
-      // Final message received
+    _currentIntent.value = message.intent;
+    _currentConfidence.value = message.confidence;
+    _actionTaken.value = message.actionTaken;
+    _actionResult.value = message.actionResult;
+
+    // Only add system message for action results if they're meaningful to the user
+    // Skip internal processing messages
+    if (message.actionTaken &&
+        message.actionResult.isNotEmpty &&
+        !_isInternalProcessingMessage(message.actionResult)) {
+      _addSystemMessage(message.actionResult);
+    }
+
+    // Update UI based on action metadata
+    if (message.metadata != null) {
+      _handleActionMetadata(message.metadata!);
+    }
+  }
+
+  /// Handle complete message
+  void _handleCompleteMessage(CompleteMessage message) {
+    Logger.debug('BA: Handling complete message', 'BA_WS');
+
+    _isProcessing.value = false;
+    _isStreaming.value = false;
+    _currentIntent.value = message.intent;
+    _currentConfidence.value = message.confidence;
+    _nextSteps.value = message.nextSteps;
+    _actionTaken.value = message.actionTaken;
+    _actionResult.value = message.actionResult;
+
+    // Don't add system messages for next steps - let UI handle this
+    // The UI will show next steps in a dedicated section
+
+    // Handle final metadata
+    if (message.metadata != null) {
+      _handleCompleteMetadata(message.metadata!);
+    }
+  }
+
+  /// Handle error message
+  void _handleErrorMessage(ErrorMessage message) {
+    Logger.error(
+        'BA: Handling error message: ${message.errorMessage}', 'BA_WS');
+    _errorMessage.value = message.errorMessage;
+    _isProcessing.value = false;
+    _isStreaming.value = false;
+    _addSystemMessage('Sorry, I encountered an error: ${message.errorMessage}');
+  }
+
+  /// Finalize streaming message and add to conversation
+  void _finalizeStreamingMessage() {
+    Logger.debug('BA: Finalizing streaming message', 'BA_WS');
+
+    // Only add meaningful content to the conversation
+    if (_chunkBuffer.value.isNotEmpty &&
+        !_isInternalProcessingMessage(_chunkBuffer.value)) {
       final aiMessage = BookingMessage(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        content: _streamingMessage.value + content,
+        content: _chunkBuffer.value.trim(),
         isUser: false,
         timestamp: DateTime.now(),
         type: BookingMessageType.text,
-        metadata: response['metadata'],
+        metadata: {
+          'intent': _currentIntent.value,
+          'confidence': _currentConfidence.value,
+          'next_steps': _nextSteps,
+        },
       );
       _messages.add(aiMessage);
-      _isStreaming.value = false;
-      _streamingMessage.value = '';
-    } else {
-      // Streaming message - update current streaming message
-      _streamingMessage.value += content;
-      _isStreaming.value = true;
+    }
+
+    // Reset streaming state
+    _chunkBuffer.value = '';
+    _isStreaming.value = false;
+    _streamingMessage.value = '';
+  }
+
+  /// Check if a message is internal processing information that shouldn't be shown to users
+  bool _isInternalProcessingMessage(String message) {
+    final lowerMessage = message.toLowerCase().trim();
+
+    // Filter out common internal processing messages
+    final internalPatterns = [
+      'thinking',
+      'processing',
+      'analyzing',
+      'considering',
+      'evaluating',
+      'ai is',
+      'model is',
+      'system is',
+      'loading',
+      'please wait',
+      'calculating',
+      'determining',
+      'generating response',
+    ];
+
+    return internalPatterns.any((pattern) => lowerMessage.contains(pattern));
+  }
+
+  /// Handle action metadata
+  void _handleActionMetadata(Map<String, dynamic> metadata) {
+    // Update available doctors if provided
+    if (metadata['suggested_doctors'] != null) {
+      _availableDoctors.value = metadata['suggested_doctors'] as List<dynamic>;
+    }
+
+    // Update suggested time slots if provided
+    if (metadata['suggested_slots'] != null) {
+      final slots = metadata['suggested_slots'] as List<dynamic>;
+      _suggestedTimeSlots.value = slots.map((slot) {
+        final slotData = slot as Map<String, dynamic>;
+        return TimeSlot(
+          id: slotData['id'] as String,
+          startTime: DateTime.parse(slotData['start_time'] as String),
+          endTime: DateTime.parse(slotData['end_time'] as String),
+          durationMinutes: slotData['duration_minutes'] as int,
+          isAvailable: slotData['is_available'] as bool,
+          doctorId: slotData['doctor_id'] as String?,
+          reasoning: slotData['reasoning'] as String?,
+        );
+      }).toList();
     }
   }
 
-  /// Handle doctors update
-  void _handleDoctorsUpdate(Map<String, dynamic> response) {
-    final doctors = response['doctors'] as List<dynamic>? ?? [];
-    _availableDoctors.value = doctors;
-  }
+  /// Handle complete metadata
+  void _handleCompleteMetadata(Map<String, dynamic> metadata) {
+    // Handle final response data
+    if (metadata['parsed_response'] != null) {
+      // Process final response data as needed
+      Logger.debug('BA: Received parsed response data', 'BA_WS');
+    }
 
-  /// Handle time slots update
-  void _handleTimeSlotsUpdate(Map<String, dynamic> response) {
-    final slots = response['time_slots'] as List<dynamic>? ?? [];
-    _availableTimeSlots.value = slots.map((slot) {
-      final slotData = slot as Map<String, dynamic>;
-      return TimeSlot(
-        id: slotData['id'] as String,
-        startTime: DateTime.parse(slotData['start_time'] as String),
-        endTime: DateTime.parse(slotData['end_time'] as String),
-        durationMinutes: slotData['duration_minutes'] as int,
-        isAvailable: slotData['is_available'] as bool,
-        doctorId: slotData['doctor_id'] as String?,
-        reasoning: slotData['reasoning'] as String?,
-      );
-    }).toList();
-  }
-
-  /// Handle booking confirmation
-  void _handleBookingConfirmation(Map<String, dynamic> response) {
-    final confirmation =
-        response['confirmation'] as Map<String, dynamic>? ?? {};
-    _addSystemMessage(
-        'Appointment confirmed! ${confirmation['appointment_id']}');
-  }
-
-  /// Handle WebSocket error
-  void _handleWebSocketError(Map<String, dynamic> response) {
-    final error = response['error'] as String? ?? 'Unknown error';
-    _errorMessage.value = 'WebSocket error: $error';
-  }
-
-  /// Handle generic response
-  void _handleGenericResponse(Map<String, dynamic> response) {
-    // Handle any other response types
-    Logger.debug(
-        'Received generic WebSocket response: ${Logger.preview(response)}',
-        'BA_WS');
+    if (metadata['intent_result'] != null) {
+      // Process intent result data as needed
+      Logger.debug('BA: Received intent result data', 'BA_WS');
+    }
   }
 
   /// Send a message to the AI booking assistant via WebSocket
@@ -618,6 +568,12 @@ class BookingAssistantController extends GetxController {
     _chunkBuffer.value = '';
     _streamingMessage.value = '';
     _isStreaming.value = false;
+    _isProcessing.value = false;
+    _currentIntent.value = '';
+    _currentConfidence.value = 0.0;
+    _nextSteps.clear();
+    _actionResult.value = '';
+    _actionTaken.value = false;
     _initializeSession();
   }
 

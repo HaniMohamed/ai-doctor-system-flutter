@@ -2,6 +2,7 @@ import '../../../../../core/logging/logger.dart';
 import '../../../../../core/network/api_client.dart';
 import '../../../../../core/network/websocket/websocket_client.dart';
 import '../models/booking_message_model.dart';
+import '../models/streaming_message_model.dart';
 
 /// Remote data source for AI booking assistant operations
 abstract class BookingAssistantRemoteDataSource {
@@ -50,7 +51,7 @@ abstract class BookingAssistantRemoteDataSource {
   });
 
   /// Connect to WebSocket for real-time booking assistance
-  Stream<BookingResponseModel> connectWebSocket({
+  Stream<StreamMessage> connectWebSocket({
     required String token,
     String? sessionId,
   });
@@ -229,47 +230,27 @@ class BookingAssistantRemoteDataSourceImpl
   }
 
   @override
-  Stream<BookingResponseModel> connectWebSocket({
+  Stream<StreamMessage> connectWebSocket({
     required String token,
     String? sessionId,
   }) async* {
     Logger.info('BA: Connecting WS (sessionId: ${sessionId ?? '-'} )', 'BA_WS');
     await _webSocketClient.connect('/ai/booking-assistant/ws');
     Logger.info('BA: WS connected, subscribing to stream', 'BA_WS');
+
     yield* _webSocketClient.messages.map((data) {
       Logger.debug('BA WS ← message: ${Logger.preview(data)}', 'BA_WS');
 
-      // Handle error messages from the backend
-      if (data['type'] == 'error') {
-        Logger.error('Backend error: ${data['message']}', 'BA_WS');
-        throw Exception('Backend error: ${data['message']}');
+      // Parse the streaming message using the factory
+      final streamMessage = StreamMessageFactory.fromJson(data);
+
+      if (streamMessage == null) {
+        Logger.warning(
+            'Unknown message type received: ${data['type']}', 'BA_WS');
+        throw Exception('Unknown message type: ${data['type']}');
       }
 
-      // Handle chunk messages - return raw data for chunk processing
-      if (data['type'] == 'chunk') {
-        Logger.debug('BA: Returning raw chunk data', 'BA_WS');
-        // Return a special BookingResponseModel that contains the raw chunk data
-        return BookingResponseModel(
-          sessionId: data['session_id']?.toString() ?? '',
-          intent: 'chunk',
-          confidence: 0.0,
-          nextSteps: [],
-          responseMessage: data['chunk']?.toString() ?? '',
-          metadata: {
-            'is_chunk': true,
-            'is_complete': data['is_complete'] ?? false,
-            'raw_data': data,
-          },
-        );
-      }
-
-      // Handle null or invalid data for non-chunk messages
-      if (data['session_id'] == null) {
-        Logger.warning('Received message with null session_id', 'BA_WS');
-        throw Exception('Invalid message: missing session_id');
-      }
-
-      return BookingResponseModel.fromJson(data);
+      return streamMessage;
     });
   }
 
