@@ -258,7 +258,8 @@ class BookingAssistantRemoteDataSourceImpl
 
         return streamMessage;
       } catch (e, stackTrace) {
-        Logger.error('Error parsing WebSocket message: $e', 'BA_WS', e, stackTrace);
+        Logger.error(
+            'Error parsing WebSocket message: $e', 'BA_WS', e, stackTrace);
         // Return an error message for parsing failures
         return ErrorMessage(
           sessionId: data['session_id']?.toString(),
