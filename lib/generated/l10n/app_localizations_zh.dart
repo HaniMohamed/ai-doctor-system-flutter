@@ -9,19 +9,19 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh']) : super(locale);
 
   @override
-  String get appTitle => 'AI Doctor System';
+  String get appTitle => 'AI医生系统';
 
   @override
-  String get welcome => 'Welcome';
+  String get welcome => '欢迎';
 
   @override
   String get login => '登录';
 
   @override
-  String get logout => 'Logout';
+  String get logout => '登出';
 
   @override
-  String get register => 'Register';
+  String get register => '注册';
 
   @override
   String get email => '电子邮件';
@@ -30,7 +30,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get password => '密码';
 
   @override
-  String get confirmPassword => 'Confirm Password';
+  String get confirmPassword => '确认密码';
 
   @override
   String get forgotPassword => '忘记密码？';
@@ -45,7 +45,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settings => '设置';
 
   @override
-  String get language => 'Language';
+  String get language => '语言';
 
   @override
   String get selectLanguage => '选择语言';
@@ -57,86 +57,85 @@ class AppLocalizationsZh extends AppLocalizations {
   String get appointments => '预约';
 
   @override
-  String get bookingAssistant => 'Booking Assistant';
+  String get bookingAssistant => '预约助手';
 
   @override
-  String get welcomeToBookingAssistant => 'Welcome to AI Booking Assistant';
+  String get welcomeToBookingAssistant => '欢迎使用AI预约助手';
 
   @override
-  String get bookingAssistantDescription =>
-      'I can help you book appointments, find doctors, and manage your healthcare schedule. Just tell me what you need!';
+  String get bookingAssistantDescription => '我可以帮助您预约、找医生和管理您的医疗保健日程。告诉我您需要什么！';
 
   @override
-  String get iNeedToBookAnAppointment => 'I need to book an appointment';
+  String get iNeedToBookAnAppointment => '我需要预约';
 
   @override
-  String get startBooking => 'Start Booking';
+  String get startBooking => '开始预约';
 
   @override
-  String get clearConversation => 'Clear Conversation';
+  String get clearConversation => '清除对话';
 
   @override
   String get typeYourMessage => '输入您的消息...';
 
   @override
-  String get sendMessage => 'Send Message';
+  String get sendMessage => '发送消息';
 
   @override
-  String get suggestions => 'Suggestions';
+  String get suggestions => '建议';
 
   @override
-  String get availableDoctors => 'Available Doctors';
+  String get availableDoctors => '可用医生';
 
   @override
-  String get suggestedTimeSlots => 'Suggested Time Slots';
+  String get suggestedTimeSlots => '建议时段';
 
   @override
-  String get select => 'Select';
+  String get select => '选择';
 
   @override
-  String get doctors => '找医生';
+  String get doctors => '医生';
 
   @override
-  String get patients => 'Patients';
+  String get patients => '患者';
 
   @override
   String get notifications => '通知';
 
   @override
-  String get chat => '与AI聊天';
+  String get chat => '聊天';
 
   @override
-  String get send => 'Send';
+  String get send => '发送';
 
   @override
-  String get cancel => 'Cancel';
+  String get cancel => '取消';
 
   @override
-  String get save => 'Save';
+  String get save => '保存';
 
   @override
-  String get edit => 'Edit';
+  String get edit => '编辑';
 
   @override
-  String get delete => 'Delete';
+  String get delete => '删除';
 
   @override
-  String get confirm => 'Confirm';
+  String get confirm => '确认';
 
   @override
-  String get yes => 'Yes';
+  String get yes => '是';
 
   @override
-  String get no => 'No';
+  String get no => '否';
 
   @override
-  String get ok => 'OK';
+  String get ok => '确定';
 
   @override
   String get error => '错误';
 
   @override
-  String get success => 'Success';
+  String get success => '成功';
 
   @override
   String get loading => '加载中...';
@@ -145,55 +144,55 @@ class AppLocalizationsZh extends AppLocalizations {
   String get retry => '重试';
 
   @override
-  String get close => 'Close';
+  String get close => '关闭';
 
   @override
-  String get back => 'Back';
+  String get back => '返回';
 
   @override
-  String get next => 'Next';
+  String get next => '下一步';
 
   @override
-  String get previous => 'Previous';
+  String get previous => '上一步';
 
   @override
-  String get finish => 'Finish';
+  String get finish => '完成';
 
   @override
-  String get search => 'Search';
+  String get search => '搜索';
 
   @override
-  String get filter => 'Filter';
+  String get filter => '筛选';
 
   @override
-  String get sort => 'Sort';
+  String get sort => '排序';
 
   @override
-  String get refresh => 'Refresh';
+  String get refresh => '刷新';
 
   @override
-  String get share => 'Share';
+  String get share => '分享';
 
   @override
-  String get copy => 'Copy';
+  String get copy => '复制';
 
   @override
-  String get paste => 'Paste';
+  String get paste => '粘贴';
 
   @override
-  String get cut => 'Cut';
+  String get cut => '剪切';
 
   @override
-  String get undo => 'Undo';
+  String get undo => '撤销';
 
   @override
-  String get redo => 'Redo';
+  String get redo => '重做';
 
   @override
-  String get selectAll => 'Select All';
+  String get selectAll => '全选';
 
   @override
-  String get deselectAll => 'Deselect All';
+  String get deselectAll => '取消全选';
 
   @override
   String get changeLanguage => '更改语言';
@@ -467,107 +466,103 @@ class AppLocalizationsZh extends AppLocalizations {
   String get totalNotifications => '总通知数';
 
   @override
-  String get appDescription =>
-      'A comprehensive healthcare management platform powered by AI.';
+  String get appDescription => '由AI驱动的综合医疗管理平台。';
 
   @override
-  String get appBuiltWith =>
-      'Built with Flutter for cross-platform compatibility.';
+  String get appBuiltWith => '使用Flutter构建，实现跨平台兼容性。';
 
   @override
-  String get confirmSignOut => 'Are you sure you want to sign out?';
+  String get confirmSignOut => '您确定要退出吗？';
 
   @override
-  String get aiInitializingNeuralNetwork => '🧠 Initializing neural network...';
+  String get aiInitializingNeuralNetwork => '🧠 初始化神经网络...';
 
   @override
-  String get aiScanningSymptomPatterns => '🔍 Scanning symptom patterns...';
+  String get aiScanningSymptomPatterns => '🔍 扫描症状模式...';
 
   @override
-  String get aiAnalyzingMedicalHistory => '📊 Analyzing medical history...';
+  String get aiAnalyzingMedicalHistory => '📊 分析病史...';
 
   @override
-  String get aiProcessingGeneticData => '🧬 Processing genetic data...';
+  String get aiProcessingGeneticData => '🧬 处理遗传数据...';
 
   @override
-  String get aiRunningDiagnostics => '🤖 Running AI diagnostics...';
+  String get aiRunningDiagnostics => '🤖 运行AI诊断...';
 
   @override
-  String get aiCrossReferencingDatabases => '📈 Cross-referencing databases...';
+  String get aiCrossReferencingDatabases => '📈 交叉引用数据库...';
 
   @override
-  String get aiGeneratingInsights => '💡 Generating insights...';
+  String get aiGeneratingInsights => '💡 生成见解...';
 
   @override
-  String get aiEvaluatingBiomarkers => '🔬 Evaluating biomarkers...';
+  String get aiEvaluatingBiomarkers => '🔬 评估生物标志物...';
 
   @override
-  String get aiCalculatingProbabilities => '🎯 Calculating probabilities...';
+  String get aiCalculatingProbabilities => '🎯 计算概率...';
 
   @override
-  String get aiFinalizingRecommendations => '✨ Finalizing recommendations...';
+  String get aiFinalizingRecommendations => '✨ 完成建议...';
 
   @override
-  String get currentSymptoms => 'Current Symptoms';
+  String get currentSymptoms => '当前症状';
 
   @override
-  String get analyzing => 'Analyzing...';
+  String get analyzing => '分析中...';
 
   @override
-  String get addSymptomsAboveToGetAnalysis =>
-      'Add symptoms above to get AI-powered analysis';
+  String get addSymptomsAboveToGetAnalysis => '添加上面的症状以获得AI分析';
 
   @override
-  String get clickAnalyzeSymptomsToGetRecommendations =>
-      'Click \"Analyze Symptoms\" to get recommendations';
+  String get clickAnalyzeSymptomsToGetRecommendations => '点击\"分析症状\"获取建议';
 
   @override
-  String get urgency => 'URGENCY';
+  String get urgency => '紧急程度';
 
   @override
-  String get recommendedSpecialties => 'Recommended Specialties';
+  String get recommendedSpecialties => '推荐专科';
 
   @override
-  String get analysisFailed => 'Analysis Failed';
+  String get analysisFailed => '分析失败';
 
   @override
-  String get aiAnalysis => 'AI Analysis';
+  String get aiAnalysis => 'AI分析';
 
   @override
-  String get suggestedQuestions => 'Suggested Questions';
+  String get suggestedQuestions => '建议问题';
 
   @override
-  String get actionCompleted => 'Action Completed';
+  String get actionCompleted => '操作完成';
 
   @override
-  String get somethingWentWrong => 'Something went wrong';
+  String get somethingWentWrong => '出了点问题';
 
   @override
-  String get dismiss => 'Dismiss';
+  String get dismiss => '忽略';
 
   @override
-  String get findADoctor => 'Find a Doctor';
+  String get findADoctor => '找医生';
 
   @override
-  String get iNeedToFindADoctor => 'I need to find a doctor';
+  String get iNeedToFindADoctor => '我需要找医生';
 
   @override
-  String get checkAvailability => 'Check Availability';
+  String get checkAvailability => '检查可用性';
 
   @override
-  String get showMeAvailableAppointments => 'Show me available appointments';
+  String get showMeAvailableAppointments => '给我看可用的预约';
 
   @override
-  String get aiIsResponding => 'AI is responding...';
+  String get aiIsResponding => 'AI正在响应...';
 
   @override
-  String get aiIsThinking => 'AI is thinking...';
+  String get aiIsThinking => 'AI正在思考...';
 
   @override
-  String get intent => 'Intent';
+  String get intent => '意图';
 
   @override
-  String get aiIntent => 'AI Intent';
+  String get aiIntent => 'AI意图';
 
   @override
   String percent(String value) {
@@ -575,35 +570,32 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get analyzingYourRequest =>
-      'Analyzing your request and preparing the best response';
+  String get analyzingYourRequest => '分析您的请求并准备最佳回复';
 
   @override
-  String get aiRecommendations => 'AI Recommendations';
+  String get aiRecommendations => 'AI建议';
 
   @override
-  String get recommendedDoctors => 'Recommended Doctors';
+  String get recommendedDoctors => '推荐医生';
 
   @override
-  String get basedOnYourPreferences =>
-      'Based on your preferences and availability';
+  String get basedOnYourPreferences => '根据您的偏好和可用性';
 
   @override
-  String get drUnknown => 'Dr. Unknown';
+  String get drUnknown => '未知医生';
 
   @override
-  String get book => 'Book';
+  String get book => '预约';
 
   @override
-  String get today => 'Today';
+  String get today => '今天';
 
   @override
-  String get tomorrow => 'Tomorrow';
+  String get tomorrow => '明天';
 
   @override
-  String get askYourAIAssistant => 'Ask your AI assistant...';
+  String get askYourAIAssistant => '询问您的AI助手...';
 
   @override
-  String get bookingAssistantWelcomeMessage =>
-      'Hello! I\'m your AI booking assistant. How can I help you today?';
+  String get bookingAssistantWelcomeMessage => '您好！我是您的AI预约助手。今天我能为您做些什么？';
 }
