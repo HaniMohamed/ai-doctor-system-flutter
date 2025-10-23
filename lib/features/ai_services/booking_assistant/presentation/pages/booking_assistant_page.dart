@@ -9,7 +9,6 @@ import '../widgets/booking_message_widget.dart';
 import '../widgets/ai_status_indicator.dart';
 import '../widgets/ai_smart_suggestions.dart';
 import '../widgets/streaming_progress_indicator.dart';
-import '../widgets/ai_confidence_indicator.dart';
 
 /// Main page for AI booking assistant
 class BookingAssistantPage extends StatefulWidget {
@@ -162,19 +161,6 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
               ),
             ),
 
-            // // AI Confidence Indicator
-            // Obx(() {
-            //   if (_controller.currentIntent.isNotEmpty &&
-            //       _controller.currentConfidence > 0) {
-            //     return AiConfidenceIndicator(
-            //       intent: _controller.currentIntent,
-            //       confidence: _controller.currentConfidence,
-            //       isVisible: true,
-            //     );
-            //   }
-            //   return const SizedBox.shrink();
-            // }),
-
             // Enhanced Streaming Progress Indicator
             Obx(() {
               if (_controller.isProcessing || _controller.isStreaming) {
@@ -266,131 +252,6 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                );
-              }
-              return const SizedBox.shrink();
-            }),
-
-            // AI Next Steps Indicator
-            Obx(() {
-              if (_controller.nextSteps.isNotEmpty &&
-                  !_controller.isProcessing &&
-                  !_controller.isStreaming) {
-                return Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Theme.of(context).colorScheme.secondaryContainer,
-                        Theme.of(context)
-                            .colorScheme
-                            .secondaryContainer
-                            .withValues(alpha: 0.8),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .secondary
-                            .withValues(alpha: 0.1),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            width: 32,
-                            height: 32,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.secondary,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            child: Icon(
-                              Icons.auto_awesome_rounded,
-                              color: Theme.of(context).colorScheme.onSecondary,
-                              size: 18,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Text(
-                            'AI Recommendations',
-                            style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .onSecondaryContainer,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      ..._controller.nextSteps.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final step = entry.value;
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 8),
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .outline
-                                  .withValues(alpha: 0.2),
-                            ),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 24,
-                                height: 24,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    '${index + 1}',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  step,
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.onSurface,
-                                    fontSize: 14,
-                                    height: 1.4,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
                     ],
                   ),
                 );
