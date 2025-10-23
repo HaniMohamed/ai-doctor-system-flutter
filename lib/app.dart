@@ -17,6 +17,7 @@ class AIDoctorApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return AccessibilityConfig(
       child: GetBuilder<LanguageService>(
+        init: LanguageService.instance,
         builder: (languageService) {
           return GetMaterialApp(
             title: 'AI Doctor System',
@@ -28,7 +29,7 @@ class AIDoctorApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             defaultTransition: Transition.fadeIn,
             transitionDuration: const Duration(milliseconds: 300),
-            
+
             // Localization configuration
             locale: languageService.currentLocale,
             fallbackLocale: LanguageConfig.defaultLocale,

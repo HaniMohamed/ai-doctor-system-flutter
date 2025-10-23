@@ -20,10 +20,10 @@ void main() async {
     print('Auth initialization failed: $e');
   }
 
-  // Initialize language service
+  // Initialize language service and register with GetX
   try {
     final languageService = sl<LanguageService>();
-    Get.put(languageService);
+    Get.put(languageService, permanent: true);
   } catch (e) {
     print('Language service initialization failed: $e');
   }

@@ -45,13 +45,13 @@ class LanguageService extends GetxController {
       // If loading fails, use default language
       await _setLanguage(LanguageConfig.supportedLanguages.first);
     }
-    _updateApiClientLanguage();
+    updateApiClientLanguage();
   }
 
   Future<void> setLanguage(SupportedLanguage language) async {
     await _setLanguage(language);
     await _saveLanguagePreference(language.code);
-    _updateApiClientLanguage();
+    updateApiClientLanguage();
   }
 
   Future<void> _setLanguage(SupportedLanguage language) async {
@@ -74,13 +74,16 @@ class LanguageService extends GetxController {
     await setLanguage(LanguageConfig.supportedLanguages.first);
   }
 
-  void _updateApiClientLanguage() {
+  void updateApiClientLanguage() {
     try {
       if (sl.isRegistered<ApiClient>()) {
-        sl<ApiClient>().updateLanguageHeader();
+        final apiClient = sl<ApiClient>();
+        apiClient
+            .updateLanguageHeader(_currentLanguage.value.locale.toString());
       }
     } catch (e) {
-      // Handle error silently
+      // Handle error silently - API client might not be ready yet
+      print('Failed to update API client language: $e');
     }
   }
 

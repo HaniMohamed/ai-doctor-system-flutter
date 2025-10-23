@@ -1,8 +1,6 @@
 import 'package:dio/dio.dart' as dio;
-import 'package:get/get.dart';
 
 import '../config/environment_config.dart';
-import '../services/language_service.dart';
 import 'interceptors/auth_interceptor.dart';
 import 'interceptors/error_interceptor.dart';
 import 'interceptors/logging_interceptor.dart';
@@ -20,22 +18,11 @@ class ApiClient {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Accept-Language': _getLanguageHeader(),
+          'Accept-Language': 'en-US',
         },
       ),
     );
     _setupInterceptors();
-  }
-
-  String _getLanguageHeader() {
-    try {
-      if (Get.isRegistered<LanguageService>()) {
-        return LanguageService.instance.currentLanguageHeader;
-      }
-    } catch (e) {
-      // Fallback to default language
-    }
-    return 'en-US';
   }
 
   void _setupInterceptors() {
@@ -46,8 +33,18 @@ class ApiClient {
     ]);
   }
 
-  void updateLanguageHeader() {
-    _dio.options.headers['Accept-Language'] = _getLanguageHeader();
+  void updateLanguageHeader(String languageCode) {
+    try {
+      // Only try to get language if LanguageService is available
+      if (languageCode.isNotEmpty) {
+        _dio.options.headers['Accept-Language'] = languageCode;
+      } else {
+        _dio.options.headers['Accept-Language'] = 'en-US';
+      }
+    } catch (e) {
+      // Fallback to default language if service is not ready
+      _dio.options.headers['Accept-Language'] = 'en-US';
+    }
   }
 
   Future<dio.Response<T>> get<T>(

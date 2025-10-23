@@ -1,6 +1,8 @@
 /// Data models for streaming WebSocket messages following the standardized format
 /// Based on the streaming format documentation
 
+import 'dart:convert';
+
 /// Base interface for all streaming messages
 abstract class StreamMessage {
   final String type;
@@ -62,12 +64,24 @@ class MetadataMessage extends StreamMessage {
 /// Chunk message for streaming text from AI model
 class ChunkMessage extends StreamMessage {
   final String chunk;
+  final String? responseMessage;
+  final String? intent;
+  final double? confidence;
+  final List<String>? nextSteps;
+  final bool? actionTaken;
+  final String? actionResult;
 
   const ChunkMessage({
     required super.sessionId,
     required super.timestamp,
     required super.isComplete,
     required this.chunk,
+    this.responseMessage,
+    this.intent,
+    this.confidence,
+    this.nextSteps,
+    this.actionTaken,
+    this.actionResult,
   }) : super(type: 'chunk');
 
   factory ChunkMessage.fromJson(Map<String, dynamic> json) {
@@ -87,6 +101,12 @@ class ChunkMessage extends StreamMessage {
       timestamp: timestamp,
       isComplete: json['is_complete'] as bool? ?? false,
       chunk: json['chunk'] as String? ?? '',
+      responseMessage: json['response_message'] as String?,
+      intent: json['intent'] as String?,
+      confidence: (json['confidence'] as num?)?.toDouble(),
+      nextSteps: (json['next_steps'] as List<dynamic>?)?.cast<String>(),
+      actionTaken: json['action_taken'] as bool?,
+      actionResult: json['action_result'] as String?,
     );
   }
 
@@ -98,6 +118,12 @@ class ChunkMessage extends StreamMessage {
       'timestamp': timestamp.toIso8601String(),
       'is_complete': isComplete,
       'chunk': chunk,
+      if (responseMessage != null) 'response_message': responseMessage,
+      if (intent != null) 'intent': intent,
+      if (confidence != null) 'confidence': confidence,
+      if (nextSteps != null) 'next_steps': nextSteps,
+      if (actionTaken != null) 'action_taken': actionTaken,
+      if (actionResult != null) 'action_result': actionResult,
     };
   }
 }
@@ -271,6 +297,79 @@ class ErrorMessage extends StreamMessage {
       'error': isError,
       'error_message': errorMessage,
     };
+  }
+}
+
+/// Helper class for parsing JSON chunks and extracting structured data
+class JsonChunkParser {
+  static String _accumulatedJson = '';
+
+  /// Accumulate JSON chunks and return parsed data when complete
+  static Map<String, dynamic>? parseJsonChunk(String chunk) {
+    _accumulatedJson += chunk;
+
+    try {
+      // Try to parse the accumulated JSON
+      final jsonData = _accumulatedJson.trim();
+      if (jsonData.isEmpty) return null;
+
+      // Check if we have a complete JSON object
+      if (_isCompleteJson(jsonData)) {
+        // Parse the JSON string
+        final parsed = json.decode(jsonData) as Map<String, dynamic>;
+        _accumulatedJson = ''; // Reset for next message
+        return parsed;
+      }
+
+      return null;
+    } catch (e) {
+      // If parsing fails, continue accumulating
+      return null;
+    }
+  }
+
+  /// Check if the JSON string is complete
+  static bool _isCompleteJson(String json) {
+    if (json.isEmpty) return false;
+
+    // Simple heuristic: check for balanced braces
+    int braceCount = 0;
+    bool inString = false;
+    bool escaped = false;
+
+    for (int i = 0; i < json.length; i++) {
+      final char = json[i];
+
+      if (escaped) {
+        escaped = false;
+        continue;
+      }
+
+      if (char == '\\') {
+        escaped = true;
+        continue;
+      }
+
+      if (char == '"' && !escaped) {
+        inString = !inString;
+        continue;
+      }
+
+      if (!inString) {
+        if (char == '{') {
+          braceCount++;
+        } else if (char == '}') {
+          braceCount--;
+        }
+      }
+    }
+
+    return braceCount == 0 && !inString;
+  }
+
+  /// Reset the accumulator
+  static void reset() {
+    _accumulatedJson = '';
   }
 }
 

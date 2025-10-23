@@ -20,10 +20,6 @@ class ServiceLocator {
     final prefs = await SharedPreferences.getInstance();
     sl.registerLazySingleton<SharedPreferences>(() => prefs);
 
-    // Network
-    sl.registerLazySingleton<ApiClient>(() => ApiClient());
-    sl.registerLazySingleton<WebSocketClient>(() => WebSocketClient());
-
     // Storage
     sl.registerLazySingleton<LocalStorage>(() => LocalStorage());
     sl.registerLazySingleton<SecureStorage>(() => SecureStorage());
@@ -33,7 +29,11 @@ class ServiceLocator {
     sl.registerLazySingleton<NetworkInfo>(
         () => NetworkInfoImpl(Connectivity()));
 
-    // Language service
+    // Network (register first to avoid circular dependency)
+    sl.registerLazySingleton<ApiClient>(() => ApiClient());
+    sl.registerLazySingleton<WebSocketClient>(() => WebSocketClient());
+
+    // Language service (register after API client)
     sl.registerLazySingleton<LanguageService>(
       () => LanguageService(sl<SharedPreferences>()),
     );

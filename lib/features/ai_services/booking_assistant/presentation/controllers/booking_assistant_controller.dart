@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:get/get.dart';
 
@@ -54,12 +55,14 @@ class BookingAssistantController extends GetxController {
   final RxBool _isStreaming = false.obs;
   final RxString _streamingMessage = ''.obs;
   final RxString _chunkBuffer = ''.obs;
+  final RxString _jsonBuffer = ''.obs;
   final RxBool _isProcessing = false.obs;
   final RxString _currentIntent = ''.obs;
   final RxDouble _currentConfidence = 0.0.obs;
   final RxList<String> _nextSteps = <String>[].obs;
   final RxString _actionResult = ''.obs;
   final RxBool _actionTaken = false.obs;
+  final RxString _responseMessage = ''.obs;
 
   // Getters
   List<BookingMessage> get messages => _messages;
@@ -78,6 +81,7 @@ class BookingAssistantController extends GetxController {
   List<String> get nextSteps => _nextSteps;
   String get actionResult => _actionResult.value;
   bool get actionTaken => _actionTaken.value;
+  String get responseMessage => _responseMessage.value;
 
   @override
   void onInit() {
@@ -216,14 +220,40 @@ class BookingAssistantController extends GetxController {
     Logger.debug('BA: Handling chunk message (complete: ${message.isComplete})',
         'BA_WS');
 
-    // Accumulate chunks in buffer
+    // Accumulate chunks in buffer (this will be shown in the message UI)
     _chunkBuffer.value += message.chunk;
+    _jsonBuffer.value += message.chunk;
     _isStreaming.value = true;
 
-    // Don't show internal "thinking" messages to user
-    // Only show actual content when streaming
+    // Try to parse JSON from accumulated chunks
+    final parsedJson = JsonChunkParser.parseJsonChunk(message.chunk);
+    if (parsedJson != null) {
+      _handleParsedJson(parsedJson);
+    }
+
+    // Show streaming content to user (for real-time display during streaming)
     if (message.chunk.trim().isNotEmpty) {
-      _streamingMessage.value = message.chunk;
+      _streamingMessage.value = _chunkBuffer.value; // Show accumulated chunks
+    }
+
+    // Update UI with any structured data from the chunk
+    if (message.intent != null) {
+      _currentIntent.value = message.intent!;
+    }
+    if (message.confidence != null) {
+      _currentConfidence.value = message.confidence!;
+    }
+    if (message.nextSteps != null) {
+      _nextSteps.value = message.nextSteps!;
+    }
+    if (message.actionTaken != null) {
+      _actionTaken.value = message.actionTaken!;
+    }
+    if (message.actionResult != null) {
+      _actionResult.value = message.actionResult!;
+    }
+    if (message.responseMessage != null) {
+      _responseMessage.value = message.responseMessage!;
     }
 
     if (message.isComplete) {
@@ -267,12 +297,54 @@ class BookingAssistantController extends GetxController {
     _actionTaken.value = message.actionTaken;
     _actionResult.value = message.actionResult;
 
-    // Don't add system messages for next steps - let UI handle this
-    // The UI will show next steps in a dedicated section
+    // Parse and handle the complete response
+    _handleCompleteResponse(message);
 
     // Handle final metadata
     if (message.metadata != null) {
       _handleCompleteMetadata(message.metadata!);
+    }
+  }
+
+  /// Handle complete response parsing and processing
+  void _handleCompleteResponse(CompleteMessage message) {
+    Logger.debug('BA: Processing complete response', 'BA_WS');
+
+    // Extract and process structured data from the complete response
+    final responseData = {
+      'intent': message.intent,
+      'confidence': message.confidence,
+      'next_steps': message.nextSteps,
+      'action_taken': message.actionTaken,
+      'action_result': message.actionResult,
+    };
+
+    // Process the complete response data
+    _processCompleteResponseData(responseData);
+
+    // Show user-friendly message based on the response
+    _showUserFriendlyResponse(message);
+  }
+
+  /// Process complete response data
+  void _processCompleteResponseData(Map<String, dynamic> responseData) {
+    // Update UI state with the complete response data
+    Logger.debug('BA: Updating UI with complete response data', 'BA_WS');
+
+    // The UI will automatically update through the reactive variables
+    // Additional processing can be added here if needed
+  }
+
+  /// Show user-friendly response based on complete message
+  void _showUserFriendlyResponse(CompleteMessage message) {
+    // Don't add additional messages here - the chunk buffer already contains
+    // the response content from streaming chunks, which will be displayed
+    // in the message UI via _finalizeStreamingMessage()
+
+    // Only show next steps if we don't have meaningful chunk content
+    if (_chunkBuffer.value.trim().isEmpty && message.nextSteps.isNotEmpty) {
+      _addSystemMessage(
+          'I understand your request. Here are the next steps to help you:');
     }
   }
 
@@ -293,13 +365,49 @@ class BookingAssistantController extends GetxController {
   /// Finalize streaming message and add to conversation
   void _finalizeStreamingMessage() {
     Logger.debug('BA: Finalizing streaming message', 'BA_WS');
+    Logger.debug('BA: Chunk buffer content: ${_chunkBuffer.value}', 'BA_WS');
+    Logger.debug('BA: Response message: ${_responseMessage.value}', 'BA_WS');
+
+    // Priority 1: Use response_message if it was extracted from JSON
+    // Priority 2: Try to extract response_message from chunk buffer JSON
+    // Priority 3: Use the entire chunk buffer as fallback
+    String finalMessage = '';
+
+    if (_responseMessage.value.isNotEmpty) {
+      finalMessage = _responseMessage.value;
+      Logger.debug('BA: Using response_message: $finalMessage', 'BA_WS');
+    } else {
+      // Try to parse JSON from chunk buffer and extract response_message
+      try {
+        final parsedJson = json.decode(_chunkBuffer.value);
+        if (parsedJson is Map<String, dynamic> &&
+            parsedJson['response_message'] != null) {
+          finalMessage = parsedJson['response_message'] as String;
+          Logger.debug(
+              'BA: Extracted response_message from JSON: $finalMessage',
+              'BA_WS');
+        } else {
+          // Fallback to chunk buffer content
+          finalMessage = _chunkBuffer.value.trim();
+          Logger.debug(
+              'BA: Using chunk buffer as fallback: $finalMessage', 'BA_WS');
+        }
+      } catch (e) {
+        // If JSON parsing fails, use chunk buffer
+        finalMessage = _chunkBuffer.value.trim();
+        Logger.debug('BA: JSON parse failed, using chunk buffer: $finalMessage',
+            'BA_WS');
+      }
+    }
 
     // Only add meaningful content to the conversation
-    if (_chunkBuffer.value.isNotEmpty &&
-        !_isInternalProcessingMessage(_chunkBuffer.value)) {
+    if (finalMessage.isNotEmpty &&
+        !_isInternalProcessingMessage(finalMessage)) {
+      Logger.debug(
+          'BA: Adding message to conversation: $finalMessage', 'BA_WS');
       final aiMessage = BookingMessage(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        content: _chunkBuffer.value.trim(),
+        content: finalMessage,
         isUser: false,
         timestamp: DateTime.now(),
         type: BookingMessageType.text,
@@ -307,15 +415,22 @@ class BookingAssistantController extends GetxController {
           'intent': _currentIntent.value,
           'confidence': _currentConfidence.value,
           'next_steps': _nextSteps,
+          'action_taken': _actionTaken.value,
+          'action_result': _actionResult.value,
         },
       );
       _messages.add(aiMessage);
+    } else {
+      Logger.warning(
+          'BA: Not adding message - empty or internal: $finalMessage', 'BA_WS');
     }
 
     // Reset streaming state
     _chunkBuffer.value = '';
+    _jsonBuffer.value = '';
     _isStreaming.value = false;
     _streamingMessage.value = '';
+    _responseMessage.value = '';
   }
 
   /// Check if a message is internal processing information that shouldn't be shown to users
@@ -381,9 +496,67 @@ class BookingAssistantController extends GetxController {
     }
   }
 
+  /// Handle parsed JSON from chunks
+  void _handleParsedJson(Map<String, dynamic> json) {
+    Logger.debug('BA: Handling parsed JSON from chunks', 'BA_WS');
+
+    // Extract structured data from parsed JSON
+    if (json['intent'] != null) {
+      _currentIntent.value = json['intent'] as String;
+    }
+    if (json['confidence'] != null) {
+      _currentConfidence.value = (json['confidence'] as num).toDouble();
+    }
+    if (json['next_steps'] != null) {
+      _nextSteps.value = (json['next_steps'] as List<dynamic>).cast<String>();
+    }
+    if (json['action_taken'] != null) {
+      _actionTaken.value = json['action_taken'] as bool;
+    }
+    if (json['action_result'] != null) {
+      _actionResult.value = json['action_result'] as String;
+    }
+
+    // Extract and store the response_message from JSON - this is what we'll show in UI
+    if (json['response_message'] != null) {
+      final responseMsg = json['response_message'] as String;
+      _responseMessage.value = responseMsg;
+      // Replace the chunk buffer with just the response message content
+      // Keep accumulating chunks but prioritize showing response_message when available
+      _chunkBuffer.value = responseMsg;
+    }
+
+    // Handle any additional metadata
+    if (json['suggested_doctors'] != null) {
+      _availableDoctors.value = json['suggested_doctors'] as List<dynamic>;
+    }
+    if (json['suggested_slots'] != null) {
+      final slots = json['suggested_slots'] as List<dynamic>;
+      _suggestedTimeSlots.value = slots.map((slot) {
+        final slotData = slot as Map<String, dynamic>;
+        return TimeSlot(
+          id: slotData['id'] as String,
+          startTime: DateTime.parse(slotData['start_time'] as String),
+          endTime: DateTime.parse(slotData['end_time'] as String),
+          durationMinutes: slotData['duration_minutes'] as int,
+          isAvailable: slotData['is_available'] as bool,
+          doctorId: slotData['doctor_id'] as String?,
+          reasoning: slotData['reasoning'] as String?,
+        );
+      }).toList();
+    }
+  }
+
   /// Send a message to the AI booking assistant via WebSocket
   Future<void> sendMessage(String message) async {
     if (message.trim().isEmpty) return;
+
+    // Clear previous AI recommendations when user sends new message
+    _suggestedTimeSlots.clear();
+    _availableDoctors.clear();
+    _nextSteps.clear();
+    _actionResult.value = '';
+    _actionTaken.value = false;
 
     // Add user message
     final userMessage = BookingMessage(
@@ -570,7 +743,9 @@ class BookingAssistantController extends GetxController {
     _suggestedTimeSlots.clear();
     _errorMessage.value = '';
     _chunkBuffer.value = '';
+    _jsonBuffer.value = '';
     _streamingMessage.value = '';
+    _responseMessage.value = '';
     _isStreaming.value = false;
     _isProcessing.value = false;
     _currentIntent.value = '';
@@ -578,6 +753,7 @@ class BookingAssistantController extends GetxController {
     _nextSteps.clear();
     _actionResult.value = '';
     _actionTaken.value = false;
+    JsonChunkParser.reset(); // Reset JSON parser
     _initializeSession();
   }
 

@@ -8,6 +8,8 @@ import '../widgets/booking_input_widget.dart';
 import '../widgets/booking_message_widget.dart';
 import '../widgets/ai_status_indicator.dart';
 import '../widgets/ai_smart_suggestions.dart';
+import '../widgets/streaming_progress_indicator.dart';
+import '../widgets/ai_confidence_indicator.dart';
 
 /// Main page for AI booking assistant
 class BookingAssistantPage extends StatefulWidget {
@@ -93,10 +95,12 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
         ),
         child: Column(
           children: [
-            // AI Smart Suggestions (when available)
+            // AI Smart Suggestions (when available and not processing)
             Obx(() {
-              if (_controller.suggestedTimeSlots.isNotEmpty ||
-                  _controller.availableDoctors.isNotEmpty) {
+              if ((_controller.suggestedTimeSlots.isNotEmpty ||
+                      _controller.availableDoctors.isNotEmpty) &&
+                  !_controller.isProcessing &&
+                  !_controller.isStreaming) {
                 return AiSmartSuggestions(
                   suggestedTimeSlots: _controller.suggestedTimeSlots,
                   availableDoctors: _controller.availableDoctors,
@@ -158,93 +162,34 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
               ),
             ),
 
-            // AI Processing Indicator
+            // // AI Confidence Indicator
+            // Obx(() {
+            //   if (_controller.currentIntent.isNotEmpty &&
+            //       _controller.currentConfidence > 0) {
+            //     return AiConfidenceIndicator(
+            //       intent: _controller.currentIntent,
+            //       confidence: _controller.currentConfidence,
+            //       isVisible: true,
+            //     );
+            //   }
+            //   return const SizedBox.shrink();
+            // }),
+
+            // Enhanced Streaming Progress Indicator
             Obx(() {
-              if (_controller.isProcessing) {
-                return Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Theme.of(context).colorScheme.primaryContainer,
-                        Theme.of(context)
-                            .colorScheme
-                            .primaryContainer
-                            .withValues(alpha: 0.8),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withValues(alpha: 0.1),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.primary,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: const Icon(
-                          Icons.psychology_rounded,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'AI is thinking...',
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Analyzing your request and preparing the best response',
-                              style: TextStyle(
-                                color: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer
-                                    .withValues(alpha: 0.8),
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2.5,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+              if (_controller.isProcessing || _controller.isStreaming) {
+                return StreamingProgressIndicator(
+                  isStreaming: _controller.isStreaming,
+                  isProcessing: _controller.isProcessing,
+                  currentIntent: _controller.currentIntent.isNotEmpty
+                      ? _controller.currentIntent
+                      : null,
+                  confidence: _controller.currentConfidence > 0
+                      ? _controller.currentConfidence
+                      : null,
+                  streamingMessage: _controller.streamingMessage.isNotEmpty
+                      ? _controller.streamingMessage
+                      : null,
                 );
               }
               return const SizedBox.shrink();
@@ -253,7 +198,9 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
             // AI Action Result Indicator
             Obx(() {
               if (_controller.actionTaken &&
-                  _controller.actionResult.isNotEmpty) {
+                  _controller.actionResult.isNotEmpty &&
+                  !_controller.isProcessing &&
+                  !_controller.isStreaming) {
                 return Container(
                   margin:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -328,7 +275,9 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
 
             // AI Next Steps Indicator
             Obx(() {
-              if (_controller.nextSteps.isNotEmpty) {
+              if (_controller.nextSteps.isNotEmpty &&
+                  !_controller.isProcessing &&
+                  !_controller.isStreaming) {
                 return Container(
                   margin:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -559,34 +508,6 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
           ],
         ),
       ),
-      floatingActionButton: Obx(() {
-        if (_controller.messages.isNotEmpty) {
-          return Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(28),
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .primary
-                      .withValues(alpha: 0.3),
-                  blurRadius: 12,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: FloatingActionButton.extended(
-              onPressed: _controller.clearConversation,
-              tooltip: AppLocalizations.of(context)!.clearConversation,
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
-              icon: const Icon(Icons.refresh_rounded),
-              label: const Text('New Chat'),
-            ),
-          );
-        }
-        return const SizedBox.shrink();
-      }),
     );
   }
 
@@ -825,10 +746,13 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Show response message if available, otherwise show streaming content
                   Text(
-                    _controller.streamingMessage.isNotEmpty
-                        ? _controller.streamingMessage
-                        : 'AI is responding...',
+                    _controller.responseMessage.isNotEmpty
+                        ? _controller.responseMessage
+                        : _controller.streamingMessage.isNotEmpty
+                            ? _controller.streamingMessage
+                            : 'AI is responding...',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontSize: 16,
@@ -837,6 +761,54 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
                     ),
                   ),
                   const SizedBox(height: 12),
+                  // Show confidence and intent if available
+                  if (_controller.currentIntent.isNotEmpty ||
+                      _controller.currentConfidence > 0)
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primaryContainer
+                            .withValues(alpha: 0.3),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (_controller.currentIntent.isNotEmpty) ...[
+                            Icon(
+                              Icons.auto_awesome_rounded,
+                              size: 14,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Intent: ${_controller.currentIntent}',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                          if (_controller.currentConfidence > 0) ...[
+                            if (_controller.currentIntent.isNotEmpty)
+                              const SizedBox(width: 8),
+                            Text(
+                              'Confidence: ${(_controller.currentConfidence * 100).toStringAsFixed(0)}%',
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  const SizedBox(height: 8),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
