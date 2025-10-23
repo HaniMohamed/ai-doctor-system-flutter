@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:get/get.dart';
 
 import '../../../../../core/logging/logger.dart';
 import '../../../../auth/domain/services/auth_service.dart';
 import '../../data/datasources/booking_assistant_remote_datasource.dart';
+import '../../data/models/booking_message_model.dart';
 import '../../domain/entities/booking_message.dart';
 import '../../domain/usecases/book_appointment_usecase.dart';
 import '../../domain/usecases/get_available_doctors_usecase.dart';
@@ -52,6 +54,7 @@ class BookingAssistantController extends GetxController {
   final RxString _errorMessage = ''.obs;
   final RxBool _isStreaming = false.obs;
   final RxString _streamingMessage = ''.obs;
+  final RxString _chunkBuffer = ''.obs;
 
   // Getters
   List<BookingMessage> get messages => _messages;
@@ -161,11 +164,33 @@ class BookingAssistantController extends GetxController {
   /// Handle WebSocket response
   void _handleWebSocketResponse(dynamic response) {
     Logger.debug('Handling WS response', 'BA_WS');
+
+    // Handle BookingResponseModel objects
+    if (response is BookingResponseModel) {
+      // Check if this is a chunk message
+      if (response.metadata?['is_chunk'] == true) {
+        Logger.debug('BA: Handling chunk from BookingResponseModel', 'BA_WS');
+        _handleChunkedMessage({
+          'chunk': response.responseMessage,
+          'is_complete': response.metadata?['is_complete'] ?? false,
+          'session_id': response.sessionId,
+        });
+        return;
+      }
+
+      // Handle regular BookingResponseModel
+      _handleBookingResponseModel(response);
+      return;
+    }
+
+    // Handle Map responses (legacy)
     if (response is Map<String, dynamic>) {
-      // Handle different types of WebSocket messages
       final type = response['type'] as String?;
 
       switch (type) {
+        case 'chunk':
+          _handleChunkedMessage(response);
+          break;
         case 'message':
           _handleStreamingMessage(response);
           break;
@@ -183,6 +208,151 @@ class BookingAssistantController extends GetxController {
           break;
         default:
           _handleGenericResponse(response);
+      }
+    }
+  }
+
+  /// Handle BookingResponseModel objects
+  void _handleBookingResponseModel(BookingResponseModel response) {
+    Logger.debug('BA: Handling BookingResponseModel', 'BA_WS');
+
+    // Add AI response message
+    final aiMessage = BookingMessage(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      content: response.responseMessage,
+      isUser: false,
+      timestamp: DateTime.now(),
+      type: BookingMessageType.text,
+      metadata: {
+        'intent': response.intent,
+        'confidence': response.confidence,
+        'next_steps': response.nextSteps,
+      },
+    );
+    _messages.add(aiMessage);
+
+    // Update available doctors if provided
+    if (response.suggestedDoctors != null) {
+      _availableDoctors.value = response.suggestedDoctors!;
+    }
+
+    // Update suggested time slots if provided
+    if (response.suggestedSlots != null) {
+      _suggestedTimeSlots.value = response.suggestedSlots!;
+    }
+  }
+
+  /// Handle chunked message response
+  void _handleChunkedMessage(Map<String, dynamic> response) {
+    final chunk = response['chunk'] as String? ?? '';
+    final isComplete = response['is_complete'] as bool? ?? false;
+
+    Logger.debug(
+        'BA: Handling chunk (complete: $isComplete, chunk: "${chunk.length} chars")',
+        'BA_WS');
+
+    // Accumulate chunks in buffer
+    _chunkBuffer.value += chunk;
+
+    // Show streaming indicator and current accumulated text
+    _isStreaming.value = true;
+
+    // Try to extract a preview of the message content from the JSON
+    String previewMessage = 'AI is thinking...';
+    try {
+      final currentJson = _chunkBuffer.value;
+
+      // Only show streaming content if we have a valid response_message field
+      if (currentJson.contains('"response_message"')) {
+        // Try to extract the response_message value using string manipulation
+        final responseMessageStart = currentJson.indexOf('"response_message"');
+        if (responseMessageStart != -1) {
+          final colonIndex = currentJson.indexOf(':', responseMessageStart);
+          if (colonIndex != -1) {
+            final quoteStart = currentJson.indexOf('"', colonIndex);
+            if (quoteStart != -1) {
+              final quoteEnd = currentJson.indexOf('"', quoteStart + 1);
+              if (quoteEnd != -1) {
+                final extractedMessage =
+                    currentJson.substring(quoteStart + 1, quoteEnd);
+                if (extractedMessage.isNotEmpty &&
+                    !extractedMessage.contains('{') &&
+                    !extractedMessage.contains('}')) {
+                  previewMessage = extractedMessage;
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (e, stackTrace) {
+      // Keep the engaging message
+      previewMessage = 'AI is thinking...';
+      Logger.error(
+          'BA: Failed to extract preview message: $e', 'BA_WS', e, stackTrace);
+    }
+
+    _streamingMessage.value = previewMessage;
+    Logger.debug('BA: Updated streaming message: "$previewMessage"', 'BA_WS');
+    Logger.debug('BA: Current JSON buffer length: ${_chunkBuffer.value.length}',
+        'BA_WS');
+
+    if (isComplete) {
+      // All chunks received, try to parse the complete JSON
+      try {
+        final completeJson = _chunkBuffer.value;
+        Logger.debug('BA: Complete JSON received: ${completeJson.length} chars',
+            'BA_WS');
+
+        // Try to parse the complete JSON directly
+        final parsedJson = jsonDecode(completeJson) as Map<String, dynamic>;
+
+        // Extract the actual message content
+        final messageContent = parsedJson['response_message'] as String? ??
+            parsedJson['content'] as String? ??
+            parsedJson['message'] as String? ??
+            completeJson;
+
+        Logger.debug(
+            'BA: Extracted message content: "${messageContent.length} chars"',
+            'BA_WS');
+
+        // Reset buffer
+        _chunkBuffer.value = '';
+        _isStreaming.value = false;
+        _streamingMessage.value = '';
+
+        // Add the final message to the conversation
+        final aiMessage = BookingMessage(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          content: messageContent,
+          isUser: false,
+          timestamp: DateTime.now(),
+          type: BookingMessageType.text,
+          metadata: {
+            'intent': parsedJson['intent'],
+            'confidence': parsedJson['confidence'],
+            'next_steps':
+                (parsedJson['next_steps'] as List<dynamic>?)?.cast<String>(),
+          },
+        );
+        _messages.add(aiMessage);
+      } catch (e) {
+        Logger.error('BA: Failed to parse complete JSON: $e', 'BA_WS');
+        // If JSON parsing fails, treat the accumulated text as a plain message
+        final aiMessage = BookingMessage(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          content: _chunkBuffer.value,
+          isUser: false,
+          timestamp: DateTime.now(),
+          type: BookingMessageType.text,
+        );
+        _messages.add(aiMessage);
+
+        // Reset buffer
+        _chunkBuffer.value = '';
+        _isStreaming.value = false;
+        _streamingMessage.value = '';
       }
     }
   }
@@ -445,6 +615,9 @@ class BookingAssistantController extends GetxController {
     _availableTimeSlots.clear();
     _suggestedTimeSlots.clear();
     _errorMessage.value = '';
+    _chunkBuffer.value = '';
+    _streamingMessage.value = '';
+    _isStreaming.value = false;
     _initializeSession();
   }
 

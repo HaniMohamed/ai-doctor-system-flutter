@@ -238,6 +238,37 @@ class BookingAssistantRemoteDataSourceImpl
     Logger.info('BA: WS connected, subscribing to stream', 'BA_WS');
     yield* _webSocketClient.messages.map((data) {
       Logger.debug('BA WS ← message: ${Logger.preview(data)}', 'BA_WS');
+
+      // Handle error messages from the backend
+      if (data['type'] == 'error') {
+        Logger.error('Backend error: ${data['message']}', 'BA_WS');
+        throw Exception('Backend error: ${data['message']}');
+      }
+
+      // Handle chunk messages - return raw data for chunk processing
+      if (data['type'] == 'chunk') {
+        Logger.debug('BA: Returning raw chunk data', 'BA_WS');
+        // Return a special BookingResponseModel that contains the raw chunk data
+        return BookingResponseModel(
+          sessionId: data['session_id']?.toString() ?? '',
+          intent: 'chunk',
+          confidence: 0.0,
+          nextSteps: [],
+          responseMessage: data['chunk']?.toString() ?? '',
+          metadata: {
+            'is_chunk': true,
+            'is_complete': data['is_complete'] ?? false,
+            'raw_data': data,
+          },
+        );
+      }
+
+      // Handle null or invalid data for non-chunk messages
+      if (data['session_id'] == null) {
+        Logger.warning('Received message with null session_id', 'BA_WS');
+        throw Exception('Invalid message: missing session_id');
+      }
+
       return BookingResponseModel.fromJson(data);
     });
   }

@@ -252,42 +252,91 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 16,
-            backgroundColor: Theme.of(context).colorScheme.primary,
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .primary
+                      .withValues(alpha: 0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
             child: const Icon(
-              Icons.smart_toy,
-              size: 16,
+              Icons.psychology,
+              size: 18,
               color: Colors.white,
             ),
           ),
-          const SizedBox(width: 8),
+          const SizedBox(width: 12),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(20).copyWith(
-                  bottomLeft: const Radius.circular(4),
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.surfaceContainerHighest,
+                    Theme.of(context)
+                        .colorScheme
+                        .surfaceContainerHighest
+                        .withValues(alpha: 0.8),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
+                borderRadius: BorderRadius.circular(24).copyWith(
+                  bottomLeft: const Radius.circular(8),
+                ),
+                border: Border.all(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .outline
+                      .withValues(alpha: 0.1),
+                  width: 1,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 12,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    _controller.streamingMessage,
+                    _controller.streamingMessage.isNotEmpty
+                        ? _controller.streamingMessage
+                        : 'AI is thinking...',
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      fontSize: 16,
+                      height: 1.4,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 8),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       _buildTypingDot(0),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 6),
                       _buildTypingDot(1),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 6),
                       _buildTypingDot(2),
                     ],
                   ),
@@ -301,18 +350,42 @@ class _BookingAssistantPageState extends State<BookingAssistantPage> {
   }
 
   Widget _buildTypingDot(int index) {
-    return AnimatedContainer(
-      duration: Duration(milliseconds: 600 + (index * 200)),
-      curve: Curves.easeInOut,
-      width: 8,
-      height: 8,
-      decoration: BoxDecoration(
-        color: Theme.of(context)
-            .colorScheme
-            .onSurfaceVariant
-            .withValues(alpha: 0.4),
-        shape: BoxShape.circle,
-      ),
+    return TweenAnimationBuilder<double>(
+      duration: Duration(milliseconds: 800 + (index * 300)),
+      tween: Tween(begin: 0.0, end: 1.0),
+      builder: (context, value, child) {
+        return Container(
+          width: 8,
+          height: 8,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Theme.of(context)
+                    .colorScheme
+                    .primary
+                    .withValues(alpha: 0.3 + (value * 0.7)),
+                Theme.of(context)
+                    .colorScheme
+                    .primary
+                    .withValues(alpha: 0.1 + (value * 0.9)),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: Theme.of(context)
+                    .colorScheme
+                    .primary
+                    .withValues(alpha: 0.2 * value),
+                blurRadius: 4 * value,
+                offset: const Offset(0, 1),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

@@ -88,9 +88,14 @@ class BookingMessageWidget extends StatelessWidget {
 
   Widget _buildMetadata(BuildContext context) {
     final metadata = message.metadata!;
-    final intent = metadata['intent'] as String?;
-    final confidence = metadata['confidence'] as double?;
-    final nextSteps = metadata['next_steps'] as List<String>?;
+    final intent = metadata['intent']?.toString();
+    final confidence = metadata['confidence'] is num
+        ? (metadata['confidence'] as num).toDouble()
+        : null;
+    final nextStepsRaw = metadata['next_steps'];
+    final nextSteps = nextStepsRaw is List<dynamic>
+        ? nextStepsRaw.cast<String>()
+        : nextStepsRaw as List<String>?;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

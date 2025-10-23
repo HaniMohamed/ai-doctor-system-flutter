@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../../shared/widgets/base_scaffold.dart';
+import '../../../ai_services/booking_assistant/presentation/controllers/booking_assistant_controller.dart';
+import '../../../ai_services/booking_assistant/domain/entities/booking_message.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -11,14 +14,13 @@ class ChatPage extends StatefulWidget {
 
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _messageController = TextEditingController();
-  final List<ChatMessage> _messages = [];
   final ScrollController _scrollController = ScrollController();
-  bool _isTyping = false;
+  late BookingAssistantController _controller;
 
   @override
   void initState() {
     super.initState();
-    _addWelcomeMessage();
+    _controller = Get.find<BookingAssistantController>();
   }
 
   @override
@@ -26,14 +28,6 @@ class _ChatPageState extends State<ChatPage> {
     _messageController.dispose();
     _scrollController.dispose();
     super.dispose();
-  }
-
-  void _addWelcomeMessage() {
-    _messages.add(ChatMessage(
-      text: AppLocalizations.of(context)!.welcomeMessage,
-      isUser: false,
-      timestamp: DateTime.now(),
-    ));
   }
 
   @override
@@ -47,68 +41,82 @@ class _ChatPageState extends State<ChatPage> {
           tooltip: AppLocalizations.of(context)!.clearChat,
         ),
       ],
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.all(16),
-              itemCount: _messages.length + (_isTyping ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index == _messages.length && _isTyping) {
-                  return _buildTypingIndicator();
-                }
-                return _buildMessageBubble(_messages[index]);
-              },
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              border: Border(
-                top: BorderSide(
-                  color: Theme.of(context)
-                      .colorScheme
-                      .outline
-                      .withValues(alpha: 0.2),
-                ),
+      body: Obx(() {
+        final messages = _controller.messages;
+        final isStreaming = _controller.isStreaming;
+        final streamingMessage = _controller.streamingMessage;
+        final isLoading = _controller.isLoading;
+
+        return Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: const EdgeInsets.all(16),
+                itemCount: messages.length + (isStreaming ? 1 : 0),
+                itemBuilder: (context, index) {
+                  if (index == messages.length && isStreaming) {
+                    return _buildStreamingMessage(streamingMessage);
+                  }
+                  return _buildMessageBubble(messages[index]);
+                },
               ),
             ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.typeYourMessage,
-                      border: const OutlineInputBorder(),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                    ),
-                    maxLines: null,
-                    textInputAction: TextInputAction.send,
-                    onSubmitted: (_) => _sendMessage(),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                border: Border(
+                  top: BorderSide(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .outline
+                        .withValues(alpha: 0.2),
                   ),
                 ),
-                const SizedBox(width: 8),
-                FloatingActionButton.small(
-                  onPressed: _messageController.text.trim().isEmpty
-                      ? null
-                      : _sendMessage,
-                  child: const Icon(Icons.send),
-                ),
-              ],
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _messageController,
+                      decoration: InputDecoration(
+                        hintText: AppLocalizations.of(context)!.typeYourMessage,
+                        border: const OutlineInputBorder(),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 12,
+                        ),
+                      ),
+                      maxLines: null,
+                      textInputAction: TextInputAction.send,
+                      onSubmitted: (_) => _sendMessage(),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  FloatingActionButton.small(
+                    onPressed:
+                        _messageController.text.trim().isEmpty || isLoading
+                            ? null
+                            : _sendMessage,
+                    child: isLoading
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Icon(Icons.send),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 
-  Widget _buildMessageBubble(ChatMessage message) {
+  Widget _buildMessageBubble(BookingMessage message) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -148,7 +156,7 @@ class _ChatPageState extends State<ChatPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    message.text,
+                    message.content,
                     style: TextStyle(
                       color: message.isUser
                           ? Theme.of(context).colorScheme.onPrimary
@@ -192,7 +200,7 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 
-  Widget _buildTypingIndicator() {
+  Widget _buildStreamingMessage(String streamingMessage) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -207,23 +215,39 @@ class _ChatPageState extends State<ChatPage> {
             ),
           ),
           const SizedBox(width: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(20).copyWith(
-                bottomLeft: const Radius.circular(4),
+          Flexible(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(20).copyWith(
+                  bottomLeft: const Radius.circular(4),
+                ),
               ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildTypingDot(0),
-                const SizedBox(width: 4),
-                _buildTypingDot(1),
-                const SizedBox(width: 4),
-                _buildTypingDot(2),
-              ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    streamingMessage.isNotEmpty
+                        ? streamingMessage
+                        : 'Receiving response...',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildTypingDot(0),
+                      const SizedBox(width: 4),
+                      _buildTypingDot(1),
+                      const SizedBox(width: 4),
+                      _buildTypingDot(2),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -266,30 +290,9 @@ class _ChatPageState extends State<ChatPage> {
     final text = _messageController.text.trim();
     if (text.isEmpty) return;
 
-    setState(() {
-      _messages.add(ChatMessage(
-        text: text,
-        isUser: true,
-        timestamp: DateTime.now(),
-      ));
-      _messageController.clear();
-      _isTyping = true;
-    });
-
+    _messageController.clear();
+    _controller.sendMessage(text);
     _scrollToBottom();
-
-    // Simulate AI response
-    Future.delayed(const Duration(seconds: 2), () {
-      setState(() {
-        _isTyping = false;
-        _messages.add(ChatMessage(
-          text: AppLocalizations.of(context)!.demoResponse,
-          isUser: false,
-          timestamp: DateTime.now(),
-        ));
-      });
-      _scrollToBottom();
-    });
   }
 
   void _scrollToBottom() {
@@ -305,21 +308,6 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _clearChat() {
-    setState(() {
-      _messages.clear();
-      _addWelcomeMessage();
-    });
+    _controller.clearConversation();
   }
-}
-
-class ChatMessage {
-  final String text;
-  final bool isUser;
-  final DateTime timestamp;
-
-  ChatMessage({
-    required this.text,
-    required this.isUser,
-    required this.timestamp,
-  });
 }

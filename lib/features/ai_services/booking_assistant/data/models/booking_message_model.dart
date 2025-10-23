@@ -73,7 +73,8 @@ class BookingSessionModel extends BookingSession {
           ? DateTime.parse(json['last_activity_at'] as String)
           : null,
       messages: (json['messages'] as List<dynamic>)
-          .map((message) => BookingMessageModel.fromJson(message as Map<String, dynamic>))
+          .map((message) =>
+              BookingMessageModel.fromJson(message as Map<String, dynamic>))
           .toList(),
       intent: json['intent'] != null
           ? BookingIntentModel.fromJson(json['intent'] as Map<String, dynamic>)
@@ -89,7 +90,9 @@ class BookingSessionModel extends BookingSession {
       'user_id': userId,
       'created_at': createdAt.toIso8601String(),
       'last_activity_at': lastActivityAt?.toIso8601String(),
-      'messages': messages.map((message) => (message as BookingMessageModel).toJson()).toList(),
+      'messages': messages
+          .map((message) => (message as BookingMessageModel).toJson())
+          .toList(),
       'intent': intent != null ? (intent as BookingIntentModel).toJson() : null,
       'context': context,
     };
@@ -181,14 +184,15 @@ class BookingResponseModel extends BookingResponse {
   /// Create a BookingResponseModel from JSON
   factory BookingResponseModel.fromJson(Map<String, dynamic> json) {
     return BookingResponseModel(
-      sessionId: json['session_id'] as String,
-      intent: json['intent'] as String,
-      confidence: (json['confidence'] as num).toDouble(),
-      nextSteps: (json['next_steps'] as List<dynamic>).cast<String>(),
-      responseMessage: json['response_message'] as String,
+      sessionId: json['session_id']?.toString() ?? '',
+      intent: json['intent']?.toString() ?? '',
+      confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
+      nextSteps: (json['next_steps'] as List<dynamic>?)?.cast<String>() ?? [],
+      responseMessage: json['response_message']?.toString() ?? '',
       suggestedSlots: json['suggested_slots'] != null
           ? (json['suggested_slots'] as List<dynamic>)
-              .map((slot) => TimeSlotModel.fromJson(slot as Map<String, dynamic>))
+              .map((slot) =>
+                  TimeSlotModel.fromJson(slot as Map<String, dynamic>))
               .toList()
           : null,
       suggestedDoctors: json['suggested_doctors'] as List<dynamic>?,
@@ -204,7 +208,9 @@ class BookingResponseModel extends BookingResponse {
       'confidence': confidence,
       'next_steps': nextSteps,
       'response_message': responseMessage,
-      'suggested_slots': suggestedSlots?.map((slot) => (slot as TimeSlotModel).toJson()).toList(),
+      'suggested_slots': suggestedSlots
+          ?.map((slot) => (slot as TimeSlotModel).toJson())
+          .toList(),
       'suggested_doctors': suggestedDoctors,
       'metadata': metadata,
     };
