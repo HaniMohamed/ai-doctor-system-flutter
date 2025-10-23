@@ -55,7 +55,6 @@ class BookingAssistantController extends GetxController {
   final RxBool _isStreaming = false.obs;
   final RxString _streamingMessage = ''.obs;
   final RxString _chunkBuffer = ''.obs;
-  final RxString _jsonBuffer = ''.obs;
   final RxBool _isProcessing = false.obs;
   final RxString _currentIntent = ''.obs;
   final RxDouble _currentConfidence = 0.0.obs;
@@ -208,10 +207,7 @@ class BookingAssistantController extends GetxController {
   /// Handle metadata message
   void _handleMetadataMessage(MetadataMessage message) {
     Logger.debug('BA: Handling metadata message', 'BA_WS');
-    _isProcessing.value = true;
     _currentSessionId.value = message.sessionId ?? _currentSessionId.value;
-
-    // Update session context with processing info
     Logger.info('Processing started: ${message.processingInfo}', 'BA_WS');
   }
 
@@ -220,23 +216,27 @@ class BookingAssistantController extends GetxController {
     Logger.debug('BA: Handling chunk message (complete: ${message.isComplete})',
         'BA_WS');
 
-    // Accumulate chunks in buffer (this will be shown in the message UI)
+    // Accumulate chunks in buffer - these form a JSON string that will be parsed when complete
     _chunkBuffer.value += message.chunk;
-    _jsonBuffer.value += message.chunk;
     _isStreaming.value = true;
+    _isProcessing.value = true;
 
-    // Try to parse JSON from accumulated chunks
+    // Try to parse JSON from accumulated chunks (only succeeds when JSON is complete)
     final parsedJson = JsonChunkParser.parseJsonChunk(message.chunk);
     if (parsedJson != null) {
-      _handleParsedJson(parsedJson);
+      // JSON parsing succeeded - extract structured data for recommendations/metadata
+      // But DON'T replace the chunk buffer yet - we still need it for final message extraction
+      _extractStructuredDataFromJson(parsedJson);
     }
 
-    // Show streaming content to user (for real-time display during streaming)
+    // Show streaming content to user in real-time
+    // Display the accumulated chunks for visual feedback during streaming
     if (message.chunk.trim().isNotEmpty) {
-      _streamingMessage.value = _chunkBuffer.value; // Show accumulated chunks
+      _streamingMessage.value = _chunkBuffer.value;
     }
 
-    // Update UI with any structured data from the chunk
+    // Update UI with any structured data from individual chunk message fields
+    // (these are parsed from the backend's chunk message envelope, not the JSON content)
     if (message.intent != null) {
       _currentIntent.value = message.intent!;
     }
@@ -291,60 +291,36 @@ class BookingAssistantController extends GetxController {
 
     _isProcessing.value = false;
     _isStreaming.value = false;
-    _currentIntent.value = message.intent;
-    _currentConfidence.value = message.confidence;
-    _nextSteps.value = message.nextSteps;
-    _actionTaken.value = message.actionTaken;
-    _actionResult.value = message.actionResult;
 
-    // Parse and handle the complete response
-    _handleCompleteResponse(message);
+    // Update intent/confidence/nextSteps only if not already set from chunk JSON parsing
+    // The complete message is for final metadata/recommendations, not to override chat message content
+    if (_currentIntent.value.isEmpty) {
+      _currentIntent.value = message.intent;
+    }
+    if (_currentConfidence.value == 0.0) {
+      _currentConfidence.value = message.confidence;
+    }
+    if (_nextSteps.isEmpty) {
+      _nextSteps.value = message.nextSteps;
+    }
+    if (!_actionTaken.value) {
+      _actionTaken.value = message.actionTaken;
+    }
+    if (_actionResult.value.isEmpty) {
+      _actionResult.value = message.actionResult;
+    }
 
-    // Handle final metadata
+    // Finalize the streaming message if chunk buffer still has content
+    // (should have been finalized by chunk with isComplete=true, but double-check)
+    if (_chunkBuffer.value.isNotEmpty) {
+      Logger.debug(
+          'BA: Complete message received, finalizing chunk buffer', 'BA_WS');
+      _finalizeStreamingMessage();
+    }
+
+    // Handle final metadata (recommendations, etc.)
     if (message.metadata != null) {
       _handleCompleteMetadata(message.metadata!);
-    }
-  }
-
-  /// Handle complete response parsing and processing
-  void _handleCompleteResponse(CompleteMessage message) {
-    Logger.debug('BA: Processing complete response', 'BA_WS');
-
-    // Extract and process structured data from the complete response
-    final responseData = {
-      'intent': message.intent,
-      'confidence': message.confidence,
-      'next_steps': message.nextSteps,
-      'action_taken': message.actionTaken,
-      'action_result': message.actionResult,
-    };
-
-    // Process the complete response data
-    _processCompleteResponseData(responseData);
-
-    // Show user-friendly message based on the response
-    _showUserFriendlyResponse(message);
-  }
-
-  /// Process complete response data
-  void _processCompleteResponseData(Map<String, dynamic> responseData) {
-    // Update UI state with the complete response data
-    Logger.debug('BA: Updating UI with complete response data', 'BA_WS');
-
-    // The UI will automatically update through the reactive variables
-    // Additional processing can be added here if needed
-  }
-
-  /// Show user-friendly response based on complete message
-  void _showUserFriendlyResponse(CompleteMessage message) {
-    // Don't add additional messages here - the chunk buffer already contains
-    // the response content from streaming chunks, which will be displayed
-    // in the message UI via _finalizeStreamingMessage()
-
-    // Only show next steps if we don't have meaningful chunk content
-    if (_chunkBuffer.value.trim().isEmpty && message.nextSteps.isNotEmpty) {
-      _addSystemMessage(
-          'I understand your request. Here are the next steps to help you:');
     }
   }
 
@@ -368,34 +344,58 @@ class BookingAssistantController extends GetxController {
     Logger.debug('BA: Chunk buffer content: ${_chunkBuffer.value}', 'BA_WS');
     Logger.debug('BA: Response message: ${_responseMessage.value}', 'BA_WS');
 
-    // Priority 1: Use response_message if it was extracted from JSON
-    // Priority 2: Try to extract response_message from chunk buffer JSON
-    // Priority 3: Use the entire chunk buffer as fallback
+    // Priority 1: Use response_message if it was already extracted from JSON during chunk processing
+    // Priority 2: Try to parse the complete JSON from chunk buffer and extract response_message
+    // Priority 3: Use the entire chunk buffer as fallback (in case JSON is malformed)
     String finalMessage = '';
 
     if (_responseMessage.value.isNotEmpty) {
+      // Use the response_message that was extracted during chunk processing
       finalMessage = _responseMessage.value;
-      Logger.debug('BA: Using response_message: $finalMessage', 'BA_WS');
+      Logger.debug(
+          'BA: Using pre-extracted response_message: $finalMessage', 'BA_WS');
     } else {
-      // Try to parse JSON from chunk buffer and extract response_message
+      // Try to parse the complete JSON from the accumulated chunk buffer
       try {
-        final parsedJson = json.decode(_chunkBuffer.value);
-        if (parsedJson is Map<String, dynamic> &&
-            parsedJson['response_message'] != null) {
-          finalMessage = parsedJson['response_message'] as String;
-          Logger.debug(
-              'BA: Extracted response_message from JSON: $finalMessage',
-              'BA_WS');
-        } else {
-          // Fallback to chunk buffer content
-          finalMessage = _chunkBuffer.value.trim();
-          Logger.debug(
-              'BA: Using chunk buffer as fallback: $finalMessage', 'BA_WS');
+        final chunkContent = _chunkBuffer.value.trim();
+        Logger.debug('BA: Attempting to parse JSON from chunk buffer', 'BA_WS');
+
+        if (chunkContent.isNotEmpty) {
+          final parsedJson = json.decode(chunkContent) as Map<String, dynamic>;
+
+          // Extract response_message from the parsed JSON
+          if (parsedJson['response_message'] != null) {
+            finalMessage = parsedJson['response_message'] as String;
+            Logger.debug(
+                'BA: Extracted response_message from parsed JSON: $finalMessage',
+                'BA_WS');
+
+            // Also extract other structured data if not already set
+            if (parsedJson['intent'] != null && _currentIntent.value.isEmpty) {
+              _currentIntent.value = parsedJson['intent'] as String;
+            }
+            if (parsedJson['confidence'] != null &&
+                _currentConfidence.value == 0.0) {
+              _currentConfidence.value =
+                  (parsedJson['confidence'] as num).toDouble();
+            }
+            if (parsedJson['next_steps'] != null && _nextSteps.isEmpty) {
+              _nextSteps.value =
+                  (parsedJson['next_steps'] as List<dynamic>).cast<String>();
+            }
+          } else {
+            // No response_message field in JSON, use the entire chunk buffer as fallback
+            finalMessage = chunkContent;
+            Logger.debug(
+                'BA: No response_message field, using entire chunk buffer: $finalMessage',
+                'BA_WS');
+          }
         }
       } catch (e) {
-        // If JSON parsing fails, use chunk buffer
+        // If JSON parsing fails, use chunk buffer as-is
         finalMessage = _chunkBuffer.value.trim();
-        Logger.debug('BA: JSON parse failed, using chunk buffer: $finalMessage',
+        Logger.debug(
+            'BA: JSON parse failed, using chunk buffer as-is: $finalMessage',
             'BA_WS');
       }
     }
@@ -427,10 +427,10 @@ class BookingAssistantController extends GetxController {
 
     // Reset streaming state
     _chunkBuffer.value = '';
-    _jsonBuffer.value = '';
     _isStreaming.value = false;
     _streamingMessage.value = '';
     _responseMessage.value = '';
+    JsonChunkParser.reset(); // Reset the JSON parser for next message
   }
 
   /// Check if a message is internal processing information that shouldn't be shown to users
@@ -459,48 +459,47 @@ class BookingAssistantController extends GetxController {
 
   /// Handle action metadata
   void _handleActionMetadata(Map<String, dynamic> metadata) {
-    // Update available doctors if provided
     if (metadata['suggested_doctors'] != null) {
       _availableDoctors.value = metadata['suggested_doctors'] as List<dynamic>;
     }
-
-    // Update suggested time slots if provided
     if (metadata['suggested_slots'] != null) {
-      final slots = metadata['suggested_slots'] as List<dynamic>;
-      _suggestedTimeSlots.value = slots.map((slot) {
-        final slotData = slot as Map<String, dynamic>;
-        return TimeSlot(
-          id: slotData['id'] as String,
-          startTime: DateTime.parse(slotData['start_time'] as String),
-          endTime: DateTime.parse(slotData['end_time'] as String),
-          durationMinutes: slotData['duration_minutes'] as int,
-          isAvailable: slotData['is_available'] as bool,
-          doctorId: slotData['doctor_id'] as String?,
-          reasoning: slotData['reasoning'] as String?,
-        );
-      }).toList();
+      _suggestedTimeSlots.value =
+          _parseTimeSlots(metadata['suggested_slots'] as List<dynamic>);
     }
+  }
+
+  /// Parse time slots from dynamic list
+  List<TimeSlot> _parseTimeSlots(List<dynamic> slots) {
+    return slots.map((slot) {
+      final slotData = slot as Map<String, dynamic>;
+      return TimeSlot(
+        id: slotData['id'] as String,
+        startTime: DateTime.parse(slotData['start_time'] as String),
+        endTime: DateTime.parse(slotData['end_time'] as String),
+        durationMinutes: slotData['duration_minutes'] as int,
+        isAvailable: slotData['is_available'] as bool,
+        doctorId: slotData['doctor_id'] as String?,
+        reasoning: slotData['reasoning'] as String?,
+      );
+    }).toList();
   }
 
   /// Handle complete metadata
   void _handleCompleteMetadata(Map<String, dynamic> metadata) {
-    // Handle final response data
+    // Process final metadata (recommendations, intent results, etc.)
     if (metadata['parsed_response'] != null) {
-      // Process final response data as needed
       Logger.debug('BA: Received parsed response data', 'BA_WS');
     }
-
     if (metadata['intent_result'] != null) {
-      // Process intent result data as needed
       Logger.debug('BA: Received intent result data', 'BA_WS');
     }
   }
 
-  /// Handle parsed JSON from chunks
-  void _handleParsedJson(Map<String, dynamic> json) {
-    Logger.debug('BA: Handling parsed JSON from chunks', 'BA_WS');
+  /// Extract structured data from parsed JSON (without replacing chunk buffer)
+  void _extractStructuredDataFromJson(Map<String, dynamic> json) {
+    Logger.debug('BA: Extracting structured data from parsed JSON', 'BA_WS');
 
-    // Extract structured data from parsed JSON
+    // Extract structured data from parsed JSON for UI metadata/recommendations
     if (json['intent'] != null) {
       _currentIntent.value = json['intent'] as String;
     }
@@ -517,33 +516,21 @@ class BookingAssistantController extends GetxController {
       _actionResult.value = json['action_result'] as String;
     }
 
-    // Extract and store the response_message from JSON - this is what we'll show in UI
+    // Extract and store the response_message from JSON for later use in final message
     if (json['response_message'] != null) {
       final responseMsg = json['response_message'] as String;
       _responseMessage.value = responseMsg;
-      // Replace the chunk buffer with just the response message content
-      // Keep accumulating chunks but prioritize showing response_message when available
-      _chunkBuffer.value = responseMsg;
+      Logger.debug(
+          'BA: Extracted response_message from JSON: $responseMsg', 'BA_WS');
     }
 
-    // Handle any additional metadata
+    // Handle any additional metadata (doctors, time slots, etc.)
     if (json['suggested_doctors'] != null) {
       _availableDoctors.value = json['suggested_doctors'] as List<dynamic>;
     }
     if (json['suggested_slots'] != null) {
-      final slots = json['suggested_slots'] as List<dynamic>;
-      _suggestedTimeSlots.value = slots.map((slot) {
-        final slotData = slot as Map<String, dynamic>;
-        return TimeSlot(
-          id: slotData['id'] as String,
-          startTime: DateTime.parse(slotData['start_time'] as String),
-          endTime: DateTime.parse(slotData['end_time'] as String),
-          durationMinutes: slotData['duration_minutes'] as int,
-          isAvailable: slotData['is_available'] as bool,
-          doctorId: slotData['doctor_id'] as String?,
-          reasoning: slotData['reasoning'] as String?,
-        );
-      }).toList();
+      _suggestedTimeSlots.value =
+          _parseTimeSlots(json['suggested_slots'] as List<dynamic>);
     }
   }
 
@@ -743,7 +730,6 @@ class BookingAssistantController extends GetxController {
     _suggestedTimeSlots.clear();
     _errorMessage.value = '';
     _chunkBuffer.value = '';
-    _jsonBuffer.value = '';
     _streamingMessage.value = '';
     _responseMessage.value = '';
     _isStreaming.value = false;
