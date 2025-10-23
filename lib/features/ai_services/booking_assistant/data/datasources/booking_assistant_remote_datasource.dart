@@ -241,16 +241,31 @@ class BookingAssistantRemoteDataSourceImpl
     yield* _webSocketClient.messages.map((data) {
       Logger.debug('BA WS ← message: ${Logger.preview(data)}', 'BA_WS');
 
-      // Parse the streaming message using the factory
-      final streamMessage = StreamMessageFactory.fromJson(data);
+      try {
+        // Parse the streaming message using the factory
+        final streamMessage = StreamMessageFactory.fromJson(data);
 
-      if (streamMessage == null) {
-        Logger.warning(
-            'Unknown message type received: ${data['type']}', 'BA_WS');
-        throw Exception('Unknown message type: ${data['type']}');
+        if (streamMessage == null) {
+          Logger.warning(
+              'Unknown message type received: ${data['type']}', 'BA_WS');
+          // Create a generic error message for unknown types
+          return ErrorMessage(
+            sessionId: data['session_id']?.toString(),
+            timestamp: DateTime.now(),
+            errorMessage: 'Unknown message type: ${data['type']}',
+          );
+        }
+
+        return streamMessage;
+      } catch (e, stackTrace) {
+        Logger.error('Error parsing WebSocket message: $e', 'BA_WS', e, stackTrace);
+        // Return an error message for parsing failures
+        return ErrorMessage(
+          sessionId: data['session_id']?.toString(),
+          timestamp: DateTime.now(),
+          errorMessage: 'Failed to parse message: ${e.toString()}',
+        );
       }
-
-      return streamMessage;
     });
   }
 

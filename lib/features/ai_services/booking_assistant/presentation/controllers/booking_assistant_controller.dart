@@ -283,7 +283,10 @@ class BookingAssistantController extends GetxController {
     _errorMessage.value = message.errorMessage;
     _isProcessing.value = false;
     _isStreaming.value = false;
-    _addSystemMessage('Sorry, I encountered an error: ${message.errorMessage}');
+    
+    // Don't show technical error details to users
+    // Show a user-friendly message instead
+    _addSystemMessage('Sorry, I encountered an error while processing your request. Please try again.');
   }
 
   /// Finalize streaming message and add to conversation

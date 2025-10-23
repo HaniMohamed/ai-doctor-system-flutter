@@ -31,7 +31,9 @@ class MetadataMessage extends StreamMessage {
   factory MetadataMessage.fromJson(Map<String, dynamic> json) {
     return MetadataMessage(
       sessionId: json['session_id']?.toString(),
-      timestamp: DateTime.parse(json['timestamp'] as String),
+      timestamp: json['timestamp'] != null 
+          ? DateTime.parse(json['timestamp'] as String)
+          : DateTime.now(),
       processingInfo: json['processing_info'] as Map<String, dynamic>? ?? {},
     );
   }
@@ -62,7 +64,9 @@ class ChunkMessage extends StreamMessage {
   factory ChunkMessage.fromJson(Map<String, dynamic> json) {
     return ChunkMessage(
       sessionId: json['session_id']?.toString(),
-      timestamp: DateTime.parse(json['timestamp'] as String),
+      timestamp: json['timestamp'] != null 
+          ? DateTime.parse(json['timestamp'] as String)
+          : DateTime.now(),
       isComplete: json['is_complete'] as bool? ?? false,
       chunk: json['chunk'] as String? ?? '',
     );
@@ -102,7 +106,9 @@ class ActionMessage extends StreamMessage {
   factory ActionMessage.fromJson(Map<String, dynamic> json) {
     return ActionMessage(
       sessionId: json['session_id']?.toString(),
-      timestamp: DateTime.parse(json['timestamp'] as String),
+      timestamp: json['timestamp'] != null 
+          ? DateTime.parse(json['timestamp'] as String)
+          : DateTime.now(),
       isComplete: json['is_complete'] as bool? ?? false,
       intent: json['intent'] as String? ?? '',
       confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
@@ -151,7 +157,9 @@ class CompleteMessage extends StreamMessage {
   factory CompleteMessage.fromJson(Map<String, dynamic> json) {
     return CompleteMessage(
       sessionId: json['session_id']?.toString(),
-      timestamp: DateTime.parse(json['timestamp'] as String),
+      timestamp: json['timestamp'] != null 
+          ? DateTime.parse(json['timestamp'] as String)
+          : DateTime.now(),
       intent: json['intent'] as String? ?? '',
       confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
       nextSteps: (json['next_steps'] as List<dynamic>?)?.cast<String>() ?? [],
@@ -193,8 +201,12 @@ class ErrorMessage extends StreamMessage {
   factory ErrorMessage.fromJson(Map<String, dynamic> json) {
     return ErrorMessage(
       sessionId: json['session_id']?.toString(),
-      timestamp: DateTime.parse(json['timestamp'] as String),
-      errorMessage: json['error_message'] as String? ?? 'Unknown error',
+      timestamp: json['timestamp'] != null 
+          ? DateTime.parse(json['timestamp'] as String)
+          : DateTime.now(),
+      errorMessage: json['error_message'] as String? ?? 
+                   json['message'] as String? ?? 
+                   'Unknown error',
     );
   }
 
@@ -215,7 +227,7 @@ class ErrorMessage extends StreamMessage {
 class StreamMessageFactory {
   static StreamMessage? fromJson(Map<String, dynamic> json) {
     final type = json['type'] as String?;
-
+    
     switch (type) {
       case 'metadata':
         return MetadataMessage.fromJson(json);
@@ -226,6 +238,7 @@ class StreamMessageFactory {
       case 'complete':
         return CompleteMessage.fromJson(json);
       case 'error':
+        // Handle both 'error_message' and 'message' fields for error messages
         return ErrorMessage.fromJson(json);
       default:
         return null;
