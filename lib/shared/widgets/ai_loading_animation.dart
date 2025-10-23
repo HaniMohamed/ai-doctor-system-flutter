@@ -216,7 +216,7 @@ class _AiMedicalPainter extends CustomPainter {
         pulsePaint);
 
     // AI neural dots
-    final dotCount = 12;
+    const dotCount = 12;
     for (int i = 0; i < dotCount; i++) {
       final angle = (i / dotCount) * 2 * math.pi + animationValue * 2 * math.pi;
       final dotOffset = Offset(
@@ -247,10 +247,11 @@ class _AiMedicalPainter extends CustomPainter {
           math.sin((x / size.width * 4 * math.pi) +
                   animationValue * 2 * math.pi) *
               6;
-      if (x == 0)
+      if (x == 0) {
         path.moveTo(x, y);
-      else
+      } else {
         path.lineTo(x, y);
+      }
     }
     final wavePaint = Paint()
       ..color = primaryColor.withOpacity(0.6)

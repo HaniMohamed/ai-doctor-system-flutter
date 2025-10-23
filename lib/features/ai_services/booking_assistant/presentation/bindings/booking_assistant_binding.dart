@@ -1,17 +1,18 @@
 import 'package:get/get.dart';
+
 import '../../../../../core/di/injection_container.dart';
 import '../../../../../core/network/api_client.dart';
 import '../../../../../core/network/websocket/websocket_client.dart';
-import '../controllers/booking_assistant_controller.dart';
+import '../../../../auth/domain/services/auth_service.dart';
 import '../../data/datasources/booking_assistant_remote_datasource.dart';
 import '../../data/repositories/booking_assistant_repository_impl.dart';
 import '../../domain/repositories/booking_assistant_repository.dart';
-import '../../domain/usecases/send_booking_message_usecase.dart';
+import '../../domain/usecases/book_appointment_usecase.dart';
 import '../../domain/usecases/get_available_doctors_usecase.dart';
 import '../../domain/usecases/get_available_time_slots_usecase.dart';
-import '../../domain/usecases/book_appointment_usecase.dart';
 import '../../domain/usecases/get_suggested_time_slots_usecase.dart';
-import '../../../../auth/domain/services/auth_service.dart';
+import '../../domain/usecases/send_booking_message_usecase.dart';
+import '../controllers/booking_assistant_controller.dart';
 
 /// Binding for booking assistant dependencies
 class BookingAssistantBinding extends Bindings {

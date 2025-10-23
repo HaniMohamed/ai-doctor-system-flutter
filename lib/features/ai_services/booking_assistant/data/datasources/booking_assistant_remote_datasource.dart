@@ -1,5 +1,5 @@
-import '../../../../../core/network/api_client.dart';
 import '../../../../../core/logging/logger.dart';
+import '../../../../../core/network/api_client.dart';
 import '../../../../../core/network/websocket/websocket_client.dart';
 import '../models/booking_message_model.dart';
 

@@ -131,7 +131,7 @@ class Logger {
     if (EnvironmentConfig.enableLogging) {
       if (data != null) {
         final dataSize = _calculateDataSize(data);
-        debug('📤 Request Data (${dataSize}): ${_truncateData(data)}', 'API');
+        debug('📤 Request Data ($dataSize): ${_truncateData(data)}', 'API');
       }
 
       if (headers != null && headers.isNotEmpty) {

@@ -2,12 +2,12 @@ import 'package:ai_doctor_system/features/ai_services/symptom_checker/domain/ent
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../generated/l10n/app_localizations.dart';
+import '../../../../../shared/services/ai_progress_service.dart';
+import '../../../../../shared/widgets/ai_loading_animation.dart';
+import '../../../../../shared/widgets/base_scaffold.dart';
 import '../../domain/entities/symptom.dart';
 import '../controllers/symptom_checker_controller.dart';
-import '../../../../../shared/widgets/ai_loading_animation.dart';
-import '../../../../../shared/services/ai_progress_service.dart';
-import '../../../../../generated/l10n/app_localizations.dart';
-import '../../../../../shared/widgets/base_scaffold.dart';
 
 class SymptomCheckerPage extends StatefulWidget {
   const SymptomCheckerPage({super.key});

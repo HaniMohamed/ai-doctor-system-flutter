@@ -145,7 +145,7 @@ class BookingSuggestionsWidget extends StatelessWidget {
           if (doctor['rating'] != null) ...[
             Row(
               children: [
-                Icon(Icons.star, color: Colors.amber, size: 14),
+                const Icon(Icons.star, color: Colors.amber, size: 14),
                 const SizedBox(width: 4),
                 Text(
                   doctor['rating'].toString(),

@@ -3,12 +3,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
 import 'core/a11y/accessibility_config.dart';
-import 'core/theme/app_theme.dart';
 import 'core/config/language_config.dart';
 import 'core/services/language_service.dart';
+import 'core/theme/app_theme.dart';
+import 'generated/l10n/app_localizations.dart';
 import 'routes/app_pages.dart';
 import 'routes/app_routes.dart';
-import 'generated/l10n/app_localizations.dart';
 
 class AIDoctorApp extends StatelessWidget {
   const AIDoctorApp({super.key});

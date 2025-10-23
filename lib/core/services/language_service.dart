@@ -1,11 +1,13 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../config/language_config.dart';
 import '../constants/storage_keys.dart';
-import '../network/api_client.dart';
 import '../di/injection_container.dart';
+import '../network/api_client.dart';
 
 class LanguageService extends GetxController {
   static LanguageService get instance => Get.find<LanguageService>();

@@ -1,14 +1,16 @@
 import 'dart:async';
+
 import 'package:get/get.dart';
+
 import '../../../../../core/logging/logger.dart';
+import '../../../../auth/domain/services/auth_service.dart';
+import '../../data/datasources/booking_assistant_remote_datasource.dart';
 import '../../domain/entities/booking_message.dart';
-import '../../domain/usecases/send_booking_message_usecase.dart';
+import '../../domain/usecases/book_appointment_usecase.dart';
 import '../../domain/usecases/get_available_doctors_usecase.dart';
 import '../../domain/usecases/get_available_time_slots_usecase.dart';
-import '../../domain/usecases/book_appointment_usecase.dart';
 import '../../domain/usecases/get_suggested_time_slots_usecase.dart';
-import '../../data/datasources/booking_assistant_remote_datasource.dart';
-import '../../../../auth/domain/services/auth_service.dart';
+import '../../domain/usecases/send_booking_message_usecase.dart';
 
 /// Controller for AI booking assistant functionality
 class BookingAssistantController extends GetxController {

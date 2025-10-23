@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../../../generated/l10n/app_localizations.dart';
 import '../../../../../shared/widgets/base_scaffold.dart';
 import '../controllers/booking_assistant_controller.dart';
-import '../widgets/booking_message_widget.dart';
 import '../widgets/booking_input_widget.dart';
+import '../widgets/booking_message_widget.dart';
 import '../widgets/booking_suggestions_widget.dart';
 
 /// Main page for AI booking assistant

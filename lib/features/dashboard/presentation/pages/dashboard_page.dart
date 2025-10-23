@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../generated/l10n/app_localizations.dart';
 import '../../../../routes/app_routes.dart';
 import '../../../../shared/widgets/base_scaffold.dart';
-import '../../../../generated/l10n/app_localizations.dart';
 import '../controllers/dashboard_controller.dart';
 
 class DashboardPage extends StatelessWidget {

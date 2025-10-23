@@ -8,10 +8,10 @@ import '../../features/auth/domain/services/auth_service.dart';
 import '../network/api_client.dart';
 import '../network/network_info.dart';
 import '../network/websocket/websocket_client.dart';
+import '../services/language_service.dart';
 import '../storage/cache_manager.dart';
 import '../storage/local_storage.dart';
 import '../storage/secure_storage.dart';
-import '../services/language_service.dart';
 import 'injection_container.dart';
 
 class ServiceLocator {

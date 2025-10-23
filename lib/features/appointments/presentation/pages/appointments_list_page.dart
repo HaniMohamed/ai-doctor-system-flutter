@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/appointments_controller.dart';
+
 import '../../../../generated/l10n/app_localizations.dart';
 import '../../../../shared/widgets/base_scaffold.dart';
+import '../controllers/appointments_controller.dart';
 
 class AppointmentsListPage extends StatelessWidget {
   const AppointmentsListPage({super.key});

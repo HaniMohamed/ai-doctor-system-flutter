@@ -64,7 +64,7 @@ class BaseScaffold extends StatelessWidget {
             Positioned(
               top: MediaQuery.of(context).padding.top + 20,
               right: 20,
-              child: FloatingLanguageButton(),
+              child: const FloatingLanguageButton(),
             ),
         ],
       ),
