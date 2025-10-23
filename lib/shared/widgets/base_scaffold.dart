@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../core/services/language_service.dart';
+
 import '../../core/config/language_config.dart';
+import '../../core/services/language_service.dart';
 import '../../generated/l10n/app_localizations.dart';
 
 class BaseScaffold extends StatelessWidget {

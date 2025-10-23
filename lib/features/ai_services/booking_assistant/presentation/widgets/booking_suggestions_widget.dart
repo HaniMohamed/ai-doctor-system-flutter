@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/booking_message.dart';
+
 import '../../../../../generated/l10n/app_localizations.dart';
+import '../../domain/entities/booking_message.dart';
 
 /// Widget for displaying booking suggestions (doctors, time slots)
 class BookingSuggestionsWidget extends StatelessWidget {
