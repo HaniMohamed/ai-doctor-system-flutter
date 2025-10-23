@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../generated/l10n/app_localizations.dart';
 import '../../domain/entities/booking_message.dart';
 
-/// Widget for displaying booking suggestions (doctors, time slots)
-class BookingSuggestionsWidget extends StatelessWidget {
+/// Modern AI-powered smart suggestions widget
+class AiSmartSuggestions extends StatelessWidget {
   final List<TimeSlot> suggestedTimeSlots;
   final List<dynamic> availableDoctors;
   final Function(TimeSlot)? onTimeSlotSelected;
   final Function(dynamic)? onDoctorSelected;
 
-  const BookingSuggestionsWidget({
+  const AiSmartSuggestions({
     super.key,
     required this.suggestedTimeSlots,
     required this.availableDoctors,
@@ -20,15 +18,19 @@ class BookingSuggestionsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (suggestedTimeSlots.isEmpty && availableDoctors.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Theme.of(context).colorScheme.secondaryContainer,
+            Theme.of(context).colorScheme.primaryContainer,
             Theme.of(context)
                 .colorScheme
-                .secondaryContainer
+                .primaryContainer
                 .withValues(alpha: 0.8),
           ],
           begin: Alignment.topLeft,
@@ -37,8 +39,7 @@ class BookingSuggestionsWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color:
-                Theme.of(context).colorScheme.secondary.withValues(alpha: 0.1),
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -47,123 +48,133 @@ class BookingSuggestionsWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Enhanced header with AI styling
+          _buildHeader(context),
+          if (availableDoctors.isNotEmpty) ...[
+            _buildDoctorsSection(context),
+            const SizedBox(height: 16),
+          ],
+          if (suggestedTimeSlots.isNotEmpty) ...[
+            _buildTimeSlotsSection(context),
+          ],
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: Row(
+        children: [
           Container(
-            padding: const EdgeInsets.all(20),
-            child: Row(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Icon(
+              Icons.auto_awesome_rounded,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Theme.of(context).colorScheme.secondary,
-                        Theme.of(context)
-                            .colorScheme
-                            .secondary
-                            .withValues(alpha: 0.8),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: const Icon(
-                    Icons.auto_awesome_rounded,
-                    color: Colors.white,
-                    size: 20,
+                Text(
+                  'AI Recommendations',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18,
                   ),
                 ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.suggestions,
-                        style: TextStyle(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'AI-powered recommendations for you',
-                        style: TextStyle(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .onSecondaryContainer
-                              .withValues(alpha: 0.8),
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
+                const SizedBox(height: 4),
+                Text(
+                  'Based on your preferences and availability',
+                  style: TextStyle(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onPrimaryContainer
+                        .withValues(alpha: 0.8),
+                    fontSize: 14,
                   ),
                 ),
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
 
-          // Doctors suggestions with modern design
-          if (availableDoctors.isNotEmpty) ...[
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                AppLocalizations.of(context)!.availableDoctors,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
-              ),
+  Widget _buildDoctorsSection(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Recommended Doctors',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
             ),
-            const SizedBox(height: 12),
-            SizedBox(
-              height: 140,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemCount: availableDoctors.length,
-                itemBuilder: (context, index) {
-                  final doctor = availableDoctors[index];
-                  return _buildDoctorCard(context, doctor);
-                },
-              ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 140,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: availableDoctors.length,
+              itemBuilder: (context, index) {
+                final doctor = availableDoctors[index];
+                return _buildDoctorCard(context, doctor);
+              },
             ),
-            const SizedBox(height: 20),
-          ],
+          ),
+        ],
+      ),
+    );
+  }
 
-          // Time slots suggestions with modern design
-          if (suggestedTimeSlots.isNotEmpty) ...[
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                AppLocalizations.of(context)!.suggestedTimeSlots,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16,
-                ),
-              ),
+  Widget _buildTimeSlotsSection(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Suggested Time Slots',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
             ),
-            const SizedBox(height: 12),
-            SizedBox(
-              height: 120,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-                itemCount: suggestedTimeSlots.length,
-                itemBuilder: (context, index) {
-                  final slot = suggestedTimeSlots[index];
-                  return _buildTimeSlotCard(context, slot);
-                },
-              ),
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            height: 120,
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              itemCount: suggestedTimeSlots.length,
+              itemBuilder: (context, index) {
+                final slot = suggestedTimeSlots[index];
+                return _buildTimeSlotCard(context, slot);
+              },
             ),
-          ],
+          ),
         ],
       ),
     );
@@ -269,22 +280,14 @@ class BookingSuggestionsWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
                 ],
                 const Spacer(),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Theme.of(context).colorScheme.primary,
-                        Theme.of(context)
-                            .colorScheme
-                            .primary
-                            .withValues(alpha: 0.8),
-                      ],
-                    ),
+                    color: Theme.of(context).colorScheme.primary,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Text(
@@ -387,15 +390,7 @@ class BookingSuggestionsWidget extends StatelessWidget {
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(vertical: 6),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        Theme.of(context).colorScheme.secondary,
-                        Theme.of(context)
-                            .colorScheme
-                            .secondary
-                            .withValues(alpha: 0.8),
-                      ],
-                    ),
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: const Text(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../../../../generated/l10n/app_localizations.dart';
 
 /// Widget for inputting messages to the booking assistant
 class BookingInputWidget extends StatefulWidget {
@@ -38,76 +37,141 @@ class _BookingInputWidgetState extends State<BookingInputWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
-        border: Border(
-          top: BorderSide(
-            color: Colors.grey.shade300,
-            width: 1,
-          ),
-        ),
-      ),
+      padding: const EdgeInsets.all(20),
       child: Row(
         children: [
-          // Text input
+          // Enhanced text input with AI styling
           Expanded(
-            child: TextField(
-              controller: widget.controller,
-              focusNode: _focusNode,
-              enabled: !widget.isLoading,
-              decoration: InputDecoration(
-                hintText: AppLocalizations.of(context)!.typeYourMessage,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.surfaceContainerHighest,
+                    Theme.of(context)
+                        .colorScheme
+                        .surfaceContainerHighest
+                        .withValues(alpha: 0.8),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: BorderSide(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(28),
+                border: Border.all(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .outline
+                      .withValues(alpha: 0.2),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(24),
-                  borderSide: BorderSide(color: Theme.of(context).primaryColor),
-                ),
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                suffixIcon: widget.isLoading
-                    ? const Padding(
-                        padding: EdgeInsets.all(12),
-                        child: SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        ),
-                      )
-                    : null,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
               ),
-              maxLines: null,
-              textInputAction: TextInputAction.send,
-              onSubmitted: (_) => _sendMessage(),
+              child: TextField(
+                controller: widget.controller,
+                focusNode: _focusNode,
+                enabled: !widget.isLoading,
+                decoration: InputDecoration(
+                  hintText: 'Ask your AI assistant...',
+                  hintStyle: TextStyle(
+                    color: Theme.of(context)
+                        .colorScheme
+                        .onSurfaceVariant
+                        .withValues(alpha: 0.6),
+                    fontSize: 16,
+                  ),
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
+                  prefixIcon: Container(
+                    margin: const EdgeInsets.only(left: 8),
+                    child: Icon(
+                      Icons.psychology_rounded,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 20,
+                    ),
+                  ),
+                  suffixIcon: widget.isLoading
+                      ? Container(
+                          margin: const EdgeInsets.only(right: 8),
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).colorScheme.primary,
+                              ),
+                            ),
+                          ),
+                        )
+                      : null,
+                ),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+                maxLines: null,
+                textInputAction: TextInputAction.send,
+                onSubmitted: (_) => _sendMessage(),
+              ),
             ),
           ),
 
-          const SizedBox(width: 8),
+          const SizedBox(width: 12),
 
-          // Send button
+          // Enhanced send button with AI styling
           Container(
+            width: 56,
+            height: 56,
             decoration: BoxDecoration(
-              color: widget.isLoading
-                  ? Colors.grey.shade300
-                  : Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            child: IconButton(
-              onPressed: widget.isLoading ? null : _sendMessage,
-              icon: Icon(
-                Icons.send,
-                color: widget.isLoading ? Colors.grey.shade500 : Colors.white,
+              gradient: LinearGradient(
+                colors: widget.isLoading
+                    ? [
+                        Colors.grey.shade400,
+                        Colors.grey.shade500,
+                      ]
+                    : [
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withValues(alpha: 0.8),
+                      ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-              tooltip: AppLocalizations.of(context)!.sendMessage,
+              borderRadius: BorderRadius.circular(28),
+              boxShadow: [
+                BoxShadow(
+                  color: widget.isLoading
+                      ? Colors.grey.withValues(alpha: 0.3)
+                      : Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.3),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: widget.isLoading ? null : _sendMessage,
+                borderRadius: BorderRadius.circular(28),
+                child: Icon(
+                  Icons.send_rounded,
+                  color: widget.isLoading ? Colors.grey.shade600 : Colors.white,
+                  size: 24,
+                ),
+              ),
             ),
           ),
         ],

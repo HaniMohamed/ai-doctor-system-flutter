@@ -29,11 +29,20 @@ class MetadataMessage extends StreamMessage {
   }) : super(type: 'metadata', isComplete: false);
 
   factory MetadataMessage.fromJson(Map<String, dynamic> json) {
+    DateTime timestamp;
+    try {
+      if (json['timestamp'] != null && json['timestamp'] is String) {
+        timestamp = DateTime.parse(json['timestamp'] as String);
+      } else {
+        timestamp = DateTime.now();
+      }
+    } catch (e) {
+      timestamp = DateTime.now();
+    }
+
     return MetadataMessage(
       sessionId: json['session_id']?.toString(),
-      timestamp: json['timestamp'] != null
-          ? DateTime.parse(json['timestamp'] as String)
-          : DateTime.now(),
+      timestamp: timestamp,
       processingInfo: json['processing_info'] as Map<String, dynamic>? ?? {},
     );
   }
@@ -62,11 +71,20 @@ class ChunkMessage extends StreamMessage {
   }) : super(type: 'chunk');
 
   factory ChunkMessage.fromJson(Map<String, dynamic> json) {
+    DateTime timestamp;
+    try {
+      if (json['timestamp'] != null && json['timestamp'] is String) {
+        timestamp = DateTime.parse(json['timestamp'] as String);
+      } else {
+        timestamp = DateTime.now();
+      }
+    } catch (e) {
+      timestamp = DateTime.now();
+    }
+
     return ChunkMessage(
       sessionId: json['session_id']?.toString(),
-      timestamp: json['timestamp'] != null
-          ? DateTime.parse(json['timestamp'] as String)
-          : DateTime.now(),
+      timestamp: timestamp,
       isComplete: json['is_complete'] as bool? ?? false,
       chunk: json['chunk'] as String? ?? '',
     );
@@ -104,11 +122,20 @@ class ActionMessage extends StreamMessage {
   }) : super(type: 'action');
 
   factory ActionMessage.fromJson(Map<String, dynamic> json) {
+    DateTime timestamp;
+    try {
+      if (json['timestamp'] != null && json['timestamp'] is String) {
+        timestamp = DateTime.parse(json['timestamp'] as String);
+      } else {
+        timestamp = DateTime.now();
+      }
+    } catch (e) {
+      timestamp = DateTime.now();
+    }
+
     return ActionMessage(
       sessionId: json['session_id']?.toString(),
-      timestamp: json['timestamp'] != null
-          ? DateTime.parse(json['timestamp'] as String)
-          : DateTime.now(),
+      timestamp: timestamp,
       isComplete: json['is_complete'] as bool? ?? false,
       intent: json['intent'] as String? ?? '',
       confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
@@ -155,11 +182,20 @@ class CompleteMessage extends StreamMessage {
   }) : super(isComplete: true, type: 'complete');
 
   factory CompleteMessage.fromJson(Map<String, dynamic> json) {
+    DateTime timestamp;
+    try {
+      if (json['timestamp'] != null && json['timestamp'] is String) {
+        timestamp = DateTime.parse(json['timestamp'] as String);
+      } else {
+        timestamp = DateTime.now();
+      }
+    } catch (e) {
+      timestamp = DateTime.now();
+    }
+
     return CompleteMessage(
       sessionId: json['session_id']?.toString(),
-      timestamp: json['timestamp'] != null
-          ? DateTime.parse(json['timestamp'] as String)
-          : DateTime.now(),
+      timestamp: timestamp,
       intent: json['intent'] as String? ?? '',
       confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
       nextSteps: (json['next_steps'] as List<dynamic>?)?.cast<String>() ?? [],
@@ -199,14 +235,29 @@ class ErrorMessage extends StreamMessage {
         super(type: 'error', isComplete: true);
 
   factory ErrorMessage.fromJson(Map<String, dynamic> json) {
+    DateTime timestamp;
+    try {
+      if (json['timestamp'] != null && json['timestamp'] is String) {
+        timestamp = DateTime.parse(json['timestamp'] as String);
+      } else {
+        timestamp = DateTime.now();
+      }
+    } catch (e) {
+      timestamp = DateTime.now();
+    }
+
+    // Get error message from either 'error_message' or 'message' field
+    String errorMessage = 'Unknown error';
+    if (json['error_message'] != null && json['error_message'] is String) {
+      errorMessage = json['error_message'] as String;
+    } else if (json['message'] != null && json['message'] is String) {
+      errorMessage = json['message'] as String;
+    }
+
     return ErrorMessage(
       sessionId: json['session_id']?.toString(),
-      timestamp: json['timestamp'] != null
-          ? DateTime.parse(json['timestamp'] as String)
-          : DateTime.now(),
-      errorMessage: json['error_message'] as String? ??
-          json['message'] as String? ??
-          'Unknown error',
+      timestamp: timestamp,
+      errorMessage: errorMessage,
     );
   }
 
